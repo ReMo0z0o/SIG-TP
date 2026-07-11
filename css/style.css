@@ -594,6 +594,56 @@ details.acc > summary::before {
 details.acc[open] > summary::before { transform: rotate(45deg); }
 details.acc .acc-body { padding: 2px 18px 16px; }
 
+/* ============ sommaire théorie (hub) ============ */
+.ch-card { padding: 0; overflow: hidden; }
+.ch-head {
+  display: grid; grid-template-columns: 52px 1fr; gap: 16px; align-items: center;
+  padding: 18px 22px 14px;
+}
+.ch-num {
+  width: 52px; height: 52px; border-radius: 12px;
+  display: grid; place-items: center;
+  font-family: var(--font-display); font-size: 1.45rem; font-weight: 700;
+  background: var(--accent-soft); color: var(--accent-deep);
+}
+.ch-num.done { background: var(--ok); color: var(--on-accent); }
+.ch-head h3 { margin: 0 0 4px; font-size: 1.1rem; }
+.ch-meta { display: flex; align-items: center; gap: 10px; font-size: .78rem; color: var(--ink-3); }
+.ch-meta .bar { flex: 1; max-width: 240px; height: 6px; border-radius: 3px; background: var(--surface-2); overflow: hidden; }
+.ch-meta .bar i { display: block; height: 100%; border-radius: 3px; background: var(--accent); transition: width .3s ease; }
+.ch-meta .cnt { font-variant-numeric: tabular-nums; font-weight: 600; }
+.ch-actions { display: flex; gap: 8px; padding: 0 22px 14px 90px; flex-wrap: wrap; }
+
+.toc-list { border-top: 1px solid var(--line); }
+.toc-row {
+  display: grid; grid-template-columns: 26px 1fr auto; gap: 10px; align-items: center;
+  padding: 8px 22px 8px 26px;
+  border-bottom: 1px solid var(--line);
+  font-size: .9rem;
+}
+.toc-row:last-child { border-bottom: none; }
+.toc-row:hover { background: var(--surface-2); }
+.toc-dot {
+  width: 16px; height: 16px; border-radius: 50%;
+  border: 2px solid var(--line-strong); background: var(--surface);
+  display: grid; place-items: center; font-size: .6rem; color: #fff;
+}
+.toc-row.seen .toc-dot { border-color: var(--warn); background: color-mix(in srgb, var(--warn) 28%, var(--surface)); }
+.toc-row.acquired .toc-dot { border-color: var(--ok); background: var(--ok); color: var(--on-accent); }
+.toc-row a { color: var(--ink); text-decoration: none; }
+.toc-row a:hover { color: var(--accent-deep); text-decoration: underline; }
+.toc-row.acquired a { color: var(--ink-3); }
+.toc-state { font-size: .7rem; color: var(--ink-3); letter-spacing: .04em; text-transform: uppercase; font-weight: 600; margin-right: 4px; }
+.toc-check {
+  border: 1.5px solid var(--line-strong); background: var(--surface); color: var(--ink-3);
+  border-radius: 6px; padding: 3px 11px; font-size: .78rem; font-weight: 600;
+}
+.toc-check:hover { border-color: var(--ok); color: var(--ok); }
+.toc-row.acquired .toc-check { background: var(--ok); border-color: var(--ok); color: var(--on-accent); }
+.toc-legend { display: flex; gap: 18px; flex-wrap: wrap; font-size: .8rem; color: var(--ink-2); margin: 10px 0 4px; align-items: center; }
+.toc-legend .toc-dot { display: inline-grid; }
+.toc-legend span { display: inline-flex; align-items: center; gap: 6px; }
+
 /* ============ misc ============ */
 .pill-row { display: flex; gap: 8px; flex-wrap: wrap; margin: 10px 0; }
 .kbd {

@@ -21,6 +21,7 @@ window.Progress = (function () {
       save();
     },
     get(id) { return data[id] == null ? null : data[id]; },
+    unset(id) { delete data[id]; save(); },
     reset() { data = {}; save(); },
     onChange(f, el) { listeners.push({ f, el }); },
     moduleStats(ids) {

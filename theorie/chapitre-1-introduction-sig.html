@@ -1199,6 +1199,40 @@ document.querySelectorAll('.quiz').forEach(function(quiz){
 });
 </script>
 
+<script>
+/* Suivi de lecture SIG-TP : marque les sections traversées comme « vues »
+   (lu par le sommaire de la théorie — localStorage partagé, même origine). */
+(function(){
+  var CH='theorie-ch1', SECS=["s1", "s2", "s3", "s4", "s5", "s6", "s7", "s8", "recap", "training"], KEY='sig-tp-seen-v1';
+  function read(){ try{ return JSON.parse(localStorage.getItem(KEY))||{}; }catch(e){ return {}; } }
+  function mark(id){
+    if(SECS.indexOf(id)<0) return;
+    var d=read(), a=d[CH]||[];
+    if(a.indexOf(id)>=0) return;
+    a.push(id); d[CH]=a;
+    try{ localStorage.setItem(KEY, JSON.stringify(d)); }catch(e){}
+  }
+  if (typeof goTo === 'function'){
+    /* navigation par onglets : on enveloppe goTo pour tracer + liens profonds #pX */
+    var orig = goTo;
+    goTo = function(id){ mark(id); return orig(id); };
+    var h = (location.hash||'').replace('#','');
+    if (SECS.indexOf(h) >= 0) { goTo(h); } else { mark(SECS[0]); }
+    window.addEventListener('hashchange', function(){
+      var h2 = (location.hash||'').replace('#','');
+      if (SECS.indexOf(h2) >= 0) goTo(h2);
+    });
+  } else if ('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(e){ if(e.isIntersecting) mark(e.target.id); });
+    }, { rootMargin: '0px 0px -55% 0px' });
+    SECS.forEach(function(id){ var el = document.getElementById(id); if(el) io.observe(el); });
+    window.addEventListener('scroll', function(){
+      if (window.scrollY + window.innerHeight >= document.body.scrollHeight - 60) mark(SECS[SECS.length-1]);
+    }, { passive:true });
+  }
+})();
+</script>
 <a href="../index.html#/theorie" style="position:fixed;left:14px;bottom:14px;z-index:99999;display:inline-flex;align-items:center;gap:6px;background:#0e7c86;color:#fff;text-decoration:none;font:600 13px/1 system-ui,sans-serif;padding:9px 14px;border-radius:999px;box-shadow:0 2px 10px rgba(0,0,0,.25);" title="Revenir au site BPMN &amp; ArchiMate — TP interactifs">&#8592; Parcours SIG</a>
 </body>
 </html>
