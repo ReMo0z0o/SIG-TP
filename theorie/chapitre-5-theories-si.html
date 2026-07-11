@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Chapitre 5 — Recherche &amp; Théories des SI · SIG ECGEB210</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect x='8' y='8' width='84' height='84' rx='18' fill='%233d8b40'/><text y='68' x='50' text-anchor='middle' font-size='52' fill='white' font-family='Georgia'>◇</text></svg>">
+<script>
+/* applique le thème clair/sombre choisi dans l'app avant le premier rendu */
+(function(){ try{ var t = localStorage.getItem('sig-tp-theme'); if (t) document.documentElement.dataset.theme = t; }catch(e){} })();
+</script>
 <style>
 :root{
   --teal:#0e7c86; --teal-deep:#0a616a; --teal-soft:#e2f2f3;
@@ -20,8 +24,19 @@
   --new:#0e7c86;
   --on-accent:#fff;
 }
+/* thème sombre : suit l'OS par défaut, mais le choix fait dans l'app
+   (localStorage sig-tp-theme → data-theme) est prioritaire */
+:root[data-theme="dark"]{
+  --paper:#131a20; --surface:#1b242c; --ink:#e8edf1; --ink-2:#b3bfc9; --ink-3:#8a97a3;
+  --line:#2c3842; --line-2:#3d4b57;
+  --teal:#3aa8b2; --teal-deep:#63c2ca; --teal-soft:#10333a;
+  --warn:#d9a94e; --warn-soft:#33290f; --ok:#58b878; --ok-soft:#17301f;
+  --err:#e07b72; --err-soft:#3a1f1c; --violet:#a48ad4; --violet-soft:#241c33;
+  --construct:#3d3323; --construct-b:#d9a23e;
+  --on-accent:#0d1319;
+}
 @media (prefers-color-scheme: dark){
-  :root{
+  :root:not([data-theme="light"]){
     --paper:#131a20; --surface:#1b242c; --ink:#e8edf1; --ink-2:#b3bfc9; --ink-3:#8a97a3;
     --line:#2c3842; --line-2:#3d4b57;
     --teal:#3aa8b2; --teal-deep:#63c2ca; --teal-soft:#10333a;

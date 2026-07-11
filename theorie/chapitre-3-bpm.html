@@ -1542,6 +1542,33 @@ document.querySelectorAll('.classify .cl-item').forEach(item=>{
   }
 })();
 </script>
+<script>
+/* SIG-TP : coches « vu » dans la barre latérale native (pastille verte + compteur). */
+(function(){
+  var CH='theorie-ch3', KEY='sig-tp-seen-v1', SECS=["p0","p1","p2","p3","p4","p5"];
+  var nav=document.getElementById('nav'); if(!nav) return;
+  var st=document.createElement('style');
+  st.textContent='#nav button.sig-seen:not(.active) .dot{border-color:var(--start);background:var(--start)}'+
+    '#nav .sig-count{font-size:.78rem;color:var(--muted);padding:10px 10px 2px;border-top:1px solid var(--line);margin-top:10px}'+
+    '#nav .sig-count b{color:var(--start)}';
+  document.head.appendChild(st);
+  var ct=document.createElement('div'); ct.className='sig-count';
+  ct.innerHTML='<b>0</b>/'+SECS.length+' pages vues';
+  nav.appendChild(ct);
+  function refresh(){
+    var seen=[];
+    try{ seen=(JSON.parse(localStorage.getItem(KEY))||{})[CH]||[]; }catch(e){}
+    SECS.forEach(function(id){
+      nav.querySelectorAll('button[data-page="'+id+'"]').forEach(function(b){
+        b.classList.toggle('sig-seen', seen.indexOf(id)>=0);
+      });
+    });
+    ct.querySelector('b').textContent = seen.filter(function(id){ return SECS.indexOf(id)>=0; }).length;
+  }
+  if (typeof goTo==='function'){ var o=goTo; goTo=function(id){ var r=o(id); refresh(); return r; }; }
+  refresh();
+})();
+</script>
 <a href="../index.html#/theorie" style="position:fixed;right:14px;bottom:14px;z-index:99999;display:inline-flex;align-items:center;gap:6px;background:#0e7c86;color:#fff;text-decoration:none;font:600 13px/1 system-ui,sans-serif;padding:9px 14px;border-radius:999px;box-shadow:0 2px 10px rgba(0,0,0,.25);" title="Revenir au site BPMN &amp; ArchiMate — TP interactifs">&#8592; Parcours SIG</a>
 </body>
 </html>

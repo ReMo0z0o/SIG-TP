@@ -4,6 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Chapitre 6 — Conclusion &amp; préparation à l'examen · SIG ECGEB210</title>
+<script>
+/* applique le thème clair/sombre choisi dans l'app avant le premier rendu */
+(function(){ try{ var t = localStorage.getItem('sig-tp-theme'); if (t) document.documentElement.dataset.theme = t; }catch(e){} })();
+</script>
 <style>
 :root{
   --teal:#0e7c86; --teal-deep:#0a616a; --teal-soft:#e2f2f3;
@@ -39,12 +43,19 @@ a{color:var(--teal-deep)}
 .part{border-left:3px solid var(--teal);padding:2px 0 2px 16px;margin:14px 0}
 .part b{color:var(--teal-deep)}
 .part .links{font-size:.85rem;margin-top:4px}
+/* thème sombre : suit l'OS par défaut, mais le choix fait dans l'app
+   (localStorage sig-tp-theme → data-theme) est prioritaire */
+:root[data-theme="dark"]{--paper:#131a20;--surface:#1b242c;--ink:#e8edf1;--ink-2:#b3bfc9;--ink-3:#8a97a3;--line:#2c3842;
+  --teal:#3aa8b2;--teal-deep:#63c2ca;--teal-soft:#10333a;--warn-soft:#33290f;--ok-soft:#17301f}
+[data-theme="dark"] .callout{border-color:#5c4d1f}
+[data-theme="dark"] .callout.ok{border-color:#28513a}
+[data-theme="dark"] .btn{color:#0d1319}
 @media (prefers-color-scheme: dark){
-  :root{--paper:#131a20;--surface:#1b242c;--ink:#e8edf1;--ink-2:#b3bfc9;--ink-3:#8a97a3;--line:#2c3842;
+  :root:not([data-theme="light"]){--paper:#131a20;--surface:#1b242c;--ink:#e8edf1;--ink-2:#b3bfc9;--ink-3:#8a97a3;--line:#2c3842;
     --teal:#3aa8b2;--teal-deep:#63c2ca;--teal-soft:#10333a;--warn-soft:#33290f;--ok-soft:#17301f}
-  .callout{border-color:#5c4d1f}
-  .callout.ok{border-color:#28513a}
-  .btn{color:#0d1319}
+  :root:not([data-theme="light"]) .callout{border-color:#5c4d1f}
+  :root:not([data-theme="light"]) .callout.ok{border-color:#28513a}
+  :root:not([data-theme="light"]) .btn{color:#0d1319}
 }
 </style>
 </head>
@@ -173,5 +184,6 @@ a{color:var(--teal-deep)}
   }
 })();
 </script>
+<script src="sommaire-lateral.js" data-ch="theorie-ch6"></script>
 </body>
 </html>
