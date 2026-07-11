@@ -72,16 +72,16 @@
     },
     {
       id: 'theorie-ch5', num: 5, file: 'theorie/chapitre-5-theories-si.html',
-      title: 'Recherche & théories des SI', exos: 21,
+      title: 'Recherche & théories des SI', exos: 19,
       toc: [
         { a: 's1', t: "Qu'est-ce que la recherche scientifique ?" },
-        { a: 's2', t: 'Une (bonne) théorie : les 4 building blocks' },
-        { a: 's3', t: "TRA — la Théorie de l'Action Raisonnée" },
-        { a: 's4', t: 'TAM — Technology Acceptance Model' },
-        { a: 's5', t: 'UTAUT' },
-        { a: 's6', t: 'UTAUT2 — le contexte consommateur' },
-        { a: 's7', t: 'Les parties les plus importantes à maîtriser' },
-        { a: 's8', t: "Exercices d'entraînement final" }
+        { a: 's2', t: 'Une (bonne) théorie : types & 4 building blocks' },
+        { a: 's3', t: 'La recherche en SI : une science sociale' },
+        { a: 's4', t: "TRA — la Théorie de l'Action Raisonnée" },
+        { a: 's5', t: 'TAM — Technology Acceptance Model' },
+        { a: 's6', t: 'UTAUT — la théorie unifiée' },
+        { a: 's7', t: 'UTAUT2 — le contexte consommateur' },
+        { a: 's8', t: "L'essentiel pour l'examen & entraînement final" }
       ]
     },
     {
