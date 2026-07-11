@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BPMN & ArchiMate — Comprendre et réussir les TP · ECGEB210</title>
+  <meta name="description" content="Site d'apprentissage interactif pour comprendre et résoudre les TP BPMN et ArchiMate du cours Systèmes d'information de gestion (ECGEB210).">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect x='8' y='8' width='84' height='84' rx='18' fill='%233d8b40'/><text y='68' x='50' text-anchor='middle' font-size='52' fill='white' font-family='Georgia'>◇</text></svg>">
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="#/home">
+        <span class="brand-mark">◇</span>
+        <span>
+          <b>BPMN &amp; ArchiMate</b>
+          <span>SIG · ECGEB210 · TP interactifs</span>
+        </span>
+      </a>
+      <nav id="nav-items" aria-label="Navigation du cours"></nav>
+      <div class="sidebar-foot">
+        Progression enregistrée dans ce navigateur.
+        <br>
+        <button id="theme-toggle" type="button">☾ / ☀ Thème</button>
+        <button id="reset-progress" type="button">Réinitialiser</button>
+      </div>
+    </aside>
+
+    <div class="main">
+      <div class="topbar">
+        <button id="menu-toggle" type="button" aria-label="Ouvrir le menu">☰ Menu</button>
+        <span class="crumb" id="crumb"></span>
+        <span class="topbar-progress" id="top-progress" style="display:none">
+          <span class="bar"><i style="width:0%"></i></span>
+          <span class="cnt"></span>
+        </span>
+      </div>
+      <main id="view"></main>
+    </div>
+  </div>
+
+  <script src="js/lib/bpmn.js"></script>
+  <script src="js/lib/archi.js"></script>
+  <script src="js/lib/quiz.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/views/home.js"></script>
+  <script src="js/views/theorie-bpmn.js"></script>
+  <script src="js/views/tp1.js"></script>
+  <script src="js/views/tp2.js"></script>
+  <script src="js/views/theorie-archimate.js"></script>
+  <script src="js/views/tp3.js"></script>
+  <script src="js/views/examen.js"></script>
+</body>
+</html>
