@@ -41,7 +41,7 @@ window.APP = {
 };
 
 /* ---------- Boot ---------- */
-document.addEventListener('DOMContentLoaded', () => {
+function bootApp() {
   const sidebar = document.getElementById('sidebar');
   const navBox = document.getElementById('nav-items');
   const main = document.getElementById('view');
@@ -165,7 +165,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   buildNav();
   renderRoute();
-});
+}
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bootApp);
+else setTimeout(bootApp, 0);
 
 /* ---------- helpers HTML partagés ---------- */
 window.H = {
