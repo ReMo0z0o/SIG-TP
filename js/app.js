@@ -7,10 +7,12 @@ window.Progress = (function () {
   const KEY = 'sig-tp-progress-v1';
   let data;
   try { data = JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { data = {}; }
-  const listeners = [];
+  let listeners = [];
   function save() {
     try { localStorage.setItem(KEY, JSON.stringify(data)); } catch (e) { /* stockage indisponible */ }
-    listeners.forEach(f => { try { f(); } catch (e) { } });
+    // purge les listeners liés à des éléments retirés du DOM
+    listeners = listeners.filter(l => !l.el || l.el.isConnected);
+    listeners.forEach(l => { try { l.f(); } catch (e) { } });
   }
   return {
     set(id, score) {
@@ -20,7 +22,7 @@ window.Progress = (function () {
     },
     get(id) { return data[id] == null ? null : data[id]; },
     reset() { data = {}; save(); },
-    onChange(f) { listeners.push(f); },
+    onChange(f, el) { listeners.push({ f, el }); },
     moduleStats(ids) {
       const done = ids.filter(i => data[i] != null);
       const sum = done.reduce((a, i) => a + data[i], 0);

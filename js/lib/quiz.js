@@ -189,18 +189,30 @@ window.QUIZ = (function () {
       `Cliquez sur les <b>${targetIds.length} éléments erronés</b> du diagramme, puis validez.`));
 
     const status = h('div', 'pill-row');
-    const counter = h('span', 'tag tag-info', `0 / ${targetIds.length} sélectionné(s)`);
+    const counter = h('span', 'tag tag-info', `0 sélectionné(s) · ${targetIds.length} erreur(s) à trouver`);
     status.appendChild(counter);
     block.appendChild(status);
 
     const selected = new Set();
-    const clickable = targetIds.concat((spec.decoys || []).map(d => d.id));
+    /* aliases : {idJumeau: idCible} — cliquer l'un sélectionne le groupe entier */
+    const aliasOf = spec.aliases || {};
+    const groupOf = {};
+    targetIds.forEach(t => { groupOf[t] = [t]; });
+    Object.entries(aliasOf).forEach(([a, t]) => { if (groupOf[t]) groupOf[t].push(a); });
+    const clickable = targetIds.concat(Object.keys(aliasOf), (spec.decoys || []).map(d => d.id));
     const clicker = spec.api.onNodeClick || spec.api.onTargetClick;
-    clicker.call(spec.api, clickable, (id, g) => {
+    clicker.call(spec.api, clickable, (id) => {
       if (block.dataset.done) return;
-      if (selected.has(id)) { selected.delete(id); g.classList.remove('dg-selected'); }
-      else { selected.add(id); g.classList.add('dg-selected'); }
-      counter.textContent = `${selected.size} / ${targetIds.length} sélectionné(s)`;
+      const key = aliasOf[id] || id;
+      const group = groupOf[key] || [key];
+      if (selected.has(key)) {
+        selected.delete(key);
+        group.forEach(x => spec.api.classify(x, 'dg-selected', false));
+      } else {
+        selected.add(key);
+        group.forEach(x => spec.api.classify(x, 'dg-selected'));
+      }
+      counter.textContent = `${selected.size} sélectionné(s) · ${targetIds.length} erreur(s) à trouver`;
       check.disabled = selected.size === 0;
     });
 
@@ -221,8 +233,10 @@ window.QUIZ = (function () {
       targetIds.forEach(id => {
         const hit = selected.has(id);
         if (hit) good++;
-        spec.api.classify(id, hit ? 'dg-flag-ok' : 'dg-flag-err');
-        spec.api.classify(id, 'dg-selected', false);
+        (groupOf[id] || [id]).forEach(x => {
+          spec.api.classify(x, hit ? 'dg-flag-ok' : 'dg-flag-err');
+          spec.api.classify(x, 'dg-selected', false);
+        });
       });
       let wrongPicks = 0;
       (spec.decoys || []).forEach(d => {
@@ -393,7 +407,7 @@ window.QUIZ = (function () {
         }
       };
       update();
-      window.Progress.onChange(update);
+      window.Progress.onChange(update, st);
       head.appendChild(st);
     }
     card.appendChild(head);

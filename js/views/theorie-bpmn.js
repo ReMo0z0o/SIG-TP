@@ -58,12 +58,12 @@
     nodes: [
       { id: 'st', type: 'start', event: 'message', x: 110, y: 330, label: 'Réception Demande Subside', lw: 16 },
       { id: 'ec', type: 'task', x: 235, y: 330, w: 112, h: 58, label: 'Evaluer Complétude de la Demande' },
-      { id: 'g1', type: 'gateway', gw: 'xor', x: 355, y: 330, label: 'Demande Complète ?', ldy: 52, lw: 18 },
+      { id: 'g1', type: 'gateway', gw: 'xor', x: 355, y: 330, label: 'Demande Complète ?', ldy: 82, lw: 18 },
       { id: 'dim', type: 'task', x: 480, y: 215, w: 116, h: 56, label: 'Demande Informations Manquantes', icon: 'send' },
       { id: 'ri', type: 'catch', event: 'message', x: 610, y: 215, label: 'Réception Infos' },
       { id: 'g2', type: 'gateway', gw: 'xor', x: 610, y: 330 },
       { id: 'ed', type: 'task', x: 725, y: 330, w: 108, h: 58, label: 'Evaluer la Demande' },
-      { id: 'g3', type: 'gateway', gw: 'xor', x: 840, y: 330, label: 'Demande Acceptée?', ldy: 52, lw: 18 },
+      { id: 'g3', type: 'gateway', gw: 'xor', x: 840, y: 330, label: 'Demande Acceptée?', ldy: 82, lw: 18 },
       { id: 'cr', type: 'task', x: 950, y: 215, w: 110, h: 56, label: 'Communication du Refus', icon: 'send' },
       { id: 'fr', type: 'end', x: 1065, y: 215, label: 'Demande Refusée', lw: 14 },
       { id: 'es', type: 'task', x: 950, y: 330, w: 110, h: 58, label: 'Enregistrement du Subside Accordé' },
@@ -208,7 +208,7 @@
         est laissé vide : on ne modélise que ses interactions (messages), pas son fonctionnement interne —
         c'est presque toujours le cas du pool « Client ».</p>
         <p>Ce diagramme du cours combine tout ce qu'on a vu : événements de message, tâches d'envoi,
-        XOR de décision et de convergence, 5 flux de messages vers le citoyen (black box) :</p>`;
+        XOR de décision et de convergence, 5 flux de messages échangés avec le citoyen (black box) :</p>`;
       const cv = H.canvas('Demande de Subside — l’exemple fil rouge du cours (3_BPM, p. 41)');
       s.appendChild(cv.panel);
       BPMN.render(cv.scroll, SUBSIDE, { alt: 'Processus de demande de subside : pool Citoyen black box et pool Région Wallonne' });
@@ -381,7 +381,7 @@
             <p style="font-size:.92rem">Quand l'événement se déclenche, un jeton supplémentaire part par le chemin
             de l'événement <b>mais la tâche continue</b>. Les deux chemins vivent en parallèle.</p></div>
         </div>
-        <p>Testez le scénario du cours — « je commence le rapport mercredi, l'échéance est jeudi » :</p>`;
+        <p>Testez le scénario type du cours (le rapport et son échéance) — « je commence le rapport mercredi, l'échéance tombe pendant la rédaction » :</p>`;
       const fPanel = H.canvas('Scénario : rapport avec échéance « jeudi »');
       s.appendChild(fPanel.panel);
       const F_SPEC = (inter) => ({

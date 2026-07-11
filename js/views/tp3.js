@@ -48,7 +48,7 @@
       { id: 'r6', from: 'mov', to: 'wait', type: 'triggering', points: [[520, 350], [565, 350]] },
       { id: 'r7', from: 'wait', to: 'treat', type: 'triggering', points: [[665, 350], [692, 350]] },
       { id: 'r8', from: 'treat', to: 'exit', type: 'triggering', points: [[797, 350], [890, 350]] },
-      { id: 'r9', from: 'sSelf', to: 'reg', type: 'serving', points: [[245, 456], [245, 372], [245, 372]], label: 'serving', lx: 280, ly: 430 },
+      { id: 'r9', from: 'sSelf', to: 'reg', type: 'serving', points: [[245, 456], [245, 372]], label: 'serving', lx: 280, ly: 430 },
       { id: 'r10', from: 'sGuid', to: 'mov', type: 'serving', points: [[455, 456], [455, 372]] },
       { id: 'r11', from: 'sQueue', to: 'wait', type: 'serving', points: [[640, 456], [640, 372]] },
       { id: 'r12', from: 'sRec', to: 'treat', type: 'serving', points: [[810, 456], [810, 372]] },
@@ -91,25 +91,27 @@
       { id: 'rT1', from: 'recv', to: 'val', type: 'triggering', points: [[398, 160], [562, 160]] },
       { id: 'rT2', from: 'val', to: 'conf', type: 'triggering', points: [[678, 160], [892, 160]] },
       { id: 'rF1', from: 'recv', to: 'regO', type: 'flow', points: [[340, 182], [340, 280], [362, 280]], label: 'Order details', lx: 350, ly: 250 },
-      { id: 'rF2', from: 'val', to: 'payP', type: 'flow', points: [[620, 182], [620, 258]], label: 'Payment info', lx: 655, ly: 225 },
+      { id: 'rF2', from: 'payP', to: 'val', type: 'flow', points: [[620, 258], [620, 182]], label: 'Payment info', lx: 658, ly: 225 },
       { id: 'rJ1', from: 'regO', to: 'jOr', type: 'triggering', points: [[478, 280], [503, 280]] },
       { id: 'rJ2', from: 'jOr', to: 'payP', type: 'triggering', points: [[517, 280], [552, 280]], label: '[yes]', lx: 535, ly: 298 },
       { id: 'rJ3', from: 'jOr', to: 'check', type: 'triggering', points: [[510, 287], [510, 385], [547, 385]], label: '[no]', lx: 528, ly: 370 },
       { id: 'rJ4', from: 'payP', to: 'jAnd', type: 'triggering', points: [[668, 280], [698, 280]] },
       { id: 'rJ5', from: 'jAnd', to: 'send', type: 'triggering', points: [[712, 280], [752, 280]] },
+      { id: 'rJ6', from: 'check', to: 'jAnd', type: 'triggering', points: [[648, 363], [705, 310], [705, 287]] },
       { id: 'rF3', from: 'send', to: 'conf', type: 'flow', points: [[878, 280], [910, 280], [910, 182]], label: 'info 2', lx: 895, ly: 250 },
       { id: 'rS1', from: 'sOrder', to: 'regO', type: 'serving', points: [[420, 467], [420, 302]], label: 'serving', lx: 448, ly: 452 },
       { id: 'rS2', from: 'sCust', to: 'check', type: 'serving', points: [[585, 467], [585, 407]], label: 'serving', lx: 613, ly: 452 },
       { id: 'rS3', from: 'sPay', to: 'payP', type: 'serving', points: [[750, 467], [750, 330], [648, 302]], label: 'serving', lx: 778, ly: 452 },
-      { id: 'rS4', from: 'sDel', to: 'send', type: 'serving', points: [[920, 467], [920, 330], [858, 302]], label: 'serving', lx: 948, ly: 452 },
+      { id: 'rS4', from: 'sDel', to: 'conf', type: 'serving', points: [[955, 467], [955, 182]], label: 'serving', lx: 983, ly: 452 },
       { id: 'rR1', from: 'cOrder', to: 'sOrder', type: 'realization', points: [[470, 561], [432, 513]], label: 'realization', lx: 420, ly: 545 },
+      { id: 'rR1b', from: 'cOrder', to: 'sCust', type: 'realization', points: [[510, 561], [572, 513]] },
       { id: 'rR2', from: 'cPay', to: 'sPay', type: 'realization', points: [[750, 561], [750, 513]], label: 'realization', lx: 700, ly: 545 },
       { id: 'rR3', from: 'cDel', to: 'sDel', type: 'realization', points: [[975, 561], [940, 513]], label: 'realization', lx: 1030, ly: 545 },
-      { id: 'rDir1', from: 'cPay', to: 'payP', type: 'serving', points: [[720, 561], [660, 302]] },
-      { id: 'rDir2', from: 'cPay', to: 'send', type: 'serving', points: [[780, 561], [810, 302]] },
+      { id: 'rDir1', from: 'cPay', to: 'send', type: 'serving', points: [[725, 561], [795, 302]] },
+      { id: 'rDir2', from: 'cPay', to: 'send', type: 'serving', points: [[762, 561], [830, 302]] },
       { id: 'rFl1', from: 'cOrder', to: 'cPay', type: 'flow', points: [[545, 585], [685, 585]], label: 'order data', lx: 615, ly: 573 },
       { id: 'rFl2', from: 'cPay', to: 'cDel', type: 'flow', points: [[815, 585], [920, 585]], label: 'payment data', lx: 868, ly: 573 },
-      { id: 'rFl3', from: 'cOrder', to: 'cDel', type: 'flow', points: [[480, 609], [480, 630], [1010, 630], [1010, 609]], label: 'order data', lx: 745, ly: 622 }
+      { id: 'rFl3', from: 'cDel', to: 'cOrder', type: 'flow', points: [[1010, 609], [1010, 630], [480, 630], [480, 609]], label: 'order data', lx: 745, ly: 622 }
     ]
   };
 
@@ -139,6 +141,7 @@
       { id: 'a2', from: 'rental', to: 'create', type: 'triggering', points: [[180, 300], [300, 300], [300, 315], [417, 315]] },
       { id: 'a3', from: 'create', to: 'valid', type: 'triggering', points: [[543, 315], [585, 315]] },
       { id: 'a4', from: 'valid', to: 'hand', type: 'triggering', points: [[640, 293], [640, 205], [610, 182]] },
+      { id: 'a7', from: 'hand', to: 'vcs', type: 'triggering', points: [[652, 158], [660, 156]] },
       { id: 'a5', from: 'valid', to: 'hand', type: 'flow', points: [[680, 293], [680, 205], [650, 182]] },
       { id: 'a6', from: 'agent', to: 'delivered', type: 'flow', points: [[800, 285], [895, 285]] },
       { id: 's1', from: 'sRes', to: 'create', type: 'serving', points: [[480, 411], [480, 337]] },
@@ -222,7 +225,8 @@
           <p><b>Couche application :</b> chaque étape du parcours est <b>servie</b> par un service applicatif :
           l'enregistrement par un « Self registration service », le déplacement et la sortie par un « Guidance service »,
           l'attente par un « Queuing service », le traitement par un « Patient record service ». Ces services sont <b>réalisés</b>
-          par quatre composants applicatifs : Self-registration Application, Queue Application et Patient Information System.</p>
+          par trois composants applicatifs : la Self-registration Application (qui réalise aussi les deux Guidance services),
+          la Queue Application et le Patient Information System.</p>
           <p><b>En une phrase :</b> le diagramme modélise le parcours d'un patient en soins ambulatoires et montre comment chaque
           étape de ce parcours est supportée par les applications de l'hôpital.</p>`
       });
@@ -244,22 +248,21 @@
         id: 'tp3-ex2',
         api: api2,
         question: 'Trois erreurs de modélisation se cachent dans ce diagramme (celles du correctif). Cliquez sur les éléments concernés, puis validez.',
+        aliases: { 'rDir1': 'rDir2' },
         targets: {
-          'jAnd': `La jonction « And » est <b>mal utilisée</b> : une junction ArchiMate sert à combiner <b>plusieurs</b> relations
-            du même type (plusieurs entrées ou plusieurs sorties). Ici elle est posée au milieu d'un enchaînement simple
-            « Process payment → Send order to delivery » (une entrée, une sortie) : elle n'exprime ni synchronisation ni choix —
-            elle n'a aucun sens. Au passage, ArchiMate n'est pas BPMN : la logique de contrôle fine ([yes]/[no], And/Or)
-            appartient au diagramme de processus BPMN, pas au modèle d'architecture.`,
+          'jAnd': `La jonction « <b>And</b> » (et son marquage [yes]/[no] autour du « Or ») importe de la <b>logique de contrôle
+            BPMN</b> dans un modèle d'architecture : une junction ArchiMate sert uniquement à combiner plusieurs relations
+            du même type — pas à reconstruire des gateways de synchronisation/décision. Ici elle « synchronise » le paiement
+            avec « Check customer data » : ce niveau de détail appartient au diagramme de processus BPMN, pas à ArchiMate.`,
           'check': `Le processus « Check customer data » est placé dans le conteneur du rôle <b>« Delivery Service »</b>, alors
             que c'est une activité de gestion de commande (vérifier les données du client avant paiement). Le rôle Delivery
             Service n'exécute par ailleurs <b>aucun</b> processus de livraison — l'affectation processus/rôle est incohérente.`,
-          'rDir1': `Le composant « Payment system » est relié <b>directement</b> aux processus métier par des relations serving,
-            en court-circuitant la couche des services : la structure en couches veut que le composant <b>réalise</b> un service
-            applicatif (« payment service ») et que ce <b>service</b> serve les processus métier. Les traits directs composant →
-            processus (vers « Process payment » et « Send order to delivery ») sont donc des erreurs de structure.`
+          'rDir2': `Le composant « Payment system » est relié <b>directement</b> au processus métier « Send order to delivery »
+            (les deux traits qui montent), en court-circuitant la couche des services : la structure en couches veut que le
+            composant <b>réalise</b> un service applicatif (« payment service ») et que ce <b>service</b> serve les processus
+            métier. Un trait direct composant → processus est une erreur de structure.`
         },
         decoys: [
-          { id: 'jOr', why: 'La jonction « Or » entre Register order et les deux chemins est discutable mais c’est le marquage [yes]/[no] et le « And » qui sont pointés par le correctif — et surtout elle a bien 1 entrée / 2 sorties.' },
           { id: 'rFl1', why: 'Un flow « order data » entre deux composants applicatifs est parfaitement légal : transfert d’information.' },
           { id: 'sDel', why: '« Delivery service » (service applicatif) réalisé par « Delivery system » et servant un processus : la chaîne est correcte.' },
           { id: 'evt', why: 'Un business event qui déclenche (triggering) le premier processus : usage canonique.' }
@@ -267,8 +270,8 @@
       });
       body.insertAdjacentHTML('beforeend', H.callout('info', 'i',
         `<b>Bonus d'observation :</b> « Recieve order » contient une faute d'orthographe (Receive), le rôle « Delivery Service »
-        ne contient aucune activité de livraison, et le processus « Confirm order » n'a pas de service applicatif qui le supporte —
-        autant de signes d'un modèle bâclé à mentionner dans une réponse d'examen complète.`));
+        ne contient aucune activité de livraison, et le service applicatif « Customer service » porte le même nom que le rôle
+        métier « Customer service » — autant de signes d'un modèle bâclé à mentionner dans une réponse d'examen complète.`));
 
       /* ---------- Exercice 3 ---------- */
       body = QUIZ.exo(page, { title: 'Exercice 3 — Location de véhicules : chasse aux erreurs', tag: 'Erreurs', ids: ['tp3-ex3'], anchor: 'ex3' });
@@ -283,8 +286,9 @@
         question: 'Trois erreurs (celles entourées dans le correctif). Cliquez sur les éléments concernés, puis validez.',
         targets: {
           'vcs': `Le service métier « Vehicle central service » est posé <b>à l'intérieur</b> du conteneur du rôle « Fleet officer »
-            et n'est relié à rien. Un service est un comportement <b>exposé</b> : il doit être réalisé par un processus et servir
-            un consommateur — il ne se place pas dans un rôle comme une simple étiquette.`,
+            et simplement « déclenché » par le processus. Un service est un comportement <b>exposé</b> : il devrait être
+            <b>réalisé</b> (realization) par le processus « Handover vehicle », placé hors du rôle, et <b>servir</b> un
+            consommateur — pas être posé dans un rôle comme une étiquette au bout d'un triggering.`,
           'realInv': `La realization entre « Reservation service » et « Reservation System » est <b>dans le mauvais sens</b> :
             la flèche pointillée à triangle creux part du service vers le composant. C'est le composant (concret) qui réalise
             le service (abstrait) : Reservation System —realization→ Reservation service.`,

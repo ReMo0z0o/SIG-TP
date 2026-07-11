@@ -39,7 +39,7 @@
       /* service administratif */
       { id: 'gj1', type: 'gateway', gw: 'xor', x: 150, y: 480 },
       { id: 'vci', type: 'task', x: 285, y: 480, w: 118, h: 56, label: 'vérifier complétude info' },
-      { id: 'gi', type: 'gateway', gw: 'xor', x: 415, y: 480, label: 'info?', ldy: 48, ldx: -18 },
+      { id: 'gi', type: 'gateway', gw: 'xor', x: 415, y: 480, label: 'info?', ldy: 31, ldx: -50 },
       { id: 'dim', type: 'task', x: 560, y: 415, w: 118, h: 56, label: 'demander info manquantes', icon: 'send' },
       { id: 'evg', type: 'gateway', gw: 'event', x: 690, y: 415 },
       { id: 'ir', type: 'catch', event: 'message', x: 810, y: 385, label: 'info reçues', ldy: 2, ldx: 44 },
@@ -73,7 +73,7 @@
       { id: 'f18', from: 'era', to: 'gj3', points: [[704, 240], [1115, 240], [1115, 457]] },
       { id: 'f19', from: 'gj3', to: 'fin' },
       { id: 'm1', from: 'eo', to: 'eo', type: 'msg', points: [[210, 212], [210, 120]], label: 'Offre', lx: 180, ly: 165 },
-      { id: 'm2', from: 'vr', to: 'vr', type: 'msg', points: [[360, 120], [360, 212]], label: 'Vérifier réponse', lx: 300, ly: 165, lw: 16 },
+      { id: 'm2', from: 'vr', to: 'vr', type: 'msg', points: [[360, 120], [360, 212]], label: 'Réponse', lx: 322, ly: 165 },
       { id: 'm3', from: 'dim', to: 'der', type: 'msg', points: [[560, 387], [560, 87]] },
       { id: 'm4', from: 'ei', to: 'ir', type: 'msg', points: [[810, 87], [810, 368]] }
     ]
@@ -103,7 +103,7 @@
     flows: [
       { id: 'f1', from: 's', to: 'scr' },
       { id: 'f2', from: 'scr', to: 'ed' },
-      { id: 'f3', from: 'ed', to: 'ts', points: [[438, 250], [528, 250]] },
+      { id: 'f3', from: 'ed', to: 'sub', points: [[438, 250], [490, 250]] },
       { id: 'f4', from: 'ts', to: 'ic' },
       { id: 'f5', from: 'ic', to: 'se' },
       { id: 'f6', from: 'sub', to: 'smc', points: [[810, 250], [839, 250]] },
@@ -119,23 +119,23 @@
 
   /* ---------------- Exercice 3 : Clients défaillants ---------------- */
   const EX3 = {
-    w: 1300, h: 700,
+    w: 1320, h: 700,
     pools: [
-      { x: 30, y: 20, w: 1240, h: 650, label: 'Employé' }
+      { x: 30, y: 20, w: 1260, h: 650, label: 'Employé' }
     ],
     nodes: [
       { id: 's', type: 'start', event: 'timer', x: 105, y: 330, label: 'Tous les matins', lw: 16 },
       { id: 'svg', type: 'task', x: 230, y: 330, w: 118, h: 58, label: 'Sauvegarder la base de données' },
       { id: 'vnc', type: 'task', x: 390, y: 330, w: 126, h: 58, label: 'vérifier nouveaux comptes défaillants' },
-      { id: 'gx', type: 'gateway', gw: 'xor', x: 520, y: 330, label: 'Nouveautés?', ldy: 50, ldx: 6 },
+      { id: 'gx', type: 'gateway', gw: 'xor', x: 520, y: 330, label: 'Nouveautés?', ldy: 78, ldx: -56 },
       /* sous-processus CRM (haut) */
       { id: 'subCrm', type: 'subprocess', x: 840, y: 160, w: 500, h: 200, label: 'Vérification du CRM' },
       { id: 'cs', type: 'start', x: 650, y: 170, r: 14 },
       { id: 'vec', type: 'task', x: 760, y: 170, w: 110, h: 54, label: 'vérifier entrées du CRM' },
       { id: 'gi', type: 'gateway', gw: 'xor', x: 880, y: 170, label: 'Nouveautés?', ldy: -4, ldx: -8 },
       { id: 'csd', type: 'task', x: 965, y: 225, w: 118, h: 52, label: 'Changer le statut des clients en défaut' },
-      { id: 'gj', type: 'gateway', gw: 'xor', x: 1040, y: 170 },
-      { id: 'ce', type: 'end', x: 1090, y: 170, r: 14 },
+      { id: 'gj', type: 'gateway', gw: 'xor', x: 1020, y: 170 },
+      { id: 'ce', type: 'end', x: 1063, y: 170, r: 13 },
       { id: 'bt1', type: 'boundary', event: 'timer', x: 700, y: 260, r: 15, interrupting: false, label: '16h00', ldx: -34, ldy: -14 },
       { id: 'ns1', type: 'end', event: 'message', x: 780, y: 310, label: 'Notification superviseur', ldy: 4, ldx: 76, lw: 24 },
       /* sous-processus Rapport (bas) */
@@ -149,7 +149,7 @@
       /* fin commune */
       { id: 'gjm', type: 'gateway', gw: 'xor', x: 1100, y: 330 },
       { id: 'ras', type: 'task', x: 1185, y: 330, w: 104, h: 58, label: 'rapport au superviseur', icon: 'send' },
-      { id: 'fin', type: 'end', x: 1252, y: 330, r: 15 }
+      { id: 'fin', type: 'end', x: 1268, y: 330, r: 15 }
     ],
     flows: [
       { id: 'f1', from: 's', to: 'svg' },
@@ -160,10 +160,10 @@
       /* intérieur CRM */
       { id: 'c1', from: 'cs', to: 'vec' },
       { id: 'c2', from: 'vec', to: 'gi' },
-      { id: 'c3', from: 'gi', to: 'gj', points: [[880, 147], [880, 105], [1040, 105], [1040, 147]], label: 'Aucune entrée', lx: 960, ly: 93, lw: 20 },
-      { id: 'c4', from: 'gi', to: 'csd', points: [[880, 193], [880, 225], [904, 225]], label: 'Nouvelle entrée', lx: 880, ly: 288, lw: 18 },
-      { id: 'c5', from: 'csd', to: 'gj', points: [[1026, 225], [1040, 225], [1040, 193]] },
-      { id: 'c6', from: 'gj', to: 'ce', points: [[1063, 170], [1076, 170]] },
+      { id: 'c3', from: 'gi', to: 'gj', points: [[880, 147], [880, 105], [1020, 105], [1020, 147]], label: 'Aucune entrée', lx: 950, ly: 93, lw: 20 },
+      { id: 'c4', from: 'gi', to: 'csd', points: [[880, 193], [880, 225], [904, 225]], label: 'Nouvelle entrée', lx: 848, ly: 212, lw: 18 },
+      { id: 'c5', from: 'csd', to: 'gj', points: [[1024, 225], [1020, 225], [1020, 193]] },
+      { id: 'c6', from: 'gj', to: 'ce', points: [[1043, 170], [1050, 170]] },
       { id: 'b1', from: 'bt1', to: 'ns1', points: [[700, 275], [700, 310], [763, 310]] },
       /* intérieur Rapport */
       { id: 'r1', from: 'rs', to: 'ecd' },
@@ -234,14 +234,14 @@
           {
             title: 'Complétude du dossier', text: `Le service administratif vérifie la complétude : XOR « <b>info?</b> » —
             <b>complet</b> → « enregistrer clôture » ; <b>incomplet</b> → « demander info manquantes » (tâche d'envoi, message vers le Client).`,
-            show: ['vci', 'gi', 'dim', 'ecl', 'f6', 'f7', 'f8', 'f9', 'm3']
+            show: ['vci', 'gi', 'dim', 'ecl', 'f6', 'f7', 'f8', 'f9']
           },
           {
             title: 'Le gateway événementiel', text: `Après la demande d'infos : gateway <b>événementiel</b> (losange au pentagone).
             Deux événements en compétition : <b>« info reçues »</b> (catch message — le client a complété et renvoyé les infos)
             → retour au XOR de convergence pour re-vérifier la complétude (boucle) ; <b>ou</b> le <b>timer « 2 semaines »</b> expire
             → « Enregistrer expiration et annulation ». Le premier événement qui survient gagne.`,
-            show: ['evg', 'ir', 'tm', 'eea', 'f10', 'f11', 'f12', 'f13', 'f14', 'der', 'ci', 'ei', 'c1', 'c2', 'm4']
+            show: ['evg', 'ir', 'tm', 'eea', 'f10', 'f11', 'f12', 'f13', 'f14', 'der', 'ci', 'ei', 'c1', 'c2', 'm3', 'm4']
           },
           {
             title: 'Convergences finales', text: `Les trois issues — clôture enregistrée, expiration, refus du client — convergent via
@@ -315,7 +315,7 @@
         steps: [
           {
             title: 'Le déclencheur quotidien', text: `« <b>Tous les matins</b> » = événement de début <b>timer</b>. Puis la séquence :
-            « Sauvegarder la base de données » → « vérifier nouveaux comptes défaillants », dans la lane <b>Employé</b>.`, show: []
+            « Sauvegarder la base de données » → « vérifier nouveaux comptes défaillants », dans le pool <b>Employé</b>.`, show: []
           },
           {
             title: 'La décision', text: `XOR « <b>Nouveautés?</b> » : <b>nouveau enregistrement</b> → branche du bas (rapport) ;

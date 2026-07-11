@@ -48,7 +48,7 @@
     flows: [
       { from: 'a', to: 'gx', points: [[135, 65], [255, 65], [255, 87]] },
       { from: 'c', to: 'gx', points: [[135, 155], [255, 155], [255, 133]] },
-      { from: 'gx', to: 'ga', points: [[255, 133], [355, 133], [355, 177]], fromSide: 'b' },
+      { from: 'gx', to: 'ga', points: [[278, 110], [355, 110], [355, 177]] },
       { from: 'b', to: 'ga', points: [[135, 245], [355, 245], [355, 223]] },
       { from: 'ga', to: 'd', points: [[378, 200], [430, 200]] }
     ]
@@ -144,7 +144,7 @@
         { id: 'e2', type: 'end', x: 480, y: 250 }
       ],
       flows: [
-        { from: 's1', to: 't1' }, { from: 't1', to: 't4' }, { from: 't4', to: 'e1' },
+        { from: 's1', to: 't1' }, { from: 't4', to: 'e1' },
         { from: 's2', to: 't2' }, { from: 't2', to: 't3' }, { from: 't3', to: 'e2' },
         { id: 'x1', from: 't1', to: 't2', type: msg ? 'msg' : 'seq', points: [[185, 105], [185, 225]] },
         { id: 'x2', from: 't3', to: 't4', type: msg ? 'msg' : 'seq', points: [[365, 225], [365, 105]], fromSide: 't' }
@@ -227,7 +227,7 @@
       }
     ],
     nodes: [
-      { id: 'ms', type: 'catch', event: 'message', x: 150, y: 170 },
+      { id: 'ms', type: 'start', event: 'message', x: 150, y: 170 },
       { id: 'enr', type: 'task', x: 260, y: 170, w: 112, h: 56, label: 'Enregistrer commande' },
       { id: 'gs', type: 'gateway', gw: 'and', x: 385, y: 170 },
       { id: 'mpp', type: 'task', x: 505, y: 278, w: 122, h: 56, label: 'Modifier planning de production' },
@@ -236,7 +236,7 @@
       { id: 'gj', type: 'gateway', gw: 'and', x: 815, y: 495 },
       { id: 'ef', type: 'task', x: 815, y: 170, w: 108, h: 56, label: 'envoyer facture', icon: 'send' },
       { id: 'fin', type: 'end', x: 915, y: 170 },
-      { id: 'dl', type: 'data', x: 680, y: 335, label: 'Date de livraison' }
+      { id: 'dl', type: 'data', x: 680, y: 335, label: 'Date de livraison', lpos: 'left' }
     ],
     flows: [
       { id: 'f1', from: 'ms', to: 'enr' },
@@ -248,8 +248,8 @@
       { id: 'f7', from: 'pt', to: 'gj', points: [[734, 495], [792, 495]] },
       { id: 'f8', from: 'gj', to: 'ef', points: [[815, 472], [815, 198]] },
       { id: 'f9', from: 'ef', to: 'fin' },
-      { id: 'a1', from: 'pt', to: 'dl', type: 'assoc', points: [[680, 467], [680, 362]] },
-      { id: 'a2', from: 'dl', to: 'ef', type: 'assoc', points: [[680, 308], [680, 240], [782, 240], [782, 198]] },
+      { id: 'a1', from: 'pt', to: 'dl', type: 'assoc', points: [[672, 467], [672, 362]] },
+      { id: 'a2', from: 'dl', to: 'ef', type: 'assoc', points: [[688, 308], [688, 240], [782, 240], [782, 198]] },
       { id: 'm1', from: 'ms', to: 'ms', type: 'msg', points: [[150, 80], [150, 153]], label: 'Commande', lx: 205, ly: 95 },
       { id: 'm2', from: 'ef', to: 'ef', type: 'msg', points: [[848, 142], [848, 80]], label: 'facture envoyée', lx: 770, ly: 95 }
     ]
@@ -278,7 +278,7 @@
       { id: 'g2', type: 'gateway', gw: 'and', x: 750, y: 225 },
       { id: 'ev', type: 'task', x: 855, y: 225, w: 104, h: 56, label: 'Evaluer la plainte' },
       { id: 'gx', type: 'gateway', gw: 'xor', x: 950, y: 225, label: 'Etat ?', ldx: 26, ldy: 4 },
-      { id: 'nc', type: 'throw', event: 'message', x: 1000, y: 152, label: 'Notifier le client', ldy: -46 },
+      { id: 'nc', type: 'throw', event: 'message', x: 1000, y: 152, label: 'Notifier le client', ldy: 2, ldx: -6 },
       { id: 'ms', type: 'task', x: 1010, y: 305, w: 116, h: 56, label: 'Mettre en place la solution' },
       { id: 'gj', type: 'gateway', gw: 'xor', x: 1090, y: 225 },
       { id: 'fin', type: 'end', x: 1140, y: 225 },
@@ -316,7 +316,7 @@
       { x: 40, y: 350, w: 800, h: 120, label: 'Client' }
     ],
     nodes: [
-      { id: 'ms', type: 'catch', event: 'message', x: 300, y: 165 },
+      { id: 'ms', type: 'start', event: 'message', x: 300, y: 165 },
       { id: 'gs', type: 'gateway', gw: 'and', x: 380, y: 165 },
       { id: 'rm', type: 'task', x: 500, y: 95, w: 116, h: 58, label: 'Réserver musique', sub: true },
       { id: 're', type: 'task', x: 500, y: 235, w: 116, h: 58, label: 'Réserver emplacement', sub: true },
@@ -356,7 +356,7 @@
       { id: 'ga', type: 'gateway', gw: 'xor', x: 575, y: 185, label: 'acceptation', ldx: 40, ldy: -2 },
       { id: 'enc', type: 'task', x: 700, y: 185, w: 118, h: 56, label: 'Encoder informations sur le groupe' },
       { id: 'gn', type: 'gateway', gw: 'xor', x: 815, y: 185 },
-      { id: 'ev', type: 'task', x: 930, y: 120, w: 110, h: 52, label: 'évaluation du groupe' },
+      { id: 'ev', type: 'task', x: 930, y: 145, w: 110, h: 52, label: 'évaluation du groupe' },
       { id: 'gj1', type: 'gateway', gw: 'xor', x: 1030, y: 185 },
       { id: 'inv', type: 'task', x: 1130, y: 185, w: 106, h: 56, label: 'invitation du groupe' },
       { id: 'lm', type: 'task', x: 460, y: 345, w: 110, h: 56, label: 'location du matériel', sub: true },
@@ -373,9 +373,9 @@
       { id: 'f-acc', from: 'ga', to: 'enc', points: [[598, 185], [641, 185]] },
       { id: 'f-ref', from: 'ga', to: 'sg', points: [[575, 208], [575, 250], [310, 250], [310, 213]], label: 'refus', lx: 440, ly: 240 },
       { from: 'enc', to: 'gn' },
-      { id: 'f-new', from: 'gn', to: 'ev', points: [[815, 162], [815, 120], [875, 120]], label: 'groupe nouveau', lx: 815, ly: 100, lw: 30 },
+      { id: 'f-new', from: 'gn', to: 'ev', points: [[815, 162], [815, 145], [875, 145]], label: 'groupe nouveau', lx: 800, ly: 128, lw: 30 },
       { id: 'f-known', from: 'gn', to: 'gj1', points: [[838, 185], [1007, 185]], label: 'groupe connu', lx: 922, ly: 202 },
-      { id: 'f-ev', from: 'ev', to: 'gj1', points: [[985, 120], [1030, 120], [1030, 162]] },
+      { id: 'f-ev', from: 'ev', to: 'gj1', points: [[985, 145], [1030, 145], [1030, 162]] },
       { from: 'gj1', to: 'inv' },
       { id: 'f-inv', from: 'inv', to: 'gf', points: [[1130, 213], [1130, 322]] },
       { from: 'lm', to: 'im' },
@@ -397,8 +397,8 @@
       { id: 'sub', type: 'subprocess', x: 445, y: 135, w: 390, h: 150, label: 'louer une salle' },
       { id: 'ss', type: 'start', x: 300, y: 150 },
       { id: 'con', type: 'task', x: 405, y: 150, w: 110, h: 54, label: 'se connecter au système' },
-      { id: 'rem', type: 'task', x: 550, y: 150, w: 112, h: 54, label: 'remplir le formulaire de location' },
-      { id: 'se', type: 'end', x: 625, y: 220, r: 14 },
+      { id: 'rem', type: 'task', x: 545, y: 150, w: 108, h: 54, label: 'remplir le formulaire de location' },
+      { id: 'se', type: 'end', x: 615, y: 185, r: 13 },
       { id: 'gp', type: 'gateway', gw: 'and', x: 260, y: 345 },
       { id: 'le', type: 'task', x: 400, y: 280, w: 108, h: 54, label: 'louer un endroit', sub: true },
       { id: 'gx1', type: 'gateway', gw: 'xor', x: 415, y: 425 },
@@ -407,7 +407,7 @@
       { id: 'gx2', type: 'gateway', gw: 'xor', x: 665, y: 425 },
       { id: 'gpj', type: 'gateway', gw: 'and', x: 745, y: 345 },
       { id: 'gm', type: 'gateway', gw: 'xor', x: 830, y: 260 },
-      { id: 'gperm', type: 'gateway', gw: 'xor', x: 905, y: 260, label: 'permission de nuit?', ldy: 46, ldx: 8, lw: 24 },
+      { id: 'gperm', type: 'gateway', gw: 'xor', x: 905, y: 260, label: 'permission de nuit?', ldy: 76, ldx: 8, lw: 24 },
       { id: 'dem', type: 'task', x: 1030, y: 140, w: 118, h: 56, label: 'démarches pour permission de nuit', sub: true },
       { id: 'gfin', type: 'gateway', gw: 'xor', x: 1030, y: 260 },
       { id: 'fin', type: 'end', x: 1105, y: 260 }
@@ -418,7 +418,7 @@
       { id: 'f-ext', from: 'g0', to: 'gp', points: [[170, 283], [170, 345], [237, 345]], label: 'extérieur', lx: 200, ly: 320 },
       { from: 'ss', to: 'con' },
       { from: 'con', to: 'rem' },
-      { id: 'f-rem', from: 'rem', to: 'se', points: [[606, 177], [606, 220], [611, 220]] },
+      { id: 'f-rem', from: 'rem', to: 'se', points: [[599, 150], [615, 150], [615, 172]] },
       { id: 'f-gp1', from: 'gp', to: 'le', points: [[260, 322], [260, 280], [346, 280]] },
       { id: 'f-gp2', from: 'gp', to: 'gx1', points: [[260, 368], [260, 425], [392, 425]] },
       { id: 'f-c1', from: 'gx1', to: 'lc', points: [[415, 402], [415, 390], [492, 390]] },
@@ -513,6 +513,7 @@
         e.target.disabled = true;
         const log = simRow.querySelector('#log3');
         const t1 = api3.token('#c4453c');
+        let t2 = null;
         log.textContent = 'Instance démarrée…';
         await t1.moveAlong(api3.flowPts('f-sa'));
         await t1.moveAlong(api3.flowPts('f-ax'));
@@ -521,7 +522,7 @@
           await t1.moveAlong(api3.flowPts('f-xc'));
           await t1.moveAlong(api3.flowPts('f-cg'));
           if (lap === 1) {
-            const t2 = api3.token('#2c5f9e');
+            t2 = api3.token('#2c5f9e');
             const p = api3.flowPts('f-gd');
             t2.set(p[0][0], p[0][1]);
             t2.moveAlong(p).then(() => t2.moveAlong(api3.flowPts('f-de'))).then(() => {
@@ -532,7 +533,8 @@
           await t1.moveAlong(api3.flowPts('f-bx'));
         }
         log.textContent = '… et la boucle C → B continue indéfiniment. L’instance ne se termine jamais.';
-        t1.hide();
+        t1.remove();
+        if (t2) t2.remove();
         e.target.disabled = false;
         simRunning = false;
       });
@@ -715,7 +717,8 @@
       body.innerHTML = `<div class="enonce">
         <p><b>Énoncé.</b> Un groupe d'étudiants souhaite formaliser le fonctionnement d'une petite structure qui organise des soirées
         et événements festifs, appelée communément sur le campus <b>Event Bureau</b>. Le client devra indiquer dans la demande d'organisation
-        d'un événement le budget alloué, le nombre de personnes invitées et l'endroit où l'événement devrait être organisé.</p>
+        d'un événement le budget alloué, le nombre de personnes invitées et l'endroit où l'événement devrait être organisé.
+        En utilisant cette information, l'Event Bureau sera capable d'organiser tous les aspects de l'événement.</p>
         <p>Lorsque l'emplacement est à l'<b>intérieur</b>, une salle doit être louée en se connectant au système afin de remplir le formulaire
         de location correspondant. Au cas où l'emplacement est à l'<b>extérieur</b>, un endroit doit être loué, ainsi qu'un chapiteau <b>ou</b> une
         tonnelle. Si nécessaire, les démarches visant à obtenir une permission de bruit après 22 heures doivent être réalisées.</p>
@@ -724,7 +727,9 @@
         Si le groupe refuse, un autre groupe est sélectionné et contacté <b>jusqu'à</b> obtenir une réponse positive. S'il accepte, ses informations
         sont encodées sur une fiche signalétique. Ensuite, le groupe est évalué afin de vérifier sa qualité — les groupes <b>connus</b> ne sont pas
         à nouveau évalués. Finalement, le groupe est invité.</p>
-        <p>Après la sélection de l'emplacement et de la musique, la nourriture et les boissons sont commandées.</p></div>
+        <p>Après la sélection de l'emplacement et de la musique, la nourriture et les boissons sont commandées.
+        Dans le cas où un groupe vient animer la soirée, la nourriture et les boissons sont également commandées pour
+        sustenter le groupe de musique.</p></div>
         <p>La démarche du TP : d'abord un <b>diagramme de haut niveau</b> avec les grandes étapes (des sous-processus repliés <span class="kbd">⊞</span>),
         puis chaque activité complexe est détaillée dans son propre diagramme.</p>`;
 
@@ -762,17 +767,17 @@
           {
             title: 'La boucle de contact', text: `« Si le groupe refuse, un autre groupe est sélectionné et contacté <b>jusqu'à</b> obtenir une réponse positive » :
             sélectionner → notifier (message « demande » au pool <b>Groupe de musique</b>) → XOR : <b>refus</b> = retour à la sélection (boucle), <b>acceptation</b> = on continue.`,
-            show: ['sg', 'ng', 'ga', 'm1', 'f-top', 'f-acc', 'f-ref']
+            show: ['sg', 'ng', 'ga', 'm1', 'f-top', 'f-ref']
           },
           {
             title: 'Évaluer… sauf si connu', text: `Encoder la fiche signalétique, puis XOR : <b>groupe nouveau</b> → « évaluation du groupe » ;
             <b>groupe connu</b> → on saute l'évaluation. Les deux chemins fusionnent (XOR), puis « invitation du groupe ».`,
-            show: ['enc', 'gn', 'ev', 'gj1', 'inv', 'f-new', 'f-known', 'f-ev', 'f-inv']
+            show: ['enc', 'gn', 'ev', 'gj1', 'inv', 'f-acc', 'f-new', 'f-known', 'f-ev']
           },
           {
             title: 'Fusion finale', text: `Le chemin « CD's » et le chemin « groupe » se rejoignent dans un <b>XOR</b> final — une seule des
             deux branches a été empruntée. Fin du sous-processus.`,
-            show: ['lm', 'im', 'gf', 'fin', 'f-bot', 'f-im']
+            show: ['lm', 'im', 'gf', 'fin', 'f-bot', 'f-im', 'f-inv']
           }
         ]
       });

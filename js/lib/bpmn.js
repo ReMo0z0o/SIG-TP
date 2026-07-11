@@ -216,7 +216,11 @@ window.BPMN = (function () {
       fill: '#fff', stroke: INK, 'stroke-width': 1.4, class: 'dg-shape'
     }, g);
     el('path', { d: `M ${x + w - f} ${y} L ${x + w - f} ${y + f} L ${x + w} ${y + f}`, fill: 'none', stroke: INK, 'stroke-width': 1.4 }, g);
-    if (n.label) textBlock(g, n.x, y + h + 14, n.label, { size: 11.5, maxChars: 16 });
+    if (n.label) {
+      if (n.lpos === 'left') textBlock(g, x - 8, n.y, n.label, { size: 11.5, anchor: 'end', maxChars: 16 });
+      else if (n.lpos === 'right') textBlock(g, x + w + 8, n.y, n.label, { size: 11.5, anchor: 'start', maxChars: 16 });
+      else textBlock(g, n.x, y + h + 14, n.label, { size: 11.5, maxChars: 16 });
+    }
   }
 
   function drawNote(g, n) {
@@ -461,6 +465,8 @@ window.BPMN = (function () {
           g.classList.add('dg-clickable');
           g.setAttribute('tabindex', '0');
           g.setAttribute('role', 'button');
+          const n = byId[id];
+          g.setAttribute('aria-label', n && n.label ? 'Sélectionner : ' + n.label : 'Sélectionner ' + id);
           const h = () => cb(id, g);
           g.addEventListener('click', h);
           g.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); h(); } });

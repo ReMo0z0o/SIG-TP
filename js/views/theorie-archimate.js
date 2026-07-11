@@ -83,9 +83,9 @@
       { id: 'r4', from: 'sPay', to: 'insurant', type: 'serving', points: [[620, 138], [465, 79]] },
       { id: 'r5', from: 'archisurance', to: 'insurer', type: 'assignment', points: [[860, 154], [860, 211]] },
       { id: 'r6', from: 'insurer', to: 'proc', type: 'assignment', points: [[795, 250], [780, 262]] },
-      { id: 'r7', from: 'proc', to: 'sReg', type: 'realization', points: [[240, 235], [240, 182]] },
-      { id: 'r8', from: 'proc', to: 'sAcc', type: 'realization', points: [[430, 235], [430, 182]] },
-      { id: 'r9', from: 'proc', to: 'sPay', type: 'realization', points: [[625, 235], [625, 182]] },
+      { id: 'r7', from: 'pReg', to: 'sReg', type: 'realization', points: [[250, 277], [250, 182]] },
+      { id: 'r8', from: 'pAcc', to: 'sAcc', type: 'realization', points: [[400, 277], [400, 182]] },
+      { id: 'r9', from: 'pPay', to: 'sPay', type: 'realization', points: [[660, 277], [660, 182]] },
       { id: 'r10', from: 'pReg', to: 'pAcc', type: 'triggering', points: [[303, 300], [342, 300]] },
       { id: 'r11', from: 'pAcc', to: 'pAdj', type: 'triggering', points: [[448, 300], [487, 300]] },
       { id: 'r12', from: 'pAdj', to: 'pPay', type: 'triggering', points: [[593, 300], [632, 300]] },
@@ -265,7 +265,7 @@
           Au niveau <b>métier</b> : l'acteur « Customer » est assigné au rôle « Insurant », qui consomme trois services métier
           (enregistrement, acceptation et paiement des sinistres). Ces services sont réalisés par le processus métier
           « Process Claims », composé de quatre étapes en séquence (Register → Accept → Adjudicate → Pay), exécuté par
-          le rôle « Insurer » assigné à l'acteur « ArchiSurance ». Le processus accède à l'objet métier « Customer Information ».</p>
+          le rôle « Insurer », auquel l'acteur « ArchiSurance » est assigné. Le processus accède à l'objet métier « Customer Information ».</p>
           <p>Au niveau <b>application</b> : le composant « CRM system » réalise le service applicatif « Customer Data Management »
           qui sert l'étape « Register » ; le composant « Financial application » réalise « Payment Processing » qui sert l'étape
           « Pay ». L'objet de données « Customer Data », accédé par le CRM, réalise l'objet métier « Customer Information ».</p>`

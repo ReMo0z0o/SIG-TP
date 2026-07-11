@@ -153,7 +153,8 @@ window.ARCHI = (function () {
   /* ---------- relations ---------- */
   function nodeBox(n) {
     if (n.container) return { x: n.x, y: n.y, w: n.w, h: n.h, cx: n.x + n.w / 2, cy: n.y + n.h / 2 };
-    const w = n.w || 130, h = n.h || 52;
+    const w = n.kind === 'junction' ? 14 : (n.w || 130);
+    const h = n.kind === 'junction' ? 14 : (n.h || 52);
     return { x: n.x - w / 2, y: n.y - h / 2, w, h, cx: n.x, cy: n.y };
   }
 
@@ -297,6 +298,8 @@ window.ARCHI = (function () {
           t.classList.add('dg-clickable');
           t.setAttribute('tabindex', '0');
           t.setAttribute('role', 'button');
+          const n = byId[id];
+          t.setAttribute('aria-label', n && n.label ? 'Sélectionner : ' + n.label : 'Sélectionner la relation ' + id);
           if (t.classList.contains('dg-flow')) {
             // zone de clic élargie pour les relations
             const p = t.querySelector('.dg-flow-path');
