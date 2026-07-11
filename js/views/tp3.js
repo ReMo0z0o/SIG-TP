@@ -164,14 +164,14 @@
       { id: 'roleA', container: true, layer: 'business', kind: 'role', x: 430, y: 315, w: 540, h: 110, label: 'Accounting Clerk', labelAnchor: 'start', labelX: 445 },
       { id: 'inv', kind: 'process', layer: 'business', x: 760, y: 380, w: 118, h: 44, label: 'Prepare invoice' },
       { id: 'notif', kind: 'process', layer: 'business', x: 895, y: 380, w: 112, h: 44, label: 'Notify customer' },
-      { id: 'sEntry', kind: 'service', layer: 'app', x: 540, y: 490, w: 130, h: 48, label: 'Order entry service' },
-      { id: 'sVerif', kind: 'service', layer: 'app', x: 700, y: 490, w: 140, h: 48, label: 'Stock verification service' },
-      { id: 'sInv', kind: 'service', layer: 'app', x: 860, y: 490, w: 125, h: 48, label: 'Invoicing service' },
-      { id: 'sNotif', kind: 'service', layer: 'app', x: 380, y: 490, w: 135, h: 48, label: 'Notification service' },
-      { id: 'cExcel', kind: 'component', layer: 'app', x: 540, y: 580, w: 130, h: 48, label: 'Excel order file' },
-      { id: 'cStock', kind: 'component', layer: 'app', x: 700, y: 580, w: 125, h: 48, label: 'Stock data base' },
-      { id: 'cAcc', kind: 'component', layer: 'app', x: 860, y: 580, w: 135, h: 48, label: 'Accounting software' },
-      { id: 'cMail', kind: 'component', layer: 'app', x: 380, y: 580, w: 105, h: 48, label: 'Email Tool' }
+      { id: 'sEntry', kind: 'service', layer: 'app', x: 500, y: 490, w: 130, h: 48, label: 'Order entry service' },
+      { id: 'sVerif', kind: 'service', layer: 'app', x: 640, y: 490, w: 132, h: 48, label: 'Stock verification service' },
+      { id: 'sInv', kind: 'service', layer: 'app', x: 782, y: 490, w: 120, h: 48, label: 'Invoicing service' },
+      { id: 'sNotif', kind: 'service', layer: 'app', x: 918, y: 490, w: 130, h: 48, label: 'Notification service' },
+      { id: 'cExcel', kind: 'component', layer: 'app', x: 500, y: 580, w: 130, h: 48, label: 'Excel order file' },
+      { id: 'cStock', kind: 'component', layer: 'app', x: 640, y: 580, w: 125, h: 48, label: 'Stock data base' },
+      { id: 'cAcc', kind: 'component', layer: 'app', x: 782, y: 580, w: 130, h: 48, label: 'Accounting software' },
+      { id: 'cMail', kind: 'component', layer: 'app', x: 918, y: 580, w: 105, h: 48, label: 'Email Tool' }
     ],
     rels: [
       { id: 'r1', from: 'reg', to: 'ohs', type: 'realization', points: [[481, 105], [430, 105], [430, 70], [412, 70]] },
@@ -179,14 +179,14 @@
       { id: 'r3', from: 'reg', to: 'chk', type: 'triggering', points: [[570, 127], [570, 240], [583, 240]] },
       { id: 'r4', from: 'chk', to: 'inv', type: 'triggering', points: [[680, 262], [680, 380], [700, 380]] },
       { id: 'r5', from: 'inv', to: 'notif', type: 'triggering', points: [[820, 380], [838, 380]] },
-      { id: 'r6', from: 'sEntry', to: 'reg', type: 'serving', points: [[540, 466], [540, 127]] },
-      { id: 'r7', from: 'sVerif', to: 'chk', type: 'serving', points: [[700, 466], [700, 262]] },
-      { id: 'r8', from: 'sInv', to: 'inv', type: 'serving', points: [[860, 466], [860, 402]] },
-      { id: 'r9', from: 'sNotif', to: 'notif', type: 'serving', points: [[380, 466], [380, 445], [1000, 445], [1000, 402], [952, 395]] },
-      { id: 'r10', from: 'cExcel', to: 'sEntry', type: 'realization', points: [[540, 556], [540, 514]] },
-      { id: 'r11', from: 'cStock', to: 'sVerif', type: 'realization', points: [[700, 556], [700, 514]] },
-      { id: 'r12', from: 'cAcc', to: 'sInv', type: 'realization', points: [[860, 556], [860, 514]] },
-      { id: 'r13', from: 'cMail', to: 'sNotif', type: 'realization', points: [[380, 556], [380, 514]] }
+      { id: 'r6', from: 'sEntry', to: 'reg', type: 'serving', points: [[500, 466], [500, 127]] },
+      { id: 'r7', from: 'sVerif', to: 'chk', type: 'serving', points: [[640, 466], [640, 262]] },
+      { id: 'r8', from: 'sInv', to: 'inv', type: 'serving', points: [[782, 466], [782, 402]] },
+      { id: 'r9', from: 'sNotif', to: 'notif', type: 'serving', points: [[918, 466], [918, 402]] },
+      { id: 'r10', from: 'cExcel', to: 'sEntry', type: 'realization', points: [[500, 556], [500, 514]] },
+      { id: 'r11', from: 'cStock', to: 'sVerif', type: 'realization', points: [[640, 556], [640, 514]] },
+      { id: 'r12', from: 'cAcc', to: 'sInv', type: 'realization', points: [[782, 556], [782, 514]] },
+      { id: 'r13', from: 'cMail', to: 'sNotif', type: 'realization', points: [[918, 556], [918, 514]] }
     ]
   };
 

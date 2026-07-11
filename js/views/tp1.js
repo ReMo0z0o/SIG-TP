@@ -5,7 +5,7 @@
 (function () {
 
   const IDS = ['tp1-ex1', 'tp1-ex2', 'tp1-ex3', 'tp1-ex4', 'tp1-ex5', 'tp1-ex6',
-    'tp1-ex7', 'tp1-ex8', 'tp1-ex9a', 'tp1-ex9b', 'tp1-ex9c'];
+    'tp1-ex7', 'tp1-ex8q', 'tp1-ex8', 'tp1-ex9a', 'tp1-ex9b', 'tp1-ex9c'];
 
   function canvasIn(parent, title, tag) {
     const { panel, scroll } = H.canvas(title, tag);
@@ -656,7 +656,7 @@
       });
 
       /* ---------- Exercice 8 ---------- */
-      body = QUIZ.exo(page, { title: 'Exercice 8 — Modélisation : gestion des plaintes', tag: 'Modélisation', ids: ['tp1-ex8'], anchor: 'ex8' });
+      body = QUIZ.exo(page, { title: 'Exercice 8 — Modélisation : gestion des plaintes', tag: 'Modélisation', ids: ['tp1-ex8q', 'tp1-ex8'], anchor: 'ex8' });
       body.innerHTML = `<div class="enonce">
         <p><b>Énoncé.</b> Chaque année, l'agence de voyages Y reçoit environ 10.000 plaintes. Il y a un département spécifique
         chargé de la gestion de ces plaintes, bien que le département logistique intervient également dans le processus.</p>

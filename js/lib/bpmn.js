@@ -355,7 +355,7 @@ window.BPMN = (function () {
       }, g);
       t.textContent = p.label || '';
     } else if (p.label) {
-      textBlock(g, p.x + p.w / 2, p.y + p.h / 2, p.label, { size: 14, weight: 600 });
+      textBlock(g, p.x + p.w / 2, p.y + p.h / 2, p.label, { size: 14, weight: 600, maxChars: 60 });
     }
     let laneY = p.y;
     (p.lanes || []).forEach((ln, i) => {
