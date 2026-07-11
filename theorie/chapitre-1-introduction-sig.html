@@ -1,0 +1,1204 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapitre 1 — Introduction aux Systèmes d'Information de Gestion</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --teal:#087E8B;          /* teal UNamur, identité du cours */
+  --teal-deep:#0B5563;
+  --teal-soft:#E4F2F4;
+  --ink:#152A31;
+  --paper:#FBFDFD;
+  --amber:#D98E1B;         /* signal "À l'examen" */
+  --amber-soft:#FDF3E1;
+  --ok:#2E8B57;
+  --ok-soft:#E7F5EC;
+  --err:#C0503C;
+  --err-soft:#FBEBE7;
+  --line:#D5E4E7;
+  --radius:14px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Instrument Sans',sans-serif;
+  background:var(--paper);
+  color:var(--ink);
+  line-height:1.65;
+  font-size:16.5px;
+}
+h1,h2,h3,h4{font-family:'Space Grotesk',sans-serif;line-height:1.2}
+
+/* ---------- NAV ---------- */
+nav{
+  position:sticky;top:0;z-index:50;
+  background:rgba(251,253,253,.92);backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--line);
+  display:flex;align-items:center;gap:6px;
+  padding:10px 20px;overflow-x:auto;white-space:nowrap;
+}
+nav .brand{font-family:'Space Grotesk';font-weight:700;color:var(--teal-deep);margin-right:12px;font-size:.95rem}
+nav a{
+  text-decoration:none;color:var(--teal-deep);
+  font-size:.82rem;font-weight:600;
+  padding:6px 12px;border-radius:99px;border:1px solid transparent;
+}
+nav a:hover{background:var(--teal-soft);border-color:var(--line)}
+
+/* ---------- HERO ---------- */
+header{
+  background:linear-gradient(135deg,var(--teal-deep) 0%,var(--teal) 70%);
+  color:#fff;padding:64px 24px 56px;position:relative;overflow:hidden;
+}
+header::after{
+  content:"";position:absolute;right:-120px;top:-120px;width:420px;height:420px;
+  border-radius:50%;border:60px solid rgba(255,255,255,.07);
+}
+.hero-inner{max-width:920px;margin:0 auto;position:relative}
+.hero-kicker{
+  display:inline-block;font-size:.78rem;font-weight:700;letter-spacing:.14em;
+  text-transform:uppercase;background:rgba(255,255,255,.15);
+  padding:6px 14px;border-radius:99px;margin-bottom:18px;
+}
+header h1{font-size:clamp(1.9rem,4.5vw,3rem);font-weight:700;margin-bottom:14px}
+header p.sub{font-size:1.05rem;max-width:640px;opacity:.92}
+.hero-tags{margin-top:22px;display:flex;gap:10px;flex-wrap:wrap}
+.hero-tags span{background:rgba(255,255,255,.14);padding:6px 14px;border-radius:99px;font-size:.82rem;font-weight:600}
+
+/* ---------- LAYOUT ---------- */
+main{max-width:920px;margin:0 auto;padding:24px 24px 90px}
+section.chapter{margin-top:58px;scroll-margin-top:80px}
+.sec-head{display:flex;align-items:baseline;gap:14px;border-bottom:3px solid var(--teal);padding-bottom:10px;margin-bottom:26px}
+.sec-num{
+  font-family:'Space Grotesk';font-weight:700;font-size:.85rem;color:#fff;
+  background:var(--teal);padding:5px 12px;border-radius:8px;flex-shrink:0;
+}
+.sec-head h2{font-size:clamp(1.35rem,3vw,1.8rem);color:var(--teal-deep)}
+.slide-ref{font-size:.75rem;font-weight:600;color:var(--teal);background:var(--teal-soft);padding:2px 9px;border-radius:99px;white-space:nowrap;vertical-align:middle}
+h3{color:var(--teal-deep);font-size:1.18rem;margin:34px 0 12px}
+p{margin-bottom:14px}
+strong{color:var(--teal-deep)}
+ul.clean{margin:0 0 16px 22px}
+ul.clean li{margin-bottom:8px}
+
+/* ---------- CARDS & CALLOUTS ---------- */
+.card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:22px 24px;margin:18px 0}
+.def{border-left:5px solid var(--teal);background:var(--teal-soft)}
+.def .def-label{font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--teal-deep);display:block;margin-bottom:6px}
+.exam{
+  border:1.5px dashed var(--amber);background:var(--amber-soft);
+  border-radius:var(--radius);padding:18px 22px;margin:18px 0;
+}
+.exam .exam-label{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:'Space Grotesk';font-weight:700;font-size:.85rem;color:var(--amber);
+  text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;
+}
+.simple{
+  background:#fff;border:1px solid var(--line);border-left:5px solid var(--ok);
+  border-radius:var(--radius);padding:18px 22px;margin:18px 0;
+}
+.simple .s-label{font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ok);display:block;margin-bottom:6px}
+.stars{color:var(--amber);letter-spacing:.1em;font-size:.95rem}
+
+/* ---------- TABLES ---------- */
+table{width:100%;border-collapse:collapse;margin:18px 0;background:#fff;border-radius:var(--radius);overflow:hidden;font-size:.93rem}
+th{background:var(--teal-deep);color:#fff;text-align:left;padding:11px 14px;font-family:'Space Grotesk';font-weight:600;font-size:.85rem}
+td{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:none}
+tr:nth-child(even) td{background:#F4FAFB}
+
+/* ---------- FIGURES ---------- */
+figure{margin:22px 0;text-align:center}
+figure svg{max-width:100%;height:auto}
+figcaption{font-size:.83rem;color:#5b7178;margin-top:10px;font-style:italic}
+
+/* ---------- QUIZ ---------- */
+.quiz{
+  background:#fff;border:1.5px solid var(--teal);border-radius:var(--radius);
+  padding:20px 22px;margin:26px 0;
+}
+.quiz .q-label{
+  display:inline-block;font-family:'Space Grotesk';font-weight:700;font-size:.78rem;
+  color:#fff;background:var(--teal);padding:4px 12px;border-radius:99px;
+  text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;
+}
+.quiz .q-text{font-weight:600;margin-bottom:14px}
+.quiz .opts{display:grid;gap:9px}
+.quiz button.opt{
+  text-align:left;font-family:'Instrument Sans';font-size:.95rem;
+  padding:11px 15px;border-radius:10px;border:1.5px solid var(--line);
+  background:var(--paper);cursor:pointer;transition:all .15s;color:var(--ink);
+}
+.quiz button.opt:hover{border-color:var(--teal);background:var(--teal-soft)}
+.quiz button.opt.correct{background:var(--ok-soft);border-color:var(--ok);font-weight:600}
+.quiz button.opt.wrong{background:var(--err-soft);border-color:var(--err)}
+.quiz button.opt:disabled{cursor:default}
+.quiz .expl{
+  display:none;margin-top:14px;padding:13px 16px;border-radius:10px;
+  background:var(--teal-soft);font-size:.92rem;border-left:4px solid var(--teal);
+}
+.quiz .expl.show{display:block}
+
+/* ---------- DETAILS (corrections) ---------- */
+details{
+  background:#fff;border:1px solid var(--line);border-radius:var(--radius);
+  margin:14px 0;overflow:hidden;
+}
+details summary{
+  cursor:pointer;padding:15px 20px;font-weight:600;color:var(--teal-deep);
+  list-style:none;display:flex;align-items:center;gap:10px;user-select:none;
+}
+details summary::before{content:"▸";color:var(--teal);transition:transform .2s}
+details[open] summary::before{transform:rotate(90deg)}
+details summary:hover{background:var(--teal-soft)}
+details .d-body{padding:4px 22px 20px;border-top:1px solid var(--line)}
+
+/* ---------- MISC ---------- */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:700px){.grid2{grid-template-columns:1fr}}
+.pill{display:inline-block;background:var(--teal-soft);color:var(--teal-deep);font-weight:600;font-size:.8rem;padding:3px 11px;border-radius:99px;margin:2px}
+footer{background:var(--teal-deep);color:#cfe6ea;text-align:center;padding:34px 20px;font-size:.85rem}
+.top-link{display:inline-block;margin-top:26px;font-size:.85rem;font-weight:600;color:var(--teal);text-decoration:none}
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="brand">SIG · Chap. 1</span>
+  <a href="#s1">1. Pourquoi ?</a>
+  <a href="#s2">2. IT doesn't matter</a>
+  <a href="#s3">3. Alignement</a>
+  <a href="#s4">4. Données → Sagesse</a>
+  <a href="#s5">5. Système & SIG</a>
+  <a href="#s6">6. Types de SIG</a>
+  <a href="#s7">7. Silos</a>
+  <a href="#s8">8. CRM · ERP · EAI</a>
+  <a href="#recap">★ Récap</a>
+  <a href="#training">Entraînement</a>
+</nav>
+
+<header>
+  <div class="hero-inner">
+    <span class="hero-kicker">Systèmes d'Information de Gestion · Prof. Simonofski · 2025–2026</span>
+    <h1>Chapitre 1 — Introduction aux SIG</h1>
+    <p class="sub">De la digitalisation ratée d'i-Police à la pyramide DIKW : tout ce qu'il faut maîtriser sur les fondements des systèmes d'information de gestion, expliqué en profondeur, avec exercices de vérification à chaque étape.</p>
+    <div class="hero-tags">
+      <span>≈ 40 % théorie & mises en situation</span>
+      <span>Basé sur les slides 2025–2026</span>
+      <span>8 sections · 10 quiz · exercices finaux</span>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<!-- ============================================================ -->
+<!-- SECTION 1 -->
+<!-- ============================================================ -->
+<section class="chapter" id="s1">
+  <div class="sec-head">
+    <span class="sec-num">01</span>
+    <h2>Pourquoi ce cours ? L'échec des projets IT <span class="slide-ref">slides 7–11</span></h2>
+  </div>
+
+  <p>Le professeur ouvre le cours avec deux questions provocatrices : <strong>pourquoi un gestionnaire a-t-il besoin de bases en informatique ?</strong> et <strong>pourquoi ne pas laisser l'IT aux informaticiens ?</strong> La réponse tient en une phrase clé des slides :</p>
+
+  <div class="card def">
+    <span class="def-label">Message central du chapitre</span>
+    <p style="margin:0"><em>« Tout le monde, quel que soit son rôle, devra participer à la conception et à la mise en œuvre des technologies numériques, dont les systèmes d'information constituent la base. »</em></p>
+  </div>
+
+  <p>Deux besoins justifient ce cours (slide 8) :</p>
+  <ul class="clean">
+    <li>Le besoin de <strong>gestionnaires dotés de solides compétences en informatique</strong> ;</li>
+    <li>Le besoin d'évoluer d'un <strong>modèle cloisonné</strong> (unités et départements séparés) vers un <strong>modèle numérique global</strong>, où le numérique soutient une <strong>transformation managériale</strong>.</li>
+  </ul>
+
+  <h3>La preuve par l'échec : le Chaos Report</h3>
+  <p>Le Standish Group (Chaos Report) mesure le taux de réussite des projets logiciels. Les chiffres à connaître :</p>
+
+  <figure>
+    <svg viewBox="0 0 560 210" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Répartition des projets logiciels">
+      <rect x="30" y="60" width="265" height="52" rx="8" fill="#D98E1B"/>
+      <rect x="300" y="60" width="145" height="52" rx="8" fill="#2E8B57"/>
+      <rect x="450" y="60" width="90" height="52" rx="8" fill="#C0503C"/>
+      <text x="162" y="92" text-anchor="middle" fill="#fff" font-family="Space Grotesk" font-weight="700" font-size="20">53 %</text>
+      <text x="372" y="92" text-anchor="middle" fill="#fff" font-family="Space Grotesk" font-weight="700" font-size="20">29 %</text>
+      <text x="495" y="92" text-anchor="middle" fill="#fff" font-family="Space Grotesk" font-weight="700" font-size="20">18 %</text>
+      <text x="162" y="135" text-anchor="middle" fill="#152A31" font-family="Instrument Sans" font-size="14" font-weight="600">Challenged (en difficulté)</text>
+      <text x="372" y="135" text-anchor="middle" fill="#152A31" font-family="Instrument Sans" font-size="14" font-weight="600">Succeed</text>
+      <text x="495" y="135" text-anchor="middle" fill="#152A31" font-family="Instrument Sans" font-size="14" font-weight="600">Fail</text>
+      <text x="280" y="180" text-anchor="middle" fill="#0B5563" font-family="Instrument Sans" font-size="14" font-style="italic">« Root cause of most failures is business process ignorance »</text>
+      <text x="280" y="35" text-anchor="middle" fill="#0B5563" font-family="Space Grotesk" font-size="15" font-weight="700">Software Engineering — Standish Group, Chaos Report</text>
+    </svg>
+    <figcaption>Seuls 29 % des projets réussissent. La cause racine de la majorité des échecs : l'ignorance des processus métier — pas la technologie elle-même.</figcaption>
+  </figure>
+
+  <div class="simple">
+    <span class="s-label">En clair</span>
+    <p style="margin:0">Les projets IT n'échouent presque jamais parce que « l'ordinateur ne marche pas ». Ils échouent parce que les gens qui les conçoivent <strong>ne comprennent pas comment l'organisation travaille réellement</strong>. C'est exactement le rôle du gestionnaire formé aux SIG : faire le pont.</p>
+  </div>
+
+  <h3>Exemple d'actualité : i-Police</h3>
+  <p>Le projet de numérisation de la police fédérale belge <strong>« i-Police »</strong> a été arrêté après <strong>cinq ans de chantier</strong>, en raison de <em>« graves lacunes dans l'exécution du marché public »</em> et de <em>« résultats qui ne correspondent pas aux attentes initiales »</em>. C'est un exemple concret, belge et récent, d'un échec majeur de digitalisation — retiens-le comme illustration possible dans une question de mise en situation.</p>
+
+  <h3>Les 6 raisons des échecs <span class="slide-ref">slide 11</span></h3>
+  <p>Liste à mémoriser telle quelle — elle se prête parfaitement à une question de restitution ou à une mise en situation (« identifiez les raisons de l'échec dans ce cas ») :</p>
+
+  <table>
+    <tr><th>Raison</th><th>Ce que ça veut dire concrètement</th></tr>
+    <tr><td><strong>1. Manque de planification</strong></td><td>Pas de feuille de route claire, délais et budget irréalistes dès le départ.</td></tr>
+    <tr><td><strong>2. Manque de ressources</strong></td><td>Budget, personnel ou temps insuffisants pour mener le projet à bien.</td></tr>
+    <tr><td><strong>3. Manque d'implication des utilisateurs</strong></td><td>Le système est conçu sans les personnes qui vont l'utiliser → il ne correspond pas à leurs besoins réels.</td></tr>
+    <tr><td><strong>4. Exigences incomplètes</strong></td><td>On n'a pas défini précisément ce que le système doit faire (requirements flous).</td></tr>
+    <tr><td><strong>5. Attentes irréalistes</strong></td><td>On attend de la technologie des miracles qu'elle ne peut pas produire.</td></tr>
+    <tr><td><strong>6. Ignorance en matière de technologie</strong></td><td>Les décideurs ne comprennent pas ce que la technologie peut ou ne peut pas faire.</td></tr>
+  </table>
+
+  <div class="quiz" data-answer="c">
+    <span class="q-label">Vérifie ta compréhension</span>
+    <p class="q-text">Selon le Chaos Report, quelle est la cause racine de la plupart des échecs de projets logiciels ?</p>
+    <div class="opts">
+      <button class="opt" data-k="a">Le manque de budget informatique</button>
+      <button class="opt" data-k="b">Des technologies pas assez performantes</button>
+      <button class="opt" data-k="c">L'ignorance des processus métier (business process ignorance)</button>
+      <button class="opt" data-k="d">Le manque de développeurs qualifiés</button>
+    </div>
+    <div class="expl">✔ Exact. La citation littérale du slide est <em>« Root cause of most failures is business process ignorance »</em>. C'est le cœur de l'argument du cours : le problème est humain et organisationnel, pas technique — d'où le besoin de gestionnaires qui comprennent les SI.</div>
+  </div>
+
+  <div class="quiz" data-answer="b">
+    <span class="q-label">Mise en situation</span>
+    <p class="q-text">Une entreprise déploie un nouveau logiciel de gestion des congés. Les RH n'ont jamais été consultées et découvrent l'outil le jour du lancement ; personne ne l'utilise. Quelle raison d'échec est illustrée en priorité ?</p>
+    <div class="opts">
+      <button class="opt" data-k="a">Attentes irréalistes</button>
+      <button class="opt" data-k="b">Manque d'implication des utilisateurs</button>
+      <button class="opt" data-k="c">Manque de ressources</button>
+      <button class="opt" data-k="d">Ignorance en matière de technologie</button>
+    </div>
+    <div class="expl">✔ Les RH sont les <strong>utilisateurs finaux</strong> du système et n'ont pas été impliquées dans sa conception. C'est le format typique d'une question de mise en situation : on te décrit un cas, tu identifies le concept du cours.</div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SECTION 2 -->
+<!-- ============================================================ -->
+<section class="chapter" id="s2">
+  <div class="sec-head">
+    <span class="sec-num">02</span>
+    <h2>« IT doesn't matter » & le Hype Cycle <span class="slide-ref">slides 12–14</span></h2>
+  </div>
+
+  <h3>La thèse provocatrice de Nicholas Carr (2003)</h3>
+  <p>Dans son article célèbre de la <em>Harvard Business Review</em>, <strong>Nicholas G. Carr</strong> soutient que : <em>« à mesure que la puissance et l'omniprésence des technologies de l'information ont augmenté, leur importance stratégique a diminué »</em>. Autrement dit : quand tout le monde a accès à la même technologie, elle ne peut plus être un <strong>avantage concurrentiel</strong> — comme l'électricité, elle devient une commodité.</p>
+
+  <p>Ses trois recommandations (à connaître, elles structurent le slide 13) :</p>
+  <ul class="clean">
+    <li><strong>Dépensez moins en technologies</strong> — réduisez les budgets IT inutiles, n'investissez pas dans les innovations IT.</li>
+    <li><strong>Suivez, ne menez pas</strong> — n'investissez que si d'autres ont réussi ; retardez les investissements, les prix baisseront de toute façon.</li>
+    <li><strong>Concentrez-vous sur les menaces, pas les opportunités</strong> — recentrez l'informatique, ignorez les offres innovantes des fournisseurs.</li>
+  </ul>
+
+  <div class="card def">
+    <span class="def-label">La phrase-clé à retenir</span>
+    <p style="margin:0"><strong>« Ce n'est pas l'informatique qui compte, mais la façon dont elle est utilisée. »</strong> — C'est la conclusion nuancée que le cours tire de Carr : la technologie seule n'apporte rien ; c'est son <em>usage aligné sur le métier</em> qui crée la valeur. Cette idée prépare directement le modèle d'alignement stratégique de la section suivante.</p>
+  </div>
+
+  <h3>Le Hype Cycle de Gartner <span class="slide-ref">slide 14</span></h3>
+  <p>Le Hype Cycle décrit le cycle de vie des attentes envers une technologie émergente. Il aide les organisations à décider <strong>quand</strong> investir — ce qui répond justement à Carr : ne pas se laisser emporter par l'engouement.</p>
+
+  <figure>
+    <svg viewBox="0 0 640 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hype Cycle de Gartner">
+      <line x1="50" y1="250" x2="610" y2="250" stroke="#152A31" stroke-width="2"/>
+      <line x1="50" y1="250" x2="50" y2="30" stroke="#152A31" stroke-width="2"/>
+      <text x="330" y="285" text-anchor="middle" font-family="Space Grotesk" font-weight="700" font-size="14" fill="#152A31">Temps</text>
+      <text x="28" y="140" text-anchor="middle" font-family="Space Grotesk" font-weight="700" font-size="14" fill="#152A31" transform="rotate(-90 28 140)">Attentes</text>
+      <path d="M 55 245 C 110 240, 130 60, 180 55 C 215 52, 240 160, 300 185 C 340 200, 420 130, 500 118 C 550 111, 590 108, 605 107"
+            fill="none" stroke="#087E8B" stroke-width="4" stroke-linecap="round"/>
+      <circle cx="180" cy="55" r="6" fill="#D98E1B"/>
+      <circle cx="300" cy="185" r="6" fill="#C0503C"/>
+      <circle cx="605" cy="107" r="6" fill="#2E8B57"/>
+      <text x="95" y="220" text-anchor="middle" font-size="11.5" font-weight="600" fill="#0B5563">1. Innovation</text>
+      <text x="95" y="234" text-anchor="middle" font-size="11.5" font-weight="600" fill="#0B5563">Trigger</text>
+      <text x="180" y="35" text-anchor="middle" font-size="11.5" font-weight="600" fill="#D98E1B">2. Peak of Inflated Expectations</text>
+      <text x="300" y="215" text-anchor="middle" font-size="11.5" font-weight="600" fill="#C0503C">3. Trough of Disillusionment</text>
+      <text x="450" y="95" text-anchor="middle" font-size="11.5" font-weight="600" fill="#087E8B">4. Slope of Enlightenment</text>
+      <text x="565" y="140" text-anchor="middle" font-size="11.5" font-weight="600" fill="#2E8B57">5. Plateau of Productivity</text>
+    </svg>
+    <figcaption>Les 5 phases du Hype Cycle (Gartner, 2024). Exemple du slide : l'IA générative se situait dans la descente vers le « creux de la désillusion ».</figcaption>
+  </figure>
+
+  <ul class="clean">
+    <li><strong>1. Innovation Trigger</strong> — une percée technologique déclenche l'intérêt.</li>
+    <li><strong>2. Peak of Inflated Expectations</strong> — l'engouement médiatique gonfle des attentes irréalistes.</li>
+    <li><strong>3. Trough of Disillusionment</strong> — les premières déceptions ; les attentes s'effondrent.</li>
+    <li><strong>4. Slope of Enlightenment</strong> — on comprend progressivement les usages réellement utiles.</li>
+    <li><strong>5. Plateau of Productivity</strong> — la technologie est adoptée de façon mature et productive.</li>
+  </ul>
+
+  <div class="exam">
+    <span class="exam-label">⚑ À l'examen</span>
+    <p style="margin:0">Question de mise en situation typique : on te décrit une entreprise qui investit massivement dans une techno « à la mode » (ex. IA générative, métavers) et qui est déçue → tu dois la <strong>positionner sur le Hype Cycle</strong> (souvent : Peak → Trough) et faire le lien avec les <strong>attentes irréalistes</strong> (raison d'échec n° 5) et la recommandation de Carr « suivez, ne menez pas ».</p>
+  </div>
+
+  <div class="quiz" data-answer="d">
+    <span class="q-label">Vérifie ta compréhension</span>
+    <p class="q-text">Une startup adopte le métavers en 2022 après un battage médiatique énorme. En 2024, elle constate que ses clients n'y viennent jamais et abandonne, très déçue. Où se situe le métavers pour elle sur le Hype Cycle ?</p>
+    <div class="opts">
+      <button class="opt" data-k="a">Innovation Trigger</button>
+      <button class="opt" data-k="b">Slope of Enlightenment</button>
+      <button class="opt" data-k="c">Plateau of Productivity</button>
+      <button class="opt" data-k="d">Trough of Disillusionment</button>
+    </div>
+    <div class="expl">✔ Elle a investi au <em>Peak of Inflated Expectations</em> et se retrouve dans le <strong>creux de la désillusion</strong>. Une entreprise plus prudente (« suivez, ne menez pas » — Carr) aurait attendu le Slope of Enlightenment pour investir.</div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SECTION 3 -->
+<!-- ============================================================ -->
+<section class="chapter" id="s3">
+  <div class="sec-head">
+    <span class="sec-num">03</span>
+    <h2>Business Analyst & modèle d'alignement stratégique <span class="slide-ref">slides 15–21</span></h2>
+  </div>
+
+  <h3>Le rôle du Business Analyst</h3>
+  <p>Le Business Analyst (BA) est <strong>l'engrenage entre le Business et l'IT</strong> — c'est littéralement l'image du slide 15 : deux roues dentées qui doivent tourner ensemble. Le slide 21 dit explicitement <strong>« Vous ! »</strong> : c'est le rôle auquel ce cours te prépare. Le BA est au centre d'un réseau d'acteurs et traduit les besoins des uns dans le langage des autres :</p>
+
+  <table>
+    <tr><th>Interlocuteur</th><th>Ce que le BA échange avec lui</th></tr>
+    <tr><td>Project Sponsor</td><td>Business requirements (exigences métier)</td></tr>
+    <tr><td>Project Manager</td><td>Scope and status (périmètre et avancement)</td></tr>
+    <tr><td>Business User</td><td>User requirements (exigences utilisateurs)</td></tr>
+    <tr><td>Software Developer & Testing</td><td>Functional and non-functional requirements</td></tr>
+    <tr><td>Other Stakeholders</td><td>Expectations and constraints (attentes et contraintes)</td></tr>
+  </table>
+
+  <h3>Le modèle d'alignement stratégique (Henderson & Venkatraman, 1999) <span class="stars">★★★</span></h3>
+  <p>C'est <strong>LE modèle théorique majeur de ce chapitre</strong>. Il répond à la question : comment faire en sorte que l'IT serve réellement la stratégie de l'entreprise ? Réponse : en alignant <strong>4 quadrants</strong> organisés selon deux axes.</p>
+
+  <figure>
+    <svg viewBox="0 0 640 430" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Modèle d'alignement stratégique Henderson-Venkatraman">
+      <text x="240" y="30" text-anchor="middle" font-family="Space Grotesk" font-weight="700" font-size="16" fill="#0B5563">MÉTIER</text>
+      <text x="500" y="30" text-anchor="middle" font-family="Space Grotesk" font-weight="700" font-size="16" fill="#0B5563">IT</text>
+      <text x="55" y="115" text-anchor="middle" font-family="Space Grotesk" font-weight="600" font-size="13" fill="#152A31" transform="rotate(-90 55 115)">Couche stratégique</text>
+      <text x="55" y="330" text-anchor="middle" font-family="Space Grotesk" font-weight="600" font-size="13" fill="#152A31" transform="rotate(-90 55 330)">Couche opérationnelle</text>
+      <!-- quadrants -->
+      <rect x="120" y="55" width="240" height="120" rx="12" fill="#E4F2F4" stroke="#087E8B" stroke-width="2.5"/>
+      <rect x="380" y="55" width="240" height="120" rx="12" fill="#E4F2F4" stroke="#087E8B" stroke-width="2.5"/>
+      <rect x="120" y="270" width="240" height="120" rx="12" fill="#fff" stroke="#087E8B" stroke-width="2.5"/>
+      <rect x="380" y="270" width="240" height="120" rx="12" fill="#fff" stroke="#087E8B" stroke-width="2.5"/>
+      <text x="240" y="108" text-anchor="middle" font-family="Space Grotesk" font-weight="700" font-size="16" fill="#0B5563">Stratégie</text>
+      <text x="240" y="130" text-anchor="middle" font-family="Space Grotesk" font-weight="700" font-size="16" fill="#0B5563">commerciale</text>
+      <text x="500" y="120" text-anchor="middle" font-family="Space Grotesk" font-weight="700" font-size="16" fill="#0B5563">Stratégie IT</text>
+      <text x="240" y="322" text-anchor="middle" font-family="Space Grotesk" font-weight="700" font-size="16" fill="#0B5563">Infrastructure</text>
+      <text x="240" y="344" text-anchor="middle" font-family="Space Grotesk" font-weight="700" font-size="16" fill="#0B5563">organisationnelle</text>
+      <text x="500" y="322" text-anchor="middle" font-family="Space Grotesk" font-weight="700" font-size="16" fill="#0B5563">Infrastructure</text>
+      <text x="500" y="344" text-anchor="middle" font-family="Space Grotesk" font-weight="700" font-size="16" fill="#0B5563">IT</text>
+      <!-- arrows -->
+      <line x1="360" y1="115" x2="380" y2="115" stroke="#152A31" stroke-width="5" marker-start="url(#ar)" marker-end="url(#ar)"/>
+      <line x1="360" y1="330" x2="380" y2="330" stroke="#152A31" stroke-width="5" marker-start="url(#ar)" marker-end="url(#ar)"/>
+      <line x1="240" y1="175" x2="240" y2="270" stroke="#152A31" stroke-width="5" marker-start="url(#ar)" marker-end="url(#ar)"/>
+      <line x1="500" y1="175" x2="500" y2="270" stroke="#152A31" stroke-width="5" marker-start="url(#ar)" marker-end="url(#ar)"/>
+      <defs><marker id="ar" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#152A31"/></marker></defs>
+      <text x="370" y="222" text-anchor="middle" font-family="Instrument Sans" font-weight="700" font-size="13" fill="#C0503C">Intégration fonctionnelle (horizontal ↔)</text>
+      <text x="565" y="222" text-anchor="start" font-size="0"> </text>
+      <text x="583" y="230" text-anchor="middle" font-family="Instrument Sans" font-weight="700" font-size="13" fill="#D98E1B" transform="rotate(0)"> </text>
+      <text x="500" y="415" text-anchor="middle" font-family="Instrument Sans" font-weight="700" font-size="13" fill="#D98E1B">Fit stratégique (vertical ↕)</text>
+      <text x="240" y="415" text-anchor="middle" font-family="Instrument Sans" font-weight="700" font-size="13" fill="#D98E1B">Fit stratégique (vertical ↕)</text>
+    </svg>
+    <figcaption>Le modèle d'alignement stratégique : 2 domaines (Métier / IT) × 2 couches (Stratégique / Opérationnelle) = 4 quadrants à aligner. Henderson & Venkatraman (1999), slide 16.</figcaption>
+  </figure>
+
+  <div class="card def">
+    <span class="def-label">Les deux types d'alignement — vocabulaire exact</span>
+    <ul class="clean" style="margin-bottom:0">
+      <li><strong>Fit stratégique</strong> (axe <em>vertical</em>) : cohérence entre la <strong>couche stratégique</strong> et la <strong>couche opérationnelle</strong> — la stratégie doit se traduire dans l'infrastructure qui l'exécute.</li>
+      <li><strong>Intégration fonctionnelle</strong> (axe <em>horizontal</em>) : cohérence entre le <strong>domaine Métier</strong> et le <strong>domaine IT</strong> — la stratégie commerciale et la stratégie IT doivent se parler, tout comme les deux infrastructures.</li>
+    </ul>
+  </div>
+
+  <h3>Le contenu des 4 quadrants</h3>
+  <table>
+    <tr><th>Quadrant</th><th>Composantes (telles que dans les slides 17–19)</th></tr>
+    <tr>
+      <td><strong>Stratégie commerciale</strong></td>
+      <td><strong>Champ d'activité</strong> (positionnement de l'offre sur le marché) · <strong>Compétences spécifiques</strong> (avantages concurrentiels : prix plus bas, meilleur produit, qualité de service) · <strong>Gouvernance globale</strong> (dépendances commerciales : externalisation, alliances, coentreprises).</td>
+    </tr>
+    <tr>
+      <td><strong>Stratégie IT</strong></td>
+      <td><strong>Technologie</strong> (technologies disponibles pouvant créer des opportunités stratégiques) · <strong>Compétences informatiques</strong> (caractéristiques IT créant un avantage : interopérabilité, fiabilité, flexibilité).</td>
+    </tr>
+    <tr>
+      <td><strong>Infrastructure organisationnelle</strong></td>
+      <td><strong>Structure administrative</strong> (structure organisationnelle, processus opérationnels) · <strong>Compétences pour les opérations quotidiennes</strong> (RH, compétences des employés soutenant la stratégie).</td>
+    </tr>
+    <tr>
+      <td><strong>Infrastructure IT</strong></td>
+      <td><strong>Architecture de l'information et processus opérationnels</strong> (matériel, logiciels, réseaux, bases de données, processus de développement et de maintenance) · <strong>Compétences IT spécifiques</strong> (gérer et maintenir l'infrastructure, exécuter les processus).</td>
+    </tr>
+  </table>
+
+  <h3>Le problème de l'intégration fonctionnelle <span class="slide-ref">slide 20</span></h3>
+  <p>Pourquoi l'alignement Métier ↔ IT échoue-t-il si souvent ? Parce que <strong>trois profils d'acteurs</strong> ont chacun leurs défauts :</p>
+  <div class="grid2">
+    <div class="card">
+      <h4 style="color:var(--teal-deep);margin-bottom:8px">Cadre supérieur (PDG, DSI)</h4>
+      <p style="margin:0;font-size:.93rem">→ <strong>Mal informé</strong><br>→ <strong>Réticent à s'impliquer</strong></p>
+    </div>
+    <div class="card">
+      <h4 style="color:var(--teal-deep);margin-bottom:8px">Utilisateur final</h4>
+      <p style="margin:0;font-size:.93rem">→ <strong>Sensibilisation croissante</strong><br>→ <strong>Impatient d'utiliser</strong> les technologies</p>
+    </div>
+    <div class="card">
+      <h4 style="color:var(--teal-deep);margin-bottom:8px">Professionnel de l'IT</h4>
+      <p style="margin:0;font-size:.93rem">→ <strong>Manque de vision stratégique</strong><br>→ <strong>Peu de communication</strong> avec le métier</p>
+    </div>
+    <div class="card" style="border-left:5px solid var(--amber)">
+      <h4 style="color:var(--amber);margin-bottom:8px">→ Solution : le Business Analyst</h4>
+      <p style="margin:0;font-size:.93rem">Il comble le fossé de communication entre ces trois profils. C'est le lien logique entre le slide 20 et le slide 21 (« Vous ! »).</p>
+    </div>
+  </div>
+
+  <div class="exam">
+    <span class="exam-label">⚑ À l'examen — piège classique</span>
+    <p style="margin:0">Ne confonds pas les deux axes ! <strong>Fit stratégique = VERTICAL</strong> (stratégie ↕ infrastructure, à l'intérieur d'un même domaine). <strong>Intégration fonctionnelle = HORIZONTAL</strong> (métier ↔ IT, à l'intérieur d'une même couche). Astuce mnémotechnique : la <em>« Fonction »</em> IT est à côté de la fonction métier → horizontal ; le <em>« Fit »</em> descend de la stratégie vers le terrain → vertical.</p>
+  </div>
+
+  <div class="quiz" data-answer="b">
+    <span class="q-label">Vérifie ta compréhension</span>
+    <p class="q-text">Une banque définit une stratégie commerciale « 100 % mobile first », mais son département IT continue de développer principalement des applications pour guichets physiques. Quel alignement fait défaut ?</p>
+    <div class="opts">
+      <button class="opt" data-k="a">Le fit stratégique du domaine Métier</button>
+      <button class="opt" data-k="b">L'intégration fonctionnelle au niveau stratégique (stratégie commerciale ↔ stratégie IT)</button>
+      <button class="opt" data-k="c">Le fit stratégique du domaine IT</button>
+      <button class="opt" data-k="d">Aucun : c'est un problème de ressources</button>
+    </div>
+    <div class="expl">✔ Le problème est <strong>horizontal</strong> : la stratégie IT n'est pas alignée sur la stratégie commerciale → défaut d'<strong>intégration fonctionnelle</strong> au niveau de la couche stratégique. Si en revanche la stratégie IT était bonne mais que l'infrastructure IT ne suivait pas, ce serait un défaut de <strong>fit stratégique</strong> côté IT (vertical).</div>
+  </div>
+
+  <div class="quiz" data-answer="c">
+    <span class="q-label">Vérifie ta compréhension</span>
+    <p class="q-text">« Quels sont les avantages concurrentiels de l'entreprise par rapport à ses concurrents ? (prix plus bas, meilleur produit…) » — Cette question relève de quelle composante ?</p>
+    <div class="opts">
+      <button class="opt" data-k="a">Gouvernance globale (stratégie commerciale)</button>
+      <button class="opt" data-k="b">Compétences informatiques (stratégie IT)</button>
+      <button class="opt" data-k="c">Compétences spécifiques (stratégie commerciale)</button>
+      <button class="opt" data-k="d">Structure administrative (infrastructure organisationnelle)</button>
+    </div>
+    <div class="expl">✔ Les <strong>compétences spécifiques</strong> de la stratégie commerciale = les avantages concurrentiels. La « gouvernance globale » concerne les dépendances commerciales (externalisation, alliances), et les « compétences informatiques » concernent l'IT (interopérabilité, fiabilité, flexibilité).</div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SECTION 4 -->
+<!-- ============================================================ -->
+<section class="chapter" id="s4">
+  <div class="sec-head">
+    <span class="sec-num">04</span>
+    <h2>Données, Information, Métadonnées & la pyramide DIKW <span class="slide-ref">slides 38–44</span></h2>
+  </div>
+
+  <h3>Données vs Information <span class="stars">★★★</span></h3>
+  <div class="grid2">
+    <div class="card def">
+      <span class="def-label">Données</span>
+      <p style="margin:0"><strong>Faits bruts</strong> observés lors d'événements (ex. transactions commerciales) : représentation <em>« symbolique »</em> des faits. Exemples : faits bruts, symboles, chiffres, documents…</p>
+    </div>
+    <div class="card def">
+      <span class="def-label">Informations</span>
+      <p style="margin:0"><strong>Données traitées, utiles pour le processus décisionnel</strong>. Les données sont les <em>éléments constitutifs</em> des informations. Elles répondent aux questions <strong>« qui », « quoi », « où », « quand »</strong> dans un <strong>contexte</strong>.</p>
+    </div>
+  </div>
+
+  <p><strong>L'exemple canonique du cours (slide 39) — apprends-le, il est parfait pour l'examen :</strong> la donnée <strong>« 50109 »</strong> ne veut rien dire toute seule. Selon le contexte, elle devient :</p>
+  <ul class="clean">
+    <li>5/01/09 → une <strong>date d'examen</strong></li>
+    <li>50 109 € → le <strong>salaire</strong> d'un employé de l'UNamur</li>
+    <li>50109 → le <strong>code postal</strong> de Granger (Iowa) ou d'Alpartir (Espagne)</li>
+  </ul>
+  <p>→ <strong>C'est le contexte qui transforme la donnée en information.</strong> Autre exemple (slide 40) : la liste brute des tickets de caisse (« 331 Soap 1.29… ») devient une information quand on l'agrège : <em>« Magasin #122, région Nord-Ouest : 7 156 savons vendus, chiffre d'affaires 9 231,24 »</em>.</p>
+
+  <h3>Les métadonnées</h3>
+  <div class="card def">
+    <span class="def-label">Définition</span>
+    <p style="margin:0"><strong>Métadonnées = informations sur les données/informations.</strong> Elles décrivent les données : le fait que « prodnr » soit numérique, que ses valeurs soient comprises entre 1 et 9999, que le service production attribue les numéros… <strong>Les métadonnées permettent aux données de devenir des informations</strong> (slide 42 : en XML, les <em>tags</em> comme &lt;Author&gt; sont les métadonnées, le contenu « Paul McCartney » est la donnée).</p>
+  </div>
+
+  <h3>De la donnée à la sagesse : la pyramide DIKW <span class="stars">★★★</span></h3>
+
+  <figure>
+    <svg viewBox="0 0 660 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Pyramide DIKW">
+      <polygon points="330,25 405,105 255,105" fill="#C0503C"/>
+      <polygon points="247,113 413,113 470,190 190,190" fill="#D98E1B"/>
+      <polygon points="182,198 478,198 535,275 125,275" fill="#087E8B"/>
+      <polygon points="117,283 543,283 600,355 60,355" fill="#0B5563"/>
+      <text x="330" y="88" text-anchor="middle" fill="#fff" font-family="Space Grotesk" font-weight="700" font-size="15">WISDOM</text>
+      <text x="330" y="160" text-anchor="middle" fill="#fff" font-family="Space Grotesk" font-weight="700" font-size="16">KNOWLEDGE</text>
+      <text x="330" y="245" text-anchor="middle" fill="#fff" font-family="Space Grotesk" font-weight="700" font-size="16">INFORMATION</text>
+      <text x="330" y="328" text-anchor="middle" fill="#fff" font-family="Space Grotesk" font-weight="700" font-size="16">DATA</text>
+    </svg>
+    <figcaption>La pyramide DIKW (slide 44). Chaque étage ajoute quelque chose : signification → contexte → action.</figcaption>
+  </figure>
+
+  <p>Les définitions <strong>exactes du slide 43</strong> — c'est un incontournable transversal du cours (il revient aussi dans les chapitres suivants) :</p>
+  <table>
+    <tr><th>Niveau</th><th>Définition (slide 43)</th><th>Exemple du feu rouge (slide 44)</th></tr>
+    <tr><td><strong>Données</strong> (Data)</td><td>Entités et transactions stockées sous forme de <strong>structures et de codes</strong>.</td><td><em>Raw :</em> « Red » — juste la valeur brute.</td></tr>
+    <tr><td><strong>Informations</strong></td><td>Résultat du <strong>traitement et de l'extraction</strong> des données, ayant une <strong>signification</strong> spécifique pour ceux qui y ont accès.</td><td><em>Meaning :</em> « le feu au coin des rues Pitt et George est passé au rouge ».</td></tr>
+    <tr><td><strong>Connaissances</strong> (Knowledge)</td><td>Les informations deviennent des connaissances lorsqu'elles sont utilisées pour <strong>comprendre</strong> un phénomène, une question ou un problème.</td><td><em>Context :</em> « le feu vers lequel <strong>je</strong> roule est passé au rouge ».</td></tr>
+    <tr><td><strong>Sagesse</strong> (Wisdom)</td><td>Les connaissances deviennent de la sagesse lorsqu'elles sont <strong>mises en pratique et exploitées pour agir</strong>.</td><td><em>Applied :</em> « je ferais mieux d'arrêter la voiture ».</td></tr>
+  </table>
+
+  <div class="simple">
+    <span class="s-label">En clair — la chaîne à retenir</span>
+    <p style="margin:0"><strong>Donnée</strong> = fait brut → <strong>Information</strong> = donnée + <em>signification</em> (contexte) → <strong>Connaissance</strong> = information + <em>compréhension</em> (mise en relation avec ma situation) → <strong>Sagesse</strong> = connaissance + <em>action</em>. Mémo : <strong>« brut → sens → comprendre → agir »</strong>.</p>
+  </div>
+
+  <div class="quiz" data-answer="c">
+    <span class="q-label">Vérifie ta compréhension</span>
+    <p class="q-text">Un GPS affiche : « Embouteillage sur votre itinéraire, ralentissement de 20 min ». Tu comprends que tu vas rater ton rendez-vous si tu ne changes pas de route. À quel niveau de la pyramide DIKW ta compréhension se situe-t-elle ?</p>
+    <div class="opts">
+      <button class="opt" data-k="a">Donnée</button>
+      <button class="opt" data-k="b">Information</button>
+      <button class="opt" data-k="c">Connaissance</button>
+      <button class="opt" data-k="d">Sagesse</button>
+    </div>
+    <div class="expl">✔ Tu utilises l'information (l'embouteillage) pour <strong>comprendre ta situation</strong> (« je vais rater mon rendez-vous ») = <strong>connaissance</strong>. Le message du GPS lui-même = information. La position brute des véhicules = données. Le moment où tu <strong>décides</strong> de prendre l'autre route = sagesse (l'action).</div>
+  </div>
+
+  <div class="quiz" data-answer="a">
+    <span class="q-label">Vérifie ta compréhension</span>
+    <p class="q-text">Dans le fichier XML &lt;Date&gt;1998&lt;/Date&gt;, qu'est-ce que la balise &lt;Date&gt; représente ?</p>
+    <div class="opts">
+      <button class="opt" data-k="a">Une métadonnée (information sur la donnée)</button>
+      <button class="opt" data-k="b">Une donnée brute</button>
+      <button class="opt" data-k="c">Une connaissance</button>
+      <button class="opt" data-k="d">De la sagesse</button>
+    </div>
+    <div class="expl">✔ Le tag &lt;Date&gt; <strong>décrit</strong> ce qu'est le contenu « 1998 » : c'est une <strong>métadonnée</strong>. « 1998 » seul est la donnée ; grâce à la métadonnée, on sait qu'il s'agit d'une date de publication → la donnée devient information.</div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SECTION 5 -->
+<!-- ============================================================ -->
+<section class="chapter" id="s5">
+  <div class="sec-head">
+    <span class="sec-num">05</span>
+    <h2>Système & définition du SIG <span class="slide-ref">slides 46–54</span></h2>
+  </div>
+
+  <h3>Qu'est-ce qu'un système ? <span class="stars">★★★</span></h3>
+  <div class="card def">
+    <span class="def-label">Définition exacte (slide 46)</span>
+    <p style="margin:0"><em>« Un système est un ensemble d'<strong>éléments</strong>. Ces éléments sont <strong>liés entre eux</strong> et sont réunis dans un <strong>objectif précis</strong>. »</em></p>
+  </div>
+  <p>Les trois composantes de la définition, avec leurs exemples du slide :</p>
+  <ul class="clean">
+    <li><strong>Éléments</strong> : objets physiques, unités énergétiques, unités biologiques…</li>
+    <li><strong>Relations</strong> : relations en termes de distance et de temps, relations physiques, logiques, de cause à effet…</li>
+    <li><strong>Objectifs</strong> : prestation de services, production de biens finis, réalisation de bénéfices, stimulation de l'emploi…</li>
+  </ul>
+  <p>Point important du slide 48 : <strong>pourquoi considère-t-on quelque chose comme un système ?</strong> Pour <strong>décrire et étudier</strong> quelque chose — et <strong>la description d'un système dépend de l'objectif visé</strong>. Exemple du corps humain : on peut le décrire comme système circulatoire, musculaire ou osseux <em>selon ce qu'on veut étudier</em>. (Remarque le lien avec la modélisation : un modèle est aussi un point de vue !)</p>
+
+  <h3>La mécanique d'un système : Input → Processus → Output</h3>
+  <figure>
+    <svg viewBox="0 0 660 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Schéma Input Processus Output">
+      <rect x="235" y="20" width="200" height="58" rx="10" fill="#E4F2F4" stroke="#087E8B" stroke-width="2"/>
+      <text x="335" y="45" text-anchor="middle" font-family="Space Grotesk" font-weight="700" font-size="14" fill="#0B5563">Gestion / Management</text>
+      <text x="335" y="64" text-anchor="middle" font-size="11.5" fill="#152A31">pilote et contrôle</text>
+      <rect x="40" y="120" width="150" height="60" rx="10" fill="#fff" stroke="#087E8B" stroke-width="2.5"/>
+      <rect x="255" y="120" width="150" height="60" rx="10" fill="#087E8B"/>
+      <rect x="470" y="120" width="150" height="60" rx="10" fill="#fff" stroke="#087E8B" stroke-width="2.5"/>
+      <text x="115" y="155" text-anchor="middle" font-family="Space Grotesk" font-weight="700" font-size="16" fill="#0B5563">Input</text>
+      <text x="330" y="155" text-anchor="middle" font-family="Space Grotesk" font-weight="700" font-size="16" fill="#fff">Processus</text>
+      <text x="545" y="155" text-anchor="middle" font-family="Space Grotesk" font-weight="700" font-size="16" fill="#0B5563">Output</text>
+      <line x1="190" y1="150" x2="253" y2="150" stroke="#152A31" stroke-width="4" marker-end="url(#ar2)"/>
+      <line x1="405" y1="150" x2="468" y2="150" stroke="#152A31" stroke-width="4" marker-end="url(#ar2)"/>
+      <line x1="115" y1="120" x2="270" y2="80" stroke="#5b7178" stroke-width="1.6" stroke-dasharray="5 4"/>
+      <line x1="330" y1="120" x2="330" y2="78" stroke="#5b7178" stroke-width="1.6" stroke-dasharray="5 4"/>
+      <line x1="545" y1="120" x2="400" y2="80" stroke="#5b7178" stroke-width="1.6" stroke-dasharray="5 4"/>
+      <rect x="40" y="215" width="580" height="36" rx="8" fill="#0B5563"/>
+      <text x="330" y="238" text-anchor="middle" font-family="Space Grotesk" font-weight="600" font-size="14" fill="#fff">Environnement</text>
+      <line x1="115" y1="213" x2="115" y2="182" stroke="#152A31" stroke-width="3" marker-end="url(#ar2)"/>
+      <line x1="545" y1="182" x2="545" y2="213" stroke="#152A31" stroke-width="3" marker-end="url(#ar2)"/>
+      <defs><marker id="ar2" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#152A31"/></marker></defs>
+    </svg>
+    <figcaption>Un système « fonctionne », « traite » quelque chose pour atteindre un objectif spécifique (slide 49). L'environnement fournit les inputs et reçoit les outputs ; la gestion pilote l'ensemble.</figcaption>
+  </figure>
+
+  <p>Appliqué à une <strong>organisation</strong> (slide 51) : les <em>inputs</em> sont le travail, les matériaux, la finance, les <strong>données</strong> ; les <em>processus</em> sont la production, les achats, la distribution, les ventes, le traitement ; les <em>outputs</em> sont les produits, services et <strong>informations</strong> ; l'<em>environnement</em> = autorités, consommateurs, clients, fournisseurs, sous-traitants, employés, syndicats, parties prenantes, concurrents… Le tout piloté par les objectifs, intentions et prévisions.</p>
+
+  <h3>La définition du SIG <span class="stars">★★★</span></h3>
+  <div class="card def">
+    <span class="def-label">Définition à connaître par cœur (slide 53)</span>
+    <p style="margin:0">« Un <strong>système d'information de gestion</strong> est un ensemble de composants liés entre eux qui permettent de <strong>collecter, rechercher, traiter, stocker et distribuer des informations</strong> afin de faciliter la <strong>coordination et le contrôle du processus décisionnel</strong> au sein d'une <strong>organisation</strong> (entreprise, administration, organisation à but non lucratif, etc.). »</p>
+  </div>
+
+  <p>Décompose la définition en 3 blocs pour la mémoriser :</p>
+  <ul class="clean">
+    <li><strong>Structure</strong> : « ensemble de composants liés entre eux » → c'est un <em>système</em> (cf. définition de système).</li>
+    <li><strong>Fonctions</strong> : les <strong>5 verbes</strong> — <span class="pill">collecter</span><span class="pill">rechercher</span><span class="pill">traiter</span><span class="pill">stocker</span><span class="pill">distribuer</span> des informations.</li>
+    <li><strong>Finalité</strong> : faciliter la <em>coordination et le contrôle du processus décisionnel</em> dans une organisation.</li>
+  </ul>
+
+  <p>Détail du slide 54 à bien comprendre : le SI transforme les <strong>données brutes</strong> en <strong>informations pertinentes</strong> via le <em>stockage et traitement des données</em>, sous la supervision de la <em>gestion de l'information</em>. Et surtout : <strong>le système d'information est un sous-système du système organisationnel</strong> — l'environnement du SI, c'est l'organisation elle-même.</p>
+
+  <div class="quiz" data-answer="d">
+    <span class="q-label">Vérifie ta compréhension</span>
+    <p class="q-text">Lequel de ces éléments ne fait PAS partie des cinq fonctions d'un SIG selon la définition du cours ?</p>
+    <div class="opts">
+      <button class="opt" data-k="a">Collecter des informations</button>
+      <button class="opt" data-k="b">Stocker des informations</button>
+      <button class="opt" data-k="c">Distribuer des informations</button>
+      <button class="opt" data-k="d">Vendre des informations</button>
+    </div>
+    <div class="expl">✔ Les 5 fonctions sont : <strong>collecter, rechercher, traiter, stocker, distribuer</strong>. « Vendre » n'en fait pas partie — la finalité du SIG est de faciliter la <em>coordination et le contrôle du processus décisionnel</em>, pas de commercialiser l'information.</div>
+  </div>
+
+  <div class="quiz" data-answer="b">
+    <span class="q-label">Vérifie ta compréhension</span>
+    <p class="q-text">Dans le schéma « SI en tant que sous-système », quel est l'environnement du système d'information ?</p>
+    <div class="opts">
+      <button class="opt" data-k="a">Internet</button>
+      <button class="opt" data-k="b">L'organisation elle-même</button>
+      <button class="opt" data-k="c">Les concurrents</button>
+      <button class="opt" data-k="d">La base de données</button>
+    </div>
+    <div class="expl">✔ Le SI est un <strong>sous-système du système organisationnel</strong> : son environnement direct est l'organisation, qui lui fournit les données brutes et reçoit les informations pertinentes. (Les concurrents, eux, font partie de l'environnement de <em>l'organisation</em>.)</div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SECTION 6 -->
+<!-- ============================================================ -->
+<section class="chapter" id="s6">
+  <div class="sec-head">
+    <span class="sec-num">06</span>
+    <h2>Les types de SIG : trois niveaux managériaux <span class="slide-ref">slides 57–71</span></h2>
+  </div>
+
+  <p>La pyramide des types de SIG croise deux dimensions (slide 57) : les <strong>niveaux managériaux</strong> (vertical) et les <strong>domaines fonctionnels</strong> (horizontal — voir section 7). Commençons par les niveaux :</p>
+
+  <figure>
+    <svg viewBox="0 0 660 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Pyramide des niveaux managériaux">
+      <polygon points="330,20 425,115 235,115" fill="#C0503C"/>
+      <polygon points="227,123 433,123 500,215 160,215" fill="#D98E1B"/>
+      <polygon points="152,223 508,223 575,310 85,310" fill="#087E8B"/>
+      <text x="330" y="90" text-anchor="middle" fill="#fff" font-family="Space Grotesk" font-weight="700" font-size="14">STRATÉGIQUE</text>
+      <text x="330" y="165" text-anchor="middle" fill="#fff" font-family="Space Grotesk" font-weight="700" font-size="15">TACTIQUE</text>
+      <text x="330" y="190" text-anchor="middle" fill="#fff" font-size="11.5">(Management level)</text>
+      <text x="330" y="262" text-anchor="middle" fill="#fff" font-family="Space Grotesk" font-weight="700" font-size="15">OPÉRATIONNEL</text>
+      <text x="500" y="65" text-anchor="start" font-size="12.5" font-weight="600" fill="#C0503C">Senior managers · ESS</text>
+      <text x="520" y="170" text-anchor="start" font-size="12.5" font-weight="600" fill="#D98E1B">Middle managers · DSS</text>
+      <text x="585" y="268" text-anchor="start" font-size="12.5" font-weight="600" fill="#087E8B">Op. managers</text>
+      <text x="585" y="284" text-anchor="start" font-size="12.5" font-weight="600" fill="#087E8B">· OLTP</text>
+    </svg>
+    <figcaption>Plus on monte dans la pyramide, moins les décisions sont fréquentes et structurées, et plus l'incertitude augmente.</figcaption>
+  </figure>
+
+  <h3>Le tableau comparatif — c'est LE cœur de la section <span class="stars">★★★</span></h3>
+  <table>
+    <tr><th></th><th>Opérationnel</th><th>Tactique</th><th>Stratégique</th></tr>
+    <tr>
+      <td><strong>Utilisateurs</strong></td>
+      <td>Travailleurs ou managers opérationnels</td>
+      <td>Cadres intermédiaires et dirigeants</td>
+      <td>Top management / direction</td>
+    </tr>
+    <tr>
+      <td><strong>Décisions</strong></td>
+      <td><strong>Court terme</strong>, prises <strong>souvent</strong>, <strong>peu d'incertitudes</strong></td>
+      <td><strong>Moyen et long terme</strong>, moins fréquentes, moins routinières, <strong>plus d'incertitudes/risques</strong></td>
+      <td><strong>Long terme</strong>, plutôt accessoires et <strong>irrégulières</strong>, <strong>beaucoup d'incertitudes et/ou de risques</strong></td>
+    </tr>
+    <tr>
+      <td><strong>Informations requises</strong></td>
+      <td>Processus <strong>bien structurés, clairs et routiniers</strong> ; infos <strong>faciles à déterminer</strong>, indépendantes de l'individu, provenant principalement de <strong>l'organisation</strong> (interne)</td>
+      <td>Infos du niveau opérationnel + <strong>entrepôts de données</strong> ; moins faciles à déterminer, <strong>dépendantes de l'individu et du moment</strong>, moins structurées, <strong>besoin accru d'informations externes</strong></td>
+      <td><strong>Très difficiles à déterminer</strong>, fortement dépendantes de l'individu, <strong>beaucoup moins structurées</strong>, provenant particulièrement de <strong>l'environnement</strong> de l'entreprise (externe)</td>
+    </tr>
+    <tr>
+      <td><strong>Exemples de systèmes</strong></td>
+      <td><strong>OLTP</strong> — systèmes de traitement des transactions en ligne (ex. système de paie, facturation)</td>
+      <td><strong>DSS</strong> — Decision Support Systems (ex. affectation des cargaisons aux navires de fret)</td>
+      <td><strong>ESS</strong> — Executive Support Systems ; <strong>IA générative ?</strong> (avec un point d'interrogation dans les slides !)</td>
+    </tr>
+  </table>
+
+  <div class="simple">
+    <span class="s-label">En clair — la logique du gradient</span>
+    <p style="margin:0">Retiens le <strong>gradient</strong> plutôt que trois cases isolées : en montant, les décisions deviennent <strong>moins fréquentes</strong>, <strong>moins structurées</strong>, <strong>plus incertaines</strong>, <strong>plus long terme</strong>, et l'information vient de <strong>plus en plus de l'extérieur</strong>. L'opérationnel = routine interne ; le stratégique = exploration de l'environnement.</p>
+  </div>
+
+  <h3>Les exemples des slides à retenir</h3>
+  <ul class="clean">
+    <li><strong>OLTP</strong> : le <strong>système de paie</strong> (slide 60) — données employés → calcul → chèques, rapports, documents pour l'État. Transaction routinière et structurée par excellence. Aussi : saisie de factures de vente.</li>
+    <li><strong>DSS</strong> : le <strong>système d'estimation des voyages maritimes</strong> (slide 65) — conçu pour faciliter l'affectation des cargaisons aux navires de fret afin de respecter les délais à moindre coût, optimiser le schéma de chargement. Il combine plusieurs fichiers (vitesse des navires, distances portuaires, consommation de carburant…) et une base de <strong>modèles analytiques</strong>.</li>
+    <li><strong>ESS</strong> : les <strong>tableaux de bord de direction</strong> (Sales Dashboard, slide 71) avec des métriques agrégées (part de marché, croissance des ventes…) pour l'analyse hypothétique long terme.</li>
+  </ul>
+
+  <div class="exam">
+    <span class="exam-label">⚑ À l'examen — question de classement typique</span>
+    <p style="margin:0">On te donne un scénario (« la directrice se demande si l'entreprise doit s'implanter en Asie dans 5 ans » / « l'employé encode une commande client ») et tu dois identifier le <strong>niveau</strong> + le <strong>type de système</strong> + <strong>justifier</strong> avec les caractéristiques (horizon temporel, fréquence, structuration, source interne/externe de l'info). Justifie toujours avec au moins 2 critères du tableau.</p>
+  </div>
+
+  <div class="quiz" data-answer="b">
+    <span class="q-label">Vérifie ta compréhension</span>
+    <p class="q-text">Un responsable logistique doit décider, chaque trimestre, de la répartition optimale des livraisons entre ses trois entrepôts, en s'appuyant sur un entrepôt de données et des simulations. Quel type de système correspond le mieux ?</p>
+    <div class="opts">
+      <button class="opt" data-k="a">OLTP — niveau opérationnel</button>
+      <button class="opt" data-k="b">DSS — niveau tactique</button>
+      <button class="opt" data-k="c">ESS — niveau stratégique</button>
+      <button class="opt" data-k="d">CRM — système intégré</button>
+    </div>
+    <div class="expl">✔ Décision de <strong>moyen terme</strong>, <strong>moins fréquente</strong> (trimestrielle), avec de l'incertitude, basée sur des <strong>entrepôts de données</strong> et des simulations → c'est le profil exact d'un <strong>Decision Support System</strong> au niveau <strong>tactique</strong>. Ce n'est pas de la routine quotidienne (opérationnel) ni une décision d'orientation à long terme de la direction (stratégique).</div>
+  </div>
+
+  <div class="quiz" data-answer="a">
+    <span class="q-label">Vérifie ta compréhension</span>
+    <p class="q-text">Quelle affirmation sur les informations requises au niveau STRATÉGIQUE est correcte ?</p>
+    <div class="opts">
+      <button class="opt" data-k="a">Elles sont très difficiles à déterminer, peu structurées et proviennent surtout de l'environnement externe</button>
+      <button class="opt" data-k="b">Elles sont bien structurées, routinières et proviennent de l'organisation</button>
+      <button class="opt" data-k="c">Elles sont indépendantes de l'individu qui décide</button>
+      <button class="opt" data-k="d">Elles proviennent exclusivement des OLTP internes</button>
+    </div>
+    <div class="expl">✔ Au niveau stratégique : infos <strong>très difficiles à déterminer</strong>, <strong>fortement dépendantes de l'individu</strong>, <strong>beaucoup moins structurées</strong>, provenant particulièrement de <strong>l'environnement</strong> de l'entreprise. L'option (b) décrit le niveau opérationnel — piège classique d'inversion.</div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SECTION 7 -->
+<!-- ============================================================ -->
+<section class="chapter" id="s7">
+  <div class="sec-head">
+    <span class="sec-num">07</span>
+    <h2>SI fonctionnels & le problème des silos <span class="slide-ref">slides 73–80</span></h2>
+  </div>
+
+  <h3>Les domaines fonctionnels</h3>
+  <p>La deuxième dimension de la pyramide : chaque <strong>fonction</strong> de l'entreprise a son propre SI. Les quatre grands domaines (slide 73) et leurs exemples :</p>
+  <table>
+    <tr><th>Domaine</th><th>Exemples d'activités</th><th>Exemples de SI (slide 74)</th></tr>
+    <tr><td><strong>Ventes & marketing</strong></td><td>Traitement des commandes, tarification et prévisions</td><td>Suivi des opportunités, prédiction de ventes, gestion des clients et des produits</td></tr>
+    <tr><td><strong>Production & logistique</strong></td><td>Contrôle des processus, planification et ouverture d'une nouvelle unité de production</td><td>Inventaire, planification, ordonnancement, opérations de fabrication</td></tr>
+    <tr><td><strong>Finance & comptabilité</strong></td><td>Enregistrement des transactions financières, budgétisation court/long terme</td><td>Grand livre général, reporting financier, comptabilité analytique, trésorerie</td></tr>
+    <tr><td><strong>Ressources humaines</strong></td><td>Recrutements et licenciements, échelles salariales, planification du personnel</td><td>Recrutement, indemnisation, évaluation, développement et formation</td></tr>
+  </table>
+
+  <h3>Le problème : les silos <span class="stars">★★★</span></h3>
+  <div class="card def">
+    <span class="def-label">Le constat (slide 79)</span>
+    <p style="margin:0">« Les SI fonctionnels rendent de considérables services aux départements qui les utilisent <strong>MAIS</strong> leur fonctionnement en <strong>silos isolés</strong> limite leur champ d'action. »</p>
+  </div>
+
+  <p>Les <strong>5 conséquences des systèmes en silos</strong> — liste exacte des slides, à restituer :</p>
+  <ul class="clean">
+    <li>Les données sont <strong>dupliquées</strong> dans les bases de données de chaque système ;</li>
+    <li><strong>Redondances, risques d'incohérences</strong>… (ex. l'adresse d'un client différente dans le SI ventes et le SI facturation) ;</li>
+    <li>Les <strong>processus métiers sont séparés</strong> ;</li>
+    <li>Il est <strong>très difficile d'intégrer l'information</strong> ;</li>
+    <li>Dans l'ensemble, l'entreprise s'expose à des <strong>coûts supplémentaires</strong>.</li>
+  </ul>
+
+  <figure>
+    <svg viewBox="0 0 640 230" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Silos fonctionnels">
+      <g font-family="Space Grotesk" font-weight="600" font-size="12.5" text-anchor="middle">
+        <rect x="40" y="40" width="120" height="150" rx="10" fill="#E4F2F4" stroke="#087E8B" stroke-width="2"/>
+        <rect x="190" y="40" width="120" height="150" rx="10" fill="#E4F2F4" stroke="#087E8B" stroke-width="2"/>
+        <rect x="340" y="40" width="120" height="150" rx="10" fill="#E4F2F4" stroke="#087E8B" stroke-width="2"/>
+        <rect x="490" y="40" width="120" height="150" rx="10" fill="#E4F2F4" stroke="#087E8B" stroke-width="2"/>
+        <text x="100" y="70" fill="#0B5563">Ventes &amp;</text><text x="100" y="86" fill="#0B5563">Marketing</text>
+        <text x="250" y="70" fill="#0B5563">Production</text><text x="250" y="86" fill="#0B5563">&amp; Logistique</text>
+        <text x="400" y="70" fill="#0B5563">Finance &amp;</text><text x="400" y="86" fill="#0B5563">Compta</text>
+        <text x="550" y="78" fill="#0B5563">RH</text>
+        <g font-size="24" font-weight="700">
+          <text x="100" y="150" fill="#087E8B">🗄</text>
+          <text x="250" y="150" fill="#087E8B">🗄</text>
+          <text x="400" y="150" fill="#087E8B">🗄</text>
+          <text x="550" y="150" fill="#087E8B">🗄</text>
+        </g>
+        <text x="100" y="175" font-size="10.5" fill="#5b7178">BD propre</text>
+        <text x="250" y="175" font-size="10.5" fill="#5b7178">BD propre</text>
+        <text x="400" y="175" font-size="10.5" fill="#5b7178">BD propre</text>
+        <text x="550" y="175" font-size="10.5" fill="#5b7178">BD propre</text>
+      </g>
+      <text x="175" y="120" text-anchor="middle" font-size="20" fill="#C0503C" font-weight="700">✕</text>
+      <text x="325" y="120" text-anchor="middle" font-size="20" fill="#C0503C" font-weight="700">✕</text>
+      <text x="475" y="120" text-anchor="middle" font-size="20" fill="#C0503C" font-weight="700">✕</text>
+      <text x="325" y="220" text-anchor="middle" font-family="Instrument Sans" font-size="13" font-weight="600" fill="#C0503C">Pas de communication entre silos → duplication, incohérences, processus séparés, coûts</text>
+    </svg>
+    <figcaption>Chaque département a son SI et sa base de données : les silos fonctionnels.</figcaption>
+  </figure>
+
+  <div class="quiz" data-answer="c">
+    <span class="q-label">Vérifie ta compréhension</span>
+    <p class="q-text">Un client change d'adresse. Le service des ventes met à jour sa fiche, mais la facturation continue d'envoyer les factures à l'ancienne adresse pendant 6 mois. Quel problème des silos est illustré ?</p>
+    <div class="opts">
+      <button class="opt" data-k="a">Le manque de planification</button>
+      <button class="opt" data-k="b">Le fit stratégique insuffisant</button>
+      <button class="opt" data-k="c">La duplication des données et le risque d'incohérence</button>
+      <button class="opt" data-k="d">Le Trough of Disillusionment</button>
+    </div>
+    <div class="expl">✔ L'adresse du client existe en <strong>double</strong> (BD ventes + BD facturation) et les deux copies divergent → <strong>redondance et incohérence</strong>, conséquence typique des systèmes en silos. La solution ? Les systèmes intégrés de la section suivante (ici, un CRM avec « un seul identifiant, données cohérentes »).</div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SECTION 8 -->
+<!-- ============================================================ -->
+<section class="chapter" id="s8">
+  <div class="sec-head">
+    <span class="sec-num">08</span>
+    <h2>Les systèmes intégrés : CRM, ERP, EAI <span class="slide-ref">slides 81–90</span></h2>
+  </div>
+
+  <p>La réponse au problème des silos : les <strong>systèmes d'information intégrés</strong>. Leur triple objectif (slide 81) : <strong>éviter les silos</strong>, <strong>coordonner les différentes activités</strong>, <strong>intégrer les processus dans une vision transversale</strong>. Trois « vues classiques » : CRM, ERP, EAI.</p>
+
+  <h3>1. CRM — Customer Relationship Management <span class="stars">★★★</span></h3>
+  <div class="card def">
+    <span class="def-label">Principe (slide 83)</span>
+    <p style="margin:0">Typiquement pour des <strong>entreprises orientées-client</strong>. Principe : <strong>toutes les données concernant un client sont centralisées dans une base de données unique</strong> — un seul identifiant, données cohérentes ; lien entre production, logistique, marketing, ventes, R&D, support/SAV ; intégration internationale si besoin.</p>
+  </div>
+  <p>Les trois volets d'un CRM (slide 84) : <strong>Sollicitation</strong> (générer des prospects : e-mail, sites web, courrier direct), <strong>Pré-vente / suivi des opportunités</strong> (tracer les opportunités et prioriser les réponses pour maximiser le revenu), <strong>Gestion des relations / après-vente</strong> (maximiser la valeur de la base clients existante, prioriser selon la valeur du client, tracer et résoudre les problèmes).</p>
+
+  <h3>2. ERP — Enterprise Resource Planning / PGI <span class="stars">★★★</span></h3>
+  <div class="card def">
+    <span class="def-label">Principe (slide 85)</span>
+    <p style="margin:0">Typiquement pour l'<strong>intégration des processus</strong>. Principes : <strong>intégration de tous les processus principaux de l'entreprise</strong> ; <strong>partage des données dans une vision transversale de la chaîne de la valeur</strong>. En français : Progiciel de Gestion Intégré (PGI). Exemple concret vu en cours : <strong>Odoo</strong> (intervention externe prévue), qui regroupe CRM, comptabilité, inventaire, RH, e-commerce, etc. en modules autour d'une base commune.</p>
+  </div>
+
+  <h3>Le tableau ERP vs CRM — à maîtriser parfaitement</h3>
+  <table>
+    <tr><th></th><th>CRM</th><th>ERP</th></tr>
+    <tr><td><strong>Focus</strong></td><td>Clients / <strong>front-office</strong></td><td>Business / <strong>back-office</strong></td></tr>
+    <tr><td><strong>Objectif</strong></td><td>« <strong>Améliorer comment on vend</strong> » : faire augmenter les revenus (ventes) et mieux gérer la clientèle</td><td>« <strong>Améliorer comment on travaille</strong> » : réduire les coûts et augmenter l'efficacité des processus métiers</td></tr>
+    <tr><td><strong>Comment</strong></td><td>Mise en place d'une meilleure relation commerciale (marketing, prospection, suivi, SAV…)</td><td>Analyse d'indicateurs et optimisation de processus</td></tr>
+  </table>
+
+  <p>Points complémentaires du slide 86 (souvent oubliés à l'examen) :</p>
+  <ul class="clean">
+    <li>CRM et ERP sont des <strong>vues complémentaires avec fonctionnalités partagées</strong> : utilisables de manière exclusive <em>ou conjointe</em> ; en silo (données séparées) vs <strong>couplées</strong> (données partagées → meilleure intégration) ; <strong>les ERP proposent souvent un module CRM</strong>.</li>
+    <li>Lequel choisir ? Selon la <strong>taille et la stratégie</strong> de l'organisation, mais : le <strong>CRM</strong> est souvent lié à la préoccupation première (« faire des sous ! »), l'<strong>ERP</strong> est souvent valorisable à partir d'une certaine <strong>taille critique</strong>.</li>
+  </ul>
+
+  <h3>3. EAI — Enterprise Application Integration</h3>
+  <p><strong>Le cas d'usage</strong> (slide 87) : parfois, l'entreprise possède déjà un ou plusieurs SI, et remplacer tout par un ERP unique n'est pas adapté :</p>
+  <ul class="clean">
+    <li>Un seul ERP n'est globalement <strong>pas adapté pour les remplacer</strong> ;</li>
+    <li>Les produits existants <strong>prennent mal en charge le secteur d'activité</strong> ;</li>
+    <li><strong>Seuls certains modules</strong> de l'ERP sont pertinents.</li>
+  </ul>
+  <div class="card def">
+    <span class="def-label">Ce que fait l'EAI</span>
+    <p style="margin:0">L'EAI permet d'<strong>intégrer des systèmes isolés</strong> en <strong>ajoutant une couche logicielle</strong> qui connecte ces applications entre elles et leur permet de <strong>partager des données</strong>. On <em>garde</em> les logiciels existants, on les fait juste communiquer.</p>
+  </div>
+
+  <figure>
+    <svg viewBox="0 0 660 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Architecture EAI">
+      <rect x="200" y="20" width="180" height="52" rx="10" fill="#0B5563"/>
+      <text x="290" y="52" text-anchor="middle" fill="#fff" font-family="Space Grotesk" font-weight="700" font-size="15">Serveur EAI</text>
+      <rect x="440" y="14" width="185" height="64" rx="10" fill="#E4F2F4" stroke="#087E8B" stroke-width="2"/>
+      <text x="532" y="40" text-anchor="middle" font-family="Space Grotesk" font-weight="600" font-size="12.5" fill="#0B5563">Dictionnaire de données</text>
+      <text x="532" y="58" text-anchor="middle" font-size="11" fill="#152A31">(métadonnées : recense les</text>
+      <text x="532" y="72" text-anchor="middle" font-size="11" fill="#152A31">données et leur localisation)</text>
+      <line x1="380" y1="46" x2="438" y2="46" stroke="#152A31" stroke-width="3" marker-end="url(#ar3)" marker-start="url(#ar3)"/>
+      <rect x="60" y="118" width="540" height="46" rx="10" fill="#087E8B"/>
+      <text x="330" y="147" text-anchor="middle" fill="#fff" font-family="Space Grotesk" font-weight="700" font-size="14">Couche d'interfaces EAI</text>
+      <line x1="290" y1="72" x2="290" y2="116" stroke="#152A31" stroke-width="3" stroke-dasharray="6 4"/>
+      <g font-family="Space Grotesk" font-weight="600" font-size="12.5" text-anchor="middle">
+        <rect x="70" y="210" width="140" height="70" rx="10" fill="#fff" stroke="#087E8B" stroke-width="2"/>
+        <text x="140" y="240" fill="#0B5563">Production MRP</text>
+        <text x="140" y="258" font-size="11" fill="#5b7178">données</text>
+        <rect x="250" y="210" width="140" height="70" rx="10" fill="#fff" stroke="#087E8B" stroke-width="2"/>
+        <text x="320" y="240" fill="#0B5563">Système RH</text>
+        <text x="320" y="258" font-size="11" fill="#5b7178">données</text>
+        <rect x="430" y="210" width="170" height="70" rx="10" fill="#fff" stroke="#087E8B" stroke-width="2" stroke-dasharray="7 5"/>
+        <text x="515" y="234" fill="#0B5563">ERP partiel</text>
+        <text x="515" y="252" font-size="10.5" fill="#5b7178">(compta / finance /</text>
+        <text x="515" y="266" font-size="10.5" fill="#5b7178">gestion commerciale)</text>
+      </g>
+      <line x1="140" y1="208" x2="140" y2="166" stroke="#152A31" stroke-width="3" marker-end="url(#ar3)" marker-start="url(#ar3)"/>
+      <line x1="320" y1="208" x2="320" y2="166" stroke="#152A31" stroke-width="3" marker-end="url(#ar3)" marker-start="url(#ar3)"/>
+      <line x1="515" y1="208" x2="515" y2="166" stroke="#152A31" stroke-width="3" marker-end="url(#ar3)" marker-start="url(#ar3)"/>
+      <text x="200" y="305" text-anchor="middle" font-size="11.5" font-style="italic" fill="#5b7178">On garde des processus et logiciels indépendants</text>
+      <text x="515" y="305" text-anchor="middle" font-size="11.5" font-style="italic" fill="#5b7178">Certains processus pris en charge par l'ERP</text>
+      <defs><marker id="ar3" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#152A31"/></marker></defs>
+    </svg>
+    <figcaption>Architecture EAI (slide 88) : le serveur EAI, appuyé sur un dictionnaire de métadonnées, connecte via une couche d'interfaces les systèmes existants — qui restent indépendants.</figcaption>
+  </figure>
+
+  <h3>Pourquoi le passage aux systèmes intégrés est-il difficile ? <span class="slide-ref">slide 89</span></h3>
+  <ul class="clean">
+    <li>Les systèmes intégrés <strong>imposent aux départements de ne plus fonctionner en silo</strong> mais de coordonner leurs activités (<strong>données, processus, hommes</strong>) — c'est un changement organisationnel, pas seulement technique ;</li>
+    <li>La plupart des entreprises utilisent aujourd'hui un <strong>mélange</strong> de systèmes fonctionnels et de systèmes intégrés.</li>
+  </ul>
+  <p>Conclusion du slide : pour faire face à la concurrence internationale, les entreprises <strong>doivent</strong> atteindre l'efficacité que procure l'usage des systèmes intégrés en facilitant les <strong>processus transversaux</strong>.</p>
+
+  <div class="exam">
+    <span class="exam-label">⚑ À l'examen — le trio à savoir distinguer</span>
+    <p style="margin:0"><strong>CRM</strong> = base de données client unique, front-office, « améliorer comment on vend ». <strong>ERP</strong> = intégration de tous les processus principaux, back-office, « améliorer comment on travaille ». <strong>EAI</strong> = couche logicielle qui connecte des systèmes <em>existants</em> qu'on ne veut/peut pas remplacer. Question type : « Cette entreprise devrait-elle choisir un ERP, un CRM ou un EAI ? Justifiez. » → identifie le besoin dominant (vendre ? processus ? systèmes hérités ?).</p>
+  </div>
+
+  <div class="quiz" data-answer="c">
+    <span class="q-label">Mise en situation</span>
+    <p class="q-text">Un hôpital possède déjà un logiciel de gestion des patients très spécialisé (irremplaçable), un système RH et un logiciel comptable. Il veut que ces systèmes partagent leurs données sans les remplacer. Quelle solution correspond le mieux ?</p>
+    <div class="opts">
+      <button class="opt" data-k="a">Remplacer le tout par un ERP unique</button>
+      <button class="opt" data-k="b">Installer un CRM</button>
+      <button class="opt" data-k="c">Mettre en place un EAI</button>
+      <button class="opt" data-k="d">Créer un SI fonctionnel supplémentaire</button>
+    </div>
+    <div class="expl">✔ C'est le cas d'école de l'<strong>EAI</strong> : les produits existants prennent mal en charge le secteur d'activité (logiciel patient spécialisé), un ERP n'est pas adapté pour tout remplacer → on ajoute une <strong>couche logicielle</strong> qui connecte les applications et leur permet de partager des données.</div>
+  </div>
+
+  <div class="quiz" data-answer="a">
+    <span class="q-label">Vérifie ta compréhension</span>
+    <p class="q-text">« Réduire les coûts et augmenter l'efficacité des processus métiers » — c'est l'objectif de quel système ?</p>
+    <div class="opts">
+      <button class="opt" data-k="a">ERP (« améliorer comment on travaille »)</button>
+      <button class="opt" data-k="b">CRM (« améliorer comment on vend »)</button>
+      <button class="opt" data-k="c">OLTP</button>
+      <button class="opt" data-k="d">DSS</button>
+    </div>
+    <div class="expl">✔ C'est la formulation exacte du tableau du slide 85 pour l'<strong>ERP</strong> : Business / back-office, « améliorer comment on travaille », via l'analyse d'indicateurs et l'optimisation de processus. Le CRM, lui, vise à augmenter les revenus et mieux gérer la clientèle (front-office).</div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- RECAP -->
+<!-- ============================================================ -->
+<section class="chapter" id="recap">
+  <div class="sec-head">
+    <span class="sec-num">★</span>
+    <h2>Récapitulatif : les priorités pour l'examen</h2>
+  </div>
+
+  <p>Voici, selon moi, la hiérarchie d'importance des concepts de ce chapitre. Concentre tes révisions dans cet ordre.</p>
+
+  <table>
+    <tr><th>Priorité</th><th>Concept</th><th>Pourquoi c'est critique</th></tr>
+    <tr>
+      <td><span class="stars">★★★</span></td>
+      <td><strong>Modèle d'alignement stratégique</strong> (Henderson & Venkatraman)</td>
+      <td>Le grand modèle théorique du chapitre. Il faut savoir : dessiner les 4 quadrants, nommer les 2 axes (fit stratégique = vertical / intégration fonctionnelle = horizontal), citer les composantes de chaque quadrant, et l'appliquer à un cas.</td>
+    </tr>
+    <tr>
+      <td><span class="stars">★★★</span></td>
+      <td><strong>Pyramide DIKW + définitions données/information/métadonnées</strong></td>
+      <td>Concept transversal (revient dans plusieurs chapitres du cours). Savoir donner la définition exacte des 4 niveaux et classer un exemple. L'exemple « 50109 » et l'exemple du feu rouge sont les références du cours.</td>
+    </tr>
+    <tr>
+      <td><span class="stars">★★★</span></td>
+      <td><strong>Définition du SIG + les 5 fonctions</strong></td>
+      <td>Restitution par cœur possible : « collecter, rechercher, traiter, stocker, distribuer » + finalité (coordination et contrôle du processus décisionnel). Base de tout le cours.</td>
+    </tr>
+    <tr>
+      <td><span class="stars">★★★</span></td>
+      <td><strong>Les 3 niveaux (opérationnel / tactique / stratégique) + OLTP / DSS / ESS</strong></td>
+      <td>Format de question quasi garanti : classer un scénario et justifier avec les caractéristiques (horizon, fréquence, structuration, interne/externe).</td>
+    </tr>
+    <tr>
+      <td><span class="stars">★★★</span></td>
+      <td><strong>Silos → systèmes intégrés : CRM vs ERP vs EAI</strong></td>
+      <td>Le tableau ERP/CRM (focus, objectif, comment) et le cas d'usage EAI sont parfaits pour une mise en situation « quelle solution recommandez-vous ? ».</td>
+    </tr>
+    <tr>
+      <td><span class="stars">★★☆</span></td>
+      <td><strong>Raisons des échecs + Chaos Report</strong></td>
+      <td>Liste de 6 raisons à connaître + citation « business process ignorance ». Sert à justifier l'existence même du cours et du rôle de BA.</td>
+    </tr>
+    <tr>
+      <td><span class="stars">★★☆</span></td>
+      <td><strong>« IT doesn't matter » (Carr) + Hype Cycle</strong></td>
+      <td>Retenir la conclusion (« ce n'est pas l'informatique qui compte, mais la façon dont elle est utilisée »), les 3 recommandations de Carr et les 5 phases du Hype Cycle.</td>
+    </tr>
+    <tr>
+      <td><span class="stars">★★☆</span></td>
+      <td><strong>Rôle du Business Analyst + problème d'intégration fonctionnelle (3 acteurs)</strong></td>
+      <td>Bien comprendre le fossé Business↔IT et pourquoi le BA le comble ; les défauts des 3 profils d'acteurs (cadre / utilisateur / pro IT).</td>
+    </tr>
+    <tr>
+      <td><span class="stars">★☆☆</span></td>
+      <td><strong>Définition de système + Input/Processus/Output + domaines fonctionnels</strong></td>
+      <td>Fondations conceptuelles : moins susceptibles d'être interrogées seules, mais indispensables pour construire les réponses aux questions ci-dessus.</td>
+    </tr>
+  </table>
+</section>
+
+<!-- ============================================================ -->
+<!-- TRAINING -->
+<!-- ============================================================ -->
+<section class="chapter" id="training">
+  <div class="sec-head">
+    <span class="sec-num">✎</span>
+    <h2>Exercices d'entraînement finaux</h2>
+  </div>
+
+  <p>Fais d'abord chaque exercice <strong>sans regarder la correction</strong>, sur papier si possible (comme à l'examen), puis déplie la réponse pour te corriger.</p>
+
+  <h3>Partie A — QCM de synthèse</h3>
+
+  <div class="quiz" data-answer="b">
+    <span class="q-label">Q1</span>
+    <p class="q-text">Dans le modèle d'alignement stratégique, l'« intégration fonctionnelle » désigne l'alignement entre :</p>
+    <div class="opts">
+      <button class="opt" data-k="a">La couche stratégique et la couche opérationnelle</button>
+      <button class="opt" data-k="b">Le domaine Métier et le domaine IT</button>
+      <button class="opt" data-k="c">Le CRM et l'ERP</button>
+      <button class="opt" data-k="d">Le fournisseur et le client</button>
+    </div>
+    <div class="expl">✔ Intégration fonctionnelle = axe <strong>horizontal</strong> Métier ↔ IT. L'option (a) décrit le fit stratégique (vertical).</div>
+  </div>
+
+  <div class="quiz" data-answer="d">
+    <span class="q-label">Q2</span>
+    <p class="q-text">« Les connaissances deviennent de la sagesse lorsqu'elles sont… » (complète avec la définition du cours)</p>
+    <div class="opts">
+      <button class="opt" data-k="a">…stockées sous forme de structures et de codes</button>
+      <button class="opt" data-k="b">…extraites et traitées avec une signification spécifique</button>
+      <button class="opt" data-k="c">…utilisées pour comprendre un phénomène</button>
+      <button class="opt" data-k="d">…mises en pratique et exploitées par l'entreprise pour agir</button>
+    </div>
+    <div class="expl">✔ Sagesse = connaissance + <strong>action</strong>. (a) = données, (b) = informations, (c) = connaissances. Repère les verbes clés : stocker / signifier / comprendre / <strong>agir</strong>.</div>
+  </div>
+
+  <div class="quiz" data-answer="a">
+    <span class="q-label">Q3</span>
+    <p class="q-text">Un système de paie qui calcule et verse automatiquement les salaires chaque mois est un exemple de :</p>
+    <div class="opts">
+      <button class="opt" data-k="a">OLTP — système d'information opérationnel</button>
+      <button class="opt" data-k="b">DSS — système d'information tactique</button>
+      <button class="opt" data-k="c">ESS — système d'information stratégique</button>
+      <button class="opt" data-k="d">EAI — système intégré</button>
+    </div>
+    <div class="expl">✔ C'est l'exemple exact du slide 60 : décisions de court terme, très fréquentes, peu d'incertitudes, processus bien structuré et routinier → <strong>OLTP</strong> au niveau opérationnel.</div>
+  </div>
+
+  <div class="quiz" data-answer="c">
+    <span class="q-label">Q4</span>
+    <p class="q-text">Selon Nicholas Carr (« IT doesn't matter »), pourquoi l'importance stratégique de l'IT a-t-elle diminué ?</p>
+    <div class="opts">
+      <button class="opt" data-k="a">Parce que les technologies sont devenues trop chères</button>
+      <button class="opt" data-k="b">Parce que les projets IT échouent tous</button>
+      <button class="opt" data-k="c">Parce que sa puissance et son omniprésence ont augmenté : accessible à tous, l'IT ne différencie plus</button>
+      <button class="opt" data-k="d">Parce que l'IA a remplacé les systèmes d'information</button>
+    </div>
+    <div class="expl">✔ La thèse : <em>« As information technology's power and ubiquity have grown, its strategic importance has diminished »</em>. Quand tout le monde a la même techno, elle devient une commodité — d'où : ce qui compte, c'est <strong>la façon dont elle est utilisée</strong>.</div>
+  </div>
+
+  <div class="quiz" data-answer="b">
+    <span class="q-label">Q5</span>
+    <p class="q-text">Quelle affirmation sur les ERP et CRM est FAUSSE ?</p>
+    <div class="opts">
+      <button class="opt" data-k="a">Les ERP proposent souvent un module CRM</button>
+      <button class="opt" data-k="b">CRM et ERP ne peuvent jamais être utilisés conjointement</button>
+      <button class="opt" data-k="c">Le CRM est souvent lié à la préoccupation première (« faire des sous ! »)</button>
+      <button class="opt" data-k="d">L'ERP est souvent valorisable à partir d'une certaine taille critique de l'organisation</button>
+    </div>
+    <div class="expl">✔ (b) est fausse : ce sont des <strong>vues complémentaires avec fonctionnalités partagées</strong>, utilisables de manière exclusive <strong>ou conjointe</strong> (couplées = données partagées = meilleure intégration). Les trois autres affirmations sont textuellement dans le slide 86.</div>
+  </div>
+
+  <h3>Partie B — Questions ouvertes (style examen)</h3>
+
+  <details>
+    <summary>Exercice 1 — Restitution : donnez la définition complète d'un SIG et détaillez ses trois blocs constitutifs.</summary>
+    <div class="d-body">
+      <p><strong>Correction :</strong> « Un système d'information de gestion est un ensemble de composants liés entre eux qui permettent de collecter, rechercher, traiter, stocker et distribuer des informations afin de faciliter la coordination et le contrôle du processus décisionnel au sein d'une organisation (entreprise, administration, organisation à but non lucratif, etc.). »</p>
+      <p>Les trois blocs : <strong>(1) Structure</strong> — un ensemble de composants liés entre eux, donc un <em>système</em> au sens de la définition du slide 46 (éléments + relations + objectif) ; <strong>(2) Fonctions</strong> — les 5 verbes : collecter, rechercher, traiter, stocker, distribuer des informations ; <strong>(3) Finalité</strong> — faciliter la coordination et le contrôle du processus décisionnel, quelle que soit la nature de l'organisation.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Exercice 2 — Mise en situation : « FreshMarket », chaîne de supermarchés, décide d'une stratégie de livraison à domicile en 30 minutes. Six mois plus tard : le site web plante souvent, les préparateurs n'ont pas de terminaux mobiles, et le département IT travaillait en réalité sur un projet de refonte comptable. Analysez avec le modèle d'alignement stratégique.</summary>
+    <div class="d-body">
+      <p><strong>Correction possible :</strong></p>
+      <p><strong>1. Défaut d'intégration fonctionnelle au niveau stratégique (horizontal, couche haute) :</strong> la stratégie commerciale (« livraison en 30 min ») n'a pas été traduite en stratégie IT — le département IT poursuivait ses propres priorités (refonte comptable), symptôme classique du « professionnel de l'IT : manque de vision stratégique, peu de communication avec le métier » (slide 20).</p>
+      <p><strong>2. Défaut de fit stratégique côté IT (vertical, domaine IT) :</strong> même l'infrastructure IT existante ne supporte pas la stratégie — le site plante (architecture de l'information et processus opérationnels insuffisants : matériel, logiciels, réseaux…).</p>
+      <p><strong>3. Défaut de fit stratégique côté Métier (vertical, domaine Métier) :</strong> l'infrastructure organisationnelle ne suit pas non plus — les préparateurs n'ont ni les équipements ni probablement les processus opérationnels et compétences pour les opérations quotidiennes exigées par la nouvelle stratégie.</p>
+      <p><strong>Conclusion :</strong> l'échec vient d'un non-alignement des 4 quadrants ; un Business Analyst aurait dû traduire la stratégie commerciale en exigences pour la stratégie IT et les deux infrastructures. On peut aussi mobiliser les raisons d'échec : manque de planification, exigences incomplètes, manque d'implication des utilisateurs (les préparateurs).</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Exercice 3 — Classement DIKW : pour un gestionnaire de stock, classez chaque élément (donnée / information / connaissance / sagesse) : (a) « 12 » ; (b) « Il reste 12 unités du produit P404 dans l'entrepôt de Namur » ; (c) « Vu le rythme de ventes actuel, le produit P404 sera en rupture dans 3 jours » ; (d) « Je passe commande de 200 unités aujourd'hui ».</summary>
+    <div class="d-body">
+      <p><strong>Correction :</strong></p>
+      <p><strong>(a) Donnée</strong> — « 12 » est un fait brut, un code sans contexte (comme « 50109 » dans le cours).<br>
+      <strong>(b) Information</strong> — la donnée est traitée et replacée dans un contexte : elle répond aux questions quoi (P404), où (Namur), combien (12) et acquiert une signification pour celui qui y a accès.<br>
+      <strong>(c) Connaissance</strong> — l'information est mise en relation avec d'autres éléments (rythme de ventes) pour <em>comprendre</em> un phénomène : le risque de rupture.<br>
+      <strong>(d) Sagesse</strong> — la connaissance est <em>mise en pratique et exploitée pour agir</em> : la décision de commander.</p>
+      <p><em>Piège à éviter :</em> ne pas confondre (b) et (c) — la connaissance implique une compréhension/mise en relation, pas seulement une donnée contextualisée.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Exercice 4 — Mise en situation : « BelDeco », PME de meubles, a 4 logiciels séparés (ventes, production, comptabilité, RH). Les commerciaux promettent des délais que la production ne peut pas tenir ; les mêmes données clients existent en 3 versions différentes. La direction hésite entre ERP, CRM et EAI. (a) Diagnostiquez le problème avec le vocabulaire du cours. (b) Quelle solution recommandez-vous ? Justifiez.</summary>
+    <div class="d-body">
+      <p><strong>(a) Diagnostic :</strong> BelDeco souffre du problème des <strong>SI fonctionnels en silos</strong> : données <strong>dupliquées</strong> dans chaque BD (3 versions du client → <strong>redondances et incohérences</strong>), <strong>processus métiers séparés</strong> (les commerciaux ne voient pas les capacités de production), <strong>difficulté d'intégrer l'information</strong>, et au total des <strong>coûts supplémentaires</strong> (erreurs de délais, insatisfaction client).</p>
+      <p><strong>(b) Recommandation :</strong> un <strong>ERP</strong> est la réponse la plus adaptée : le besoin dominant est l'<strong>intégration des processus principaux</strong> (ventes ↔ production ↔ comptabilité ↔ RH) et le <strong>partage des données dans une vision transversale de la chaîne de la valeur</strong> — exactement l'objectif de l'ERP (« améliorer comment on travaille », back-office). L'ERP inclut souvent un module CRM, ce qui règle aussi la cohérence des données clients. Nuances valorisées : (1) vérifier la <strong>taille critique</strong> (l'ERP est valorisable à partir d'une certaine taille — pour une très petite PME, le coût peut être excessif) ; (2) si certains logiciels existants sont irremplaçables ou très spécifiques au secteur, un <strong>EAI</strong> serait l'alternative (couche logicielle connectant l'existant) ; (3) un CRM seul ne résoudrait que le front-office (vendre), pas le problème de coordination ventes-production. Attention enfin au slide 89 : le passage à l'intégré est <strong>difficile</strong>, car il impose de coordonner données, processus <em>et</em> hommes.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Exercice 5 — Restitution & application : citez les 6 raisons des échecs des projets IT, puis identifiez celles présentes dans le cas i-Police (numérisation de la police fédérale abandonnée après 5 ans pour « graves lacunes dans l'exécution du marché public » et « résultats ne correspondant pas aux attentes initiales »).</summary>
+    <div class="d-body">
+      <p><strong>Les 6 raisons :</strong> (1) manque de planification, (2) manque de ressources, (3) manque d'implication des utilisateurs, (4) exigences incomplètes, (5) attentes irréalistes, (6) ignorance en matière de technologie.</p>
+      <p><strong>Application à i-Police :</strong> les « résultats qui ne correspondent pas aux attentes initiales » pointent vers des <strong>attentes irréalistes</strong> (5) et/ou des <strong>exigences incomplètes</strong> (4) — les besoins n'ont pas été correctement définis dans le marché public ; les « graves lacunes dans l'exécution » suggèrent un <strong>manque de planification</strong> (1). On peut raisonnablement argumenter un <strong>manque d'implication des utilisateurs</strong> (3) (les policiers de terrain), typique des grands projets publics. L'important à l'examen : <strong>relier explicitement</strong> chaque élément du cas à une raison de la liste, sans inventer de faits.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Exercice 6 — Schéma : dessinez de mémoire le modèle d'alignement stratégique (4 quadrants, 2 axes nommés, auteurs) puis vérifiez.</summary>
+    <div class="d-body">
+      <p><strong>Éléments que ton schéma doit contenir :</strong></p>
+      <ul class="clean">
+        <li>Colonnes : <strong>Métier</strong> (gauche) et <strong>IT</strong> (droite) ; lignes : <strong>couche stratégique</strong> (haut) et <strong>couche opérationnelle</strong> (bas) ;</li>
+        <li>4 quadrants : <strong>Stratégie commerciale</strong> · <strong>Stratégie IT</strong> · <strong>Infrastructure organisationnelle</strong> · <strong>Infrastructure IT</strong> ;</li>
+        <li>Flèches horizontales = <strong>intégration fonctionnelle</strong> ; flèches verticales = <strong>fit stratégique</strong> ;</li>
+        <li>Référence : <strong>Henderson & Venkatraman (1999)</strong>.</li>
+      </ul>
+      <p>Bonus : être capable de citer 2–3 composantes par quadrant (ex. stratégie commerciale = champ d'activité, compétences spécifiques, gouvernance globale).</p>
+    </div>
+  </details>
+
+  <a class="top-link" href="#top" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">↑ Remonter au sommaire</a>
+</section>
+
+</main>
+
+<footer>
+  Chapitre 1 — Introduction aux Systèmes d'Information de Gestion · Basé sur les slides 2025–2026 (Prof. Simonofski, UNamur)<br>
+  Support de révision personnel · Bonne étude ! 📘
+</footer>
+
+<script>
+document.querySelectorAll('.quiz').forEach(function(quiz){
+  var answer = quiz.dataset.answer;
+  var buttons = quiz.querySelectorAll('button.opt');
+  buttons.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      buttons.forEach(function(b){ b.disabled = true; });
+      if(btn.dataset.k === answer){
+        btn.classList.add('correct');
+      } else {
+        btn.classList.add('wrong');
+        quiz.querySelector('[data-k="'+answer+'"]').classList.add('correct');
+      }
+      quiz.querySelector('.expl').classList.add('show');
+    });
+  });
+});
+</script>
+
+<a href="../index.html#/theorie" style="position:fixed;left:14px;bottom:14px;z-index:99999;display:inline-flex;align-items:center;gap:6px;background:#0e7c86;color:#fff;text-decoration:none;font:600 13px/1 system-ui,sans-serif;padding:9px 14px;border-radius:999px;box-shadow:0 2px 10px rgba(0,0,0,.25);" title="Revenir au site BPMN &amp; ArchiMate — TP interactifs">&#8592; Parcours SIG</a>
+</body>
+</html>

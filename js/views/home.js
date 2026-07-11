@@ -7,6 +7,7 @@ APP.register('home', {
   module: 'bpmn',
   render(page) {
     const MODULES = [
+      { route: 'theorie', tag: 'Cours', title: 'Théorie du cours — 6 chapitres', desc: 'Les 5 chapitres du cours magistral en apps de révision complètes (SIG, SDLC, BPM, TOGAF/ArchiMate, théories des SI) + la conclusion orientée examen.', module: 'archi' },
       { route: 'bpmn', tag: 'Théorie', title: 'BPMN — l’essentiel', desc: 'Événements, tâches, gateways XOR/AND/OR, pools & lanes, sous-processus, boucles, événements frontière. Avec simulateur de jetons.', module: 'bpmn' },
       { route: 'tp1', tag: 'TP1', title: 'BPMN de base', desc: '6 exercices de lecture de diagrammes + 3 modélisations complètes (commande, plaintes, Event Bureau) résolues pas à pas.', module: 'bpmn' },
       { route: 'tp2', tag: 'TP2', title: 'BPMN avancé', desc: 'Hypothèques, recrutement, clients défaillants : gateway événementiel, multi-instances, timers frontière non-interruptibles.', module: 'bpmn' },
@@ -29,7 +30,8 @@ APP.register('home', {
       </div>
       <div class="ring-wrap" id="stats"></div>
       <h2>Votre parcours</h2>
-      <p class="lead">L’ordre conseillé suit celui du cours : théorie BPMN → TP1 → TP2, puis théorie ArchiMate → TP3, et l’examen blanc pour finir.</p>
+      <p class="lead">L’ordre conseillé suit celui du cours : les chapitres de théorie au fil du quadrimestre,
+      l’essentiel BPMN → TP1 → TP2, l’essentiel ArchiMate → TP3, et l’examen blanc pour finir.</p>
       <div class="module-grid" id="modules"></div>
 
       <hr class="sep">

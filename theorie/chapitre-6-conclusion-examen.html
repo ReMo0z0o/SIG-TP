@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapitre 6 — Conclusion &amp; préparation à l'examen · SIG ECGEB210</title>
+<style>
+:root{
+  --teal:#0e7c86; --teal-deep:#0a616a; --teal-soft:#e2f2f3;
+  --ink:#152a31; --ink-2:#46545f; --ink-3:#6d7b85;
+  --paper:#f6f8f7; --surface:#ffffff; --line:#dbe3e0;
+  --warn:#9c6f19; --warn-soft:#faf0d7;
+  --ok:#2e7d46; --ok-soft:#e2f2e6;
+}
+*{box-sizing:border-box}
+body{margin:0;font:16px/1.6 system-ui,"Segoe UI",Roboto,sans-serif;color:var(--ink);background:var(--paper)}
+.wrap{max-width:860px;margin:0 auto;padding:40px 22px 110px}
+h1,h2,h3{font-family:Charter,"Iowan Old Style",Cambria,Georgia,serif;line-height:1.2;text-wrap:balance}
+h1{font-size:2.1rem;margin:.2em 0 .3em}
+h2{font-size:1.4rem;margin:2em 0 .5em;color:var(--teal-deep)}
+.eyebrow{font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--teal-deep);margin:0 0 .6em}
+.lead{font-size:1.06rem;color:var(--ink-2)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px 24px;margin:16px 0;box-shadow:0 1px 2px rgba(21,42,49,.05),0 4px 14px rgba(21,42,49,.06)}
+.card h3{margin:.1em 0 .4em;font-size:1.08rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin:16px 0}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px 20px;text-align:center}
+.stat b{display:block;font-size:2rem;font-family:Charter,Georgia,serif;color:var(--teal-deep)}
+.stat span{font-size:.8rem;color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em;font-weight:600}
+ul{padding-left:1.25em}
+li{margin:.35em 0}
+.tag{display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;border-radius:20px;padding:3px 10px;background:var(--teal-soft);color:var(--teal-deep);margin-right:8px}
+.callout{display:grid;grid-template-columns:32px 1fr;gap:12px;border-radius:8px;padding:14px 16px;margin:16px 0;font-size:.95rem;background:var(--warn-soft);border:1px solid #e3cf9b}
+.callout .ic{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-weight:800;color:#fff;background:var(--warn)}
+.callout.ok{background:var(--ok-soft);border-color:#b5d9bf}
+.callout.ok .ic{background:var(--ok)}
+a{color:var(--teal-deep)}
+.btn{display:inline-block;background:var(--teal);color:#fff;text-decoration:none;font-weight:600;font-size:.9rem;padding:8px 16px;border-radius:8px;margin:4px 6px 4px 0}
+.btn:hover{background:var(--teal-deep)}
+.part{border-left:3px solid var(--teal);padding:2px 0 2px 16px;margin:14px 0}
+.part b{color:var(--teal-deep)}
+.part .links{font-size:.85rem;margin-top:4px}
+@media (prefers-color-scheme: dark){
+  :root{--paper:#131a20;--surface:#1b242c;--ink:#e8edf1;--ink-2:#b3bfc9;--ink-3:#8a97a3;--line:#2c3842;
+    --teal:#3aa8b2;--teal-deep:#63c2ca;--teal-soft:#10333a;--warn-soft:#33290f;--ok-soft:#17301f}
+  .callout{border-color:#5c4d1f}
+  .callout.ok{border-color:#28513a}
+  .btn{color:#0d1319}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="eyebrow">Chapitre 6 · Systèmes d'information de gestion — ECGEB210</p>
+  <h1>Conclusion &amp; préparation à l'examen</h1>
+  <p class="lead">Le dernier chapitre du cours boucle la boucle : ce que vous devez avoir acquis,
+  comment vous serez évalué·e, et — surtout — les types de questions annoncés pour l'examen,
+  avec les endroits de ce site où vous entraîner pour chacun.</p>
+
+  <h2>1 · Les acquis d'apprentissage</h2>
+  <div class="card">
+    <p><b>Le message central du cours :</b> dans votre futur métier, vous ne pouvez pas laisser la
+    digitalisation de votre organisation aux seuls informaticiens. À l'issue du cours, vous devez :</p>
+    <ul>
+      <li><b>Comprendre ce qu'est un SIG</b> et son importance dans la digitalisation des organisations ;</li>
+      <li><b>Connaître et appliquer les techniques de modélisation</b> d'un SIG (BPMN, ArchiMate) de façon pertinente dans un contexte organisationnel ;</li>
+      <li><b>Comprendre les enjeux d'implémentation</b> des SIG et appliquer les théories de la gestion des SIG (TAM, UTAUT…) en contexte.</li>
+    </ul>
+  </div>
+
+  <h2>2 · Comment serez-vous évalué·e ?</h2>
+  <div class="grid">
+    <div class="stat"><b>20 %</b><span>Travail de groupe<br>(Hackathon — théorie via la fiction)</span></div>
+    <div class="stat"><b>40 %</b><span>Examen écrit<br>théorie &amp; mises en situation</span></div>
+    <div class="stat"><b>40 %</b><span>Examen écrit<br>exercices de modélisation</span></div>
+  </div>
+  <div class="callout"><span class="ic">!</span><div>
+    <b>À retenir :</b> la modélisation pèse autant que la théorie à l'examen écrit.
+    Les <a href="../index.html#/tp1">TP1</a>, <a href="../index.html#/tp2">TP2</a> et
+    <a href="../index.html#/tp3">TP3</a> de ce site sont votre terrain d'entraînement direct pour ces 40 %.
+  </div></div>
+
+  <h2>3 · Les questions théoriques annoncées, partie par partie</h2>
+  <p>Le professeur annonce les types de questions possibles. Pour chacune, vérifiez que vous savez répondre
+  <i>sans notes</i> — et entraînez-vous au bon endroit :</p>
+
+  <div class="part"><b>Partie 1 — Introduction aux SIG</b>
+    <ul><li>Définir ce qu'est un SIG et distinguer les différents types de systèmes d'information.</li></ul>
+    <div class="links">→ <a href="chapitre-1-introduction-sig.html">Chapitre 1 : Introduction aux SIG</a> (types de SIG, silos, CRM/ERP/EAI)</div>
+  </div>
+  <div class="part"><b>Partie 2 — Développement des SI</b>
+    <ul>
+      <li>Comprendre et appliquer à un cas les différentes phases de développement d'un SI (SDLC) ;</li>
+      <li>Distinguer le développement Waterfall d'un développement agile ;</li>
+      <li>Comprendre l'importance de la phase d'analyse des exigences.</li>
+    </ul>
+    <div class="links">→ <a href="chapitre-2-sdlc.html">Chapitre 2 : le SDLC</a> (7 phases, waterfall vs agile, MoSCoW)</div>
+  </div>
+  <div class="part"><b>Partie 3 — Gestion des processus métiers</b>
+    <ul>
+      <li>Rappeler et appliquer les différentes phases de la gestion de processus métiers ;</li>
+      <li>Rappeler et appliquer les objectifs et techniques de redesign.</li>
+    </ul>
+    <div class="links">→ <a href="chapitre-3-bpm.html">Chapitre 3 : BPM</a> (cycle de vie, Lean, heuristiques de redesign)
+    · <a href="../index.html#/bpmn">L'essentiel BPMN</a></div>
+  </div>
+  <div class="part"><b>Partie 4 — Architecture d'entreprise</b>
+    <ul>
+      <li>Définir ce qu'est l'architecture d'entreprise ;</li>
+      <li>Rappeler et appliquer les différentes phases de modélisation TOGAF.</li>
+    </ul>
+    <div class="links">→ <a href="chapitre-4-architecture-entreprise.html">Chapitre 4 : TOGAF &amp; ArchiMate</a>
+    · <a href="../index.html#/archimate">L'essentiel ArchiMate</a></div>
+  </div>
+  <div class="part"><b>Partie 5 — Théories des SI</b>
+    <ul><li>Rappeler et appliquer les modèles théoriques d'acceptation des technologies (TAM, UTAUT, UTAUT2).</li></ul>
+    <div class="links">→ <a href="chapitre-5-theories-si.html">Chapitre 5 : Théories des SI</a> (TRA → TAM → UTAUT/UTAUT2)</div>
+  </div>
+  <div class="part"><b>Partie 6 — Enjeux du numérique</b>
+    <ul><li>Argumenter et critiquer l'utilisation d'un SIG à l'aune d'un enjeu clé du numérique
+    (inclusion, influence du politique, quotidien des développeurs — vus via les fictions du cours).</li></ul>
+    <div class="links">→ Vos notes des séances « actualités technologiques » et du Hackathon.</div>
+  </div>
+
+  <h2>4 · Les questions pratiques annoncées</h2>
+  <div class="card">
+    <h3>BPMN</h3>
+    <ul>
+      <li><b>Modéliser un processus textuel donné</b> → exactement le format des
+        <a href="../index.html#/tp1">exercices 7-9 du TP1</a> et des
+        <a href="../index.html#/tp2">3 exercices du TP2</a> ;</li>
+      <li><b>Corriger un modèle BPMN donné</b> → entraînez-vous avec les
+        <a href="../index.html#/tp1">exercices de lecture 1-6 du TP1</a>.</li>
+    </ul>
+    <h3>ArchiMate</h3>
+    <ul>
+      <li><b>Décrire, corriger et/ou analyser un modèle ArchiMate donné</b> → c'est mot pour mot le programme du
+        <a href="../index.html#/tp3">TP3</a> : expliquer (ex. 1), chasser les erreurs (ex. 2-3), analyser en consultant (ex. 4).</li>
+    </ul>
+  </div>
+  <div class="callout ok"><span class="ic">✓</span><div>
+    <b>Dernière ligne droite :</b> quand chaque chapitre est coché et que les TP sont verts,
+    faites l'<a href="../index.html#/examen">examen blanc de 20 questions</a>. Visez 80 % et plus.
+  </div></div>
+
+  <p style="margin-top:38px">
+    <a class="btn" href="../index.html#/theorie">← Retour à la théorie du cours</a>
+    <a class="btn" href="../index.html#/examen">Examen blanc →</a>
+  </p>
+  <p style="font-size:.8rem;color:var(--ink-3);border-top:1px solid var(--line);padding-top:14px;margin-top:30px">
+    Synthèse construite à partir du chapitre 6 (« Conclusion ») du cours ECGEB210 — les slides officielles font foi.
+    Les informations logistiques ponctuelles (dates, Hackathon) ne sont pas reprises ici.</p>
+</div>
+</body>
+</html>

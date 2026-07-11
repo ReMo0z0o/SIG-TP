@@ -1,0 +1,1457 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapitre 4 — Architecture d'Entreprise : TOGAF & ArchiMate</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1b2430; --ink-soft:#44505f; --paper:#f5f6f3; --card:#ffffff;
+  --line:#dfe3da;
+  --biz:#fff3c4; --biz-b:#c9a227; --biz-d:#8a6d0b;
+  --app:#d4ecf7; --app-b:#2e86ab; --app-d:#1d5a75;
+  --tech:#d9efce; --tech-b:#4e9f3d; --tech-d:#33702a;
+  --accent:#2e4057; --danger:#b3402e; --ok:#2f7d4f;
+  --radius:12px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth; scroll-padding-top:70px}
+body{margin:0;font-family:'Inter',system-ui,sans-serif;background:var(--paper);color:var(--ink);line-height:1.65;font-size:16px}
+h1,h2,h3,h4{font-family:'Space Grotesk',sans-serif;line-height:1.2;color:var(--ink)}
+h2{font-size:1.9rem;margin:0 0 .4rem}
+h3{font-size:1.3rem;margin:2rem 0 .6rem}
+h4{font-size:1.05rem;margin:1.4rem 0 .4rem}
+p{margin:.6rem 0}
+code,.mono{font-family:'IBM Plex Mono',monospace;font-size:.86em}
+strong{font-weight:650}
+
+/* ---------- Nav ---------- */
+nav{position:sticky;top:0;z-index:50;background:var(--ink);display:flex;flex-wrap:wrap;gap:2px;padding:8px 14px;align-items:center}
+nav .brand{color:#fff;font-family:'Space Grotesk';font-weight:700;margin-right:14px;font-size:.95rem;letter-spacing:.03em}
+nav .brand .strip{display:inline-block;width:10px;height:22px;vertical-align:middle;margin-right:8px;border-radius:2px;
+ background:linear-gradient(to bottom,var(--biz) 33%,var(--app) 33% 66%,var(--tech) 66%)}
+nav a{color:#cfd6df;text-decoration:none;font-size:.78rem;padding:5px 9px;border-radius:6px;font-weight:500}
+nav a:hover,nav a:focus-visible{background:#3a4a5e;color:#fff;outline:none}
+
+/* ---------- Layout ---------- */
+header.hero{background:var(--ink);color:#fff;padding:56px 20px 64px;text-align:left}
+.hero-inner{max-width:960px;margin:0 auto}
+.hero h1{font-size:clamp(1.8rem,4.5vw,3rem);margin:.2rem 0 .8rem;color:#fff}
+.hero .kicker{font-family:'IBM Plex Mono';font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;color:#e8c85a}
+.hero p{color:#c9d2dd;max-width:640px}
+.layers-hero{display:flex;flex-direction:column;gap:6px;max-width:420px;margin-top:26px}
+.layers-hero .band{padding:10px 16px;border-radius:8px;font-family:'Space Grotesk';font-weight:700;color:var(--ink);font-size:.95rem;display:flex;justify-content:space-between;align-items:center}
+.layers-hero .band span{font-family:'IBM Plex Mono';font-weight:400;font-size:.72rem;color:var(--ink-soft)}
+main{max-width:960px;margin:0 auto;padding:20px}
+section{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:34px 38px;margin:26px 0;box-shadow:0 1px 3px rgba(27,36,48,.05)}
+@media(max-width:640px){section{padding:22px 18px}}
+.eyebrow{font-family:'IBM Plex Mono';font-size:.74rem;letter-spacing:.15em;text-transform:uppercase;color:var(--app-d);margin-bottom:4px}
+.lead{font-size:1.06rem;color:var(--ink-soft)}
+
+/* ---------- Boxes ---------- */
+.box{border-radius:10px;padding:16px 20px;margin:16px 0;border:1px solid}
+.box .t{font-family:'Space Grotesk';font-weight:700;font-size:.85rem;letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px;display:flex;gap:8px;align-items:center}
+.def{background:#eef3f8;border-color:#b9cbdd}.def .t{color:var(--app-d)}
+.warn{background:#fdf0ec;border-color:#e5b7ab}.warn .t{color:var(--danger)}
+.tip{background:#eef7ee;border-color:#b7d8b7}.tip .t{color:var(--ok)}
+.link-ch{background:#f6f1e2;border-color:#dcc98f}.link-ch .t{color:var(--biz-d)}
+.exam{background:#2e4057;color:#e9edf3;border-color:#2e4057}.exam .t{color:#f0d060}
+.exam strong{color:#fff}
+
+/* ---------- ArchiMate element cards ---------- */
+.elem-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;margin:14px 0}
+.elem{border:1.5px solid;border-radius:8px;padding:12px 14px;position:relative;background:#fff}
+.elem .shape{float:right;margin-left:10px}
+.elem h5{margin:0 0 4px;font-family:'Space Grotesk';font-size:.98rem}
+.elem p{margin:2px 0;font-size:.86rem;color:var(--ink-soft)}
+.elem .ex{font-size:.8rem;margin-top:6px;font-family:'IBM Plex Mono';color:var(--ink)}
+.elem.biz{border-color:var(--biz-b);background:linear-gradient(#fff, #fffdf3)}
+.elem.app{border-color:var(--app-b);background:linear-gradient(#fff,#f6fbfe)}
+.cat-label{display:inline-block;font-family:'IBM Plex Mono';font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;padding:2px 8px;border-radius:4px;margin:18px 0 6px}
+.cat-active{background:#efe3b8;color:var(--biz-d)}
+.cat-behav{background:#f2d9b8;color:#8a5a0b}
+.cat-passive{background:#e0e0ee;color:#4b4b8a}
+.cat-app-active{background:#cfe8f5;color:var(--app-d)}
+.cat-app-behav{background:#d8ecf7;color:var(--app-d)}
+.cat-app-passive{background:#dde5f2;color:#3a5a8a}
+
+/* ArchiMate shapes (mini SVG containers) */
+.am{display:inline-flex;align-items:center;justify-content:center}
+
+/* ---------- Tables ---------- */
+table{border-collapse:collapse;width:100%;margin:14px 0;font-size:.9rem}
+th{background:var(--accent);color:#fff;text-align:left;padding:9px 12px;font-family:'Space Grotesk';font-weight:600;font-size:.84rem}
+td{border:1px solid var(--line);padding:9px 12px;vertical-align:middle;background:#fff}
+tr:nth-child(even) td{background:#f8f9f6}
+
+/* ---------- Quiz ---------- */
+.quiz{border:2px dashed var(--app-b);border-radius:10px;padding:18px 22px;margin:22px 0;background:#fbfdff}
+.quiz .qt{font-family:'Space Grotesk';font-weight:700;color:var(--app-d);font-size:.82rem;letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px}
+.quiz .question{font-weight:600;margin:14px 0 8px}
+.opts{display:flex;flex-direction:column;gap:7px}
+.opt{text-align:left;background:#fff;border:1.5px solid var(--line);border-radius:8px;padding:9px 14px;font:inherit;font-size:.92rem;cursor:pointer;transition:all .15s}
+.opt:hover{border-color:var(--app-b);background:#f2f9fd}
+.opt.correct{border-color:var(--ok);background:#e7f5ec;font-weight:600}
+.opt.wrong{border-color:var(--danger);background:#fbeae6;opacity:.75}
+.opt:disabled{cursor:default}
+.expl{display:none;margin-top:10px;padding:10px 14px;border-radius:8px;background:#eef3f8;font-size:.88rem;border-left:4px solid var(--app-b)}
+.expl.show{display:block}
+details.solution{margin:12px 0;border:1px solid var(--line);border-radius:8px;background:#fff}
+details.solution summary{cursor:pointer;padding:11px 16px;font-weight:600;color:var(--app-d);font-family:'Space Grotesk';font-size:.92rem;user-select:none}
+details.solution summary:hover{background:#f2f7fb;border-radius:8px}
+details.solution .sol-body{padding:4px 18px 16px;border-top:1px solid var(--line);font-size:.92rem}
+
+/* ---------- ADM wheel ---------- */
+.adm-wrap{display:grid;grid-template-columns:minmax(280px,430px) 1fr;gap:24px;align-items:start;margin:20px 0}
+@media(max-width:760px){.adm-wrap{grid-template-columns:1fr}}
+.adm-detail{border:1.5px solid var(--accent);border-radius:10px;padding:18px 20px;background:#fff;min-height:220px}
+.adm-detail h4{margin:0 0 8px;color:var(--accent)}
+.adm-detail ul{margin:6px 0;padding-left:20px;font-size:.9rem}
+.adm-detail .phase-tag{font-family:'IBM Plex Mono';font-size:.72rem;background:var(--accent);color:#fff;padding:2px 8px;border-radius:4px}
+.adm-node{cursor:pointer;transition:all .15s}
+.adm-node:hover ellipse, .adm-node:hover rect{stroke-width:3}
+.adm-node.active ellipse, .adm-node.active rect{fill:#2e4057}
+.adm-node.active text{fill:#fff}
+
+svg text{font-family:'Inter',sans-serif}
+
+/* ---------- Misc ---------- */
+.pill{display:inline-block;background:#f0d060;color:var(--ink);font-family:'Space Grotesk';font-weight:700;font-size:.72rem;padding:2px 10px;border-radius:20px;margin-right:6px;vertical-align:middle}
+.star3{color:#b3402e;font-weight:700}.star2{color:#c9820b;font-weight:700}.star1{color:#6b7a8c;font-weight:600}
+footer{max-width:960px;margin:10px auto 60px;padding:0 20px;color:var(--ink-soft);font-size:.82rem;text-align:center}
+figure{margin:20px 0;text-align:center}
+figcaption{font-size:.8rem;color:var(--ink-soft);margin-top:6px;font-family:'IBM Plex Mono'}
+.rel-table td:nth-child(2){text-align:center}
+.legend-inline{display:flex;flex-wrap:wrap;gap:14px;font-size:.8rem;margin:10px 0;align-items:center}
+.legend-inline span{display:inline-flex;align-items:center;gap:6px}
+.sw{display:inline-block;width:16px;height:16px;border-radius:3px;border:1.5px solid}
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="brand"><span class="strip"></span>SIG · CH.4</span>
+  <a href="#s1">1. Pourquoi l'AE ?</a>
+  <a href="#s2">2. TOGAF</a>
+  <a href="#s3">3. ArchiMate & couches</a>
+  <a href="#s4">4. Couche métier</a>
+  <a href="#s5">5. Couche application</a>
+  <a href="#s6">6. Relations</a>
+  <a href="#s7">7. Inter-couches</a>
+  <a href="#s8">8. Essentiel examen</a>
+  <a href="#s9">9. Entraînement</a>
+</nav>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="kicker">Systèmes d'Information de Gestion — Prof. Simonofski · 2025-2026</div>
+    <h1>Chapitre 4 · Architecture &amp; Modélisation d'Entreprise</h1>
+    <p>Deux outils complémentaires : <strong style="color:#fff">TOGAF</strong>, la <em>méthode</em> qui organise la démarche d'architecture, et <strong style="color:#fff">ArchiMate</strong>, le <em>langage</em> qui la modélise en trois couches.</p>
+    <div class="layers-hero">
+      <div class="band" style="background:var(--biz)">Couche Métier <span>acteurs · processus · services</span></div>
+      <div class="band" style="background:var(--app)">Couche Application <span>applications · données</span></div>
+      <div class="band" style="background:var(--tech)">Couche Technologique <span>serveurs · réseaux</span></div>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<!-- ============================================================ SECTION 1 -->
+<section id="s1">
+  <div class="eyebrow">Section 1</div>
+  <h2>Pourquoi l'Architecture d'Entreprise ?</h2>
+  <p class="lead">Avant d'apprendre la méthode et le langage, il faut comprendre le <strong>problème</strong> qu'ils résolvent. Tout part d'une tension fondamentale dans les organisations.</p>
+
+  <h3>1.1 Le problème : des processus transversaux, des applications cloisonnées</h3>
+  <p>Les <strong>processus métier</strong> (chapitre 3 !) ont besoin des <strong>services des systèmes d'information</strong> pour s'exécuter : enregistrer une commande dans une base de données, récupérer un dossier client, calculer un prix…</p>
+  <p>Mais il y a un décalage structurel :</p>
+  <ul>
+    <li>Les <strong>SI sont organisés par domaine fonctionnel</strong> : une application pour les ventes, une pour la comptabilité, une pour les RH… Ce sont des <strong>applications cloisonnées</strong> (« silos »).</li>
+    <li>Les <strong>processus métier sont transversaux</strong> : traiter une commande traverse les ventes, la logistique, la facturation…</li>
+  </ul>
+
+  <figure>
+    <svg viewBox="0 0 640 260" style="max-width:640px;width:100%">
+      <!-- silos -->
+      <g font-size="13">
+        <rect x="60" y="40" width="130" height="170" rx="6" fill="#e8ecf1" stroke="#9aa7b5" stroke-width="1.5"/>
+        <rect x="255" y="40" width="130" height="170" rx="6" fill="#e8ecf1" stroke="#9aa7b5" stroke-width="1.5"/>
+        <rect x="450" y="40" width="130" height="170" rx="6" fill="#e8ecf1" stroke="#9aa7b5" stroke-width="1.5"/>
+        <text x="125" y="65" text-anchor="middle" font-weight="600">App Ventes</text>
+        <text x="320" y="65" text-anchor="middle" font-weight="600">App Logistique</text>
+        <text x="515" y="65" text-anchor="middle" font-weight="600">App Facturation</text>
+        <text x="125" y="85" text-anchor="middle" font-size="11" fill="#667">domaine fonctionnel</text>
+        <text x="320" y="85" text-anchor="middle" font-size="11" fill="#667">domaine fonctionnel</text>
+        <text x="515" y="85" text-anchor="middle" font-size="11" fill="#667">domaine fonctionnel</text>
+      </g>
+      <!-- process arrow crossing -->
+      <defs><marker id="arrY" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#8a6d0b"/></marker></defs>
+      <rect x="30" y="130" width="580" height="44" rx="22" fill="var(--biz)" stroke="var(--biz-b)" stroke-width="2" opacity="0.92"/>
+      <line x1="55" y1="152" x2="595" y2="152" stroke="#8a6d0b" stroke-width="2.5" marker-end="url(#arrY)"/>
+      <text x="320" y="157" text-anchor="middle" font-size="13.5" font-weight="700" fill="#5c4a08">Processus « Traiter une commande » — transversal</text>
+      <text x="320" y="242" text-anchor="middle" font-size="12" fill="#8a4a3a" font-weight="600">⚠ Le processus doit traverser 3 silos → intégrations complexes, transferts de données, incohérences</text>
+    </svg>
+    <figcaption>Le décalage silos verticaux ↔ processus horizontal (slides 5-7)</figcaption>
+  </figure>
+
+  <h3>1.2 Le lien avec le chapitre 1 : l'alignement stratégique</h3>
+  <div class="box link-ch"><div class="t">🔗 Lien avec le chapitre 1</div>
+    Le cours réactive ici le <strong>modèle d'alignement stratégique de Henderson &amp; Venkatraman</strong> : 4 quadrants (Stratégie commerciale, Stratégie IT, Infrastructure organisationnelle, Infrastructure IT), reliés par le <strong>fit stratégique</strong> (vertical : stratégie ↔ opérations) et l'<strong>intégration fonctionnelle</strong> (horizontal : métier ↔ IT). L'alignement dit <em>quoi</em> viser ; il ne dit pas <em>comment</em> y arriver concrètement.
+  </div>
+  <p>En pratique, l'alignement se réalise via une multitude de <strong>projets</strong> (chacun avec son cycle requirements → analysis → design → implementation → test, cf. chapitre 2). Sans vision d'ensemble, ces projets partent dans tous les sens. Il faut un <strong>instrument de coordination global</strong> : c'est l'Architecture d'Entreprise.</p>
+
+  <h3>1.3 Définition de l'Architecture d'Entreprise (EA)</h3>
+  <div class="box def"><div class="t">📖 Définition (à connaître — slide 11)</div>
+    <p style="margin-top:0">L'EA est un <strong>ensemble cohérent de descriptions</strong> qui fournit des <strong>indicateurs et des contrôles</strong> permettant une <strong>gouvernance éclairée</strong> de l'évolution et du succès de l'entreprise.</p>
+    <p style="margin-bottom:0">L'EA est un <strong>instrument</strong> qui permet d'<strong>articuler l'orientation future</strong> d'une entreprise, tout en servant de <strong>mécanisme de coordination et de pilotage</strong> vers la transformation effective de l'entreprise.</p>
+  </div>
+  <p>En clair : l'EA, c'est <strong>modéliser l'entreprise entière</strong> (métier + applications + technologie) pour piloter sa transformation de façon cohérente — plutôt que projet par projet, silo par silo.</p>
+  <div class="box tip"><div class="t">💡 Pour retenir</div>
+    L'EA joue pour <em>toute l'entreprise</em> le rôle que le BPM (ch. 3) joue pour <em>un processus</em> : décrire l'existant (as-is), concevoir la cible (to-be), et piloter la transition. D'ailleurs, les 5 qualités d'un modèle du chapitre 1 (abstrait, compréhensible, précis, prédictif, peu coûteux) s'appliquent aussi aux modèles d'architecture !
+  </div>
+
+  <div class="quiz">
+    <div class="qt">✏️ Vérifie ta compréhension</div>
+    <div class="question">1. Quel est le décalage fondamental qui motive l'Architecture d'Entreprise ?</div>
+    <div class="opts">
+      <button class="opt" onclick="answer(this,false)">Les processus sont cloisonnés alors que les applications sont transversales</button>
+      <button class="opt" onclick="answer(this,true)">Les applications sont organisées par domaine fonctionnel (silos) alors que les processus métier sont transversaux</button>
+      <button class="opt" onclick="answer(this,false)">Les processus métier n'ont pas besoin des systèmes d'information</button>
+    </div>
+    <div class="expl">✔ Exactement : SI en silos <em>verticaux</em>, processus <em>horizontaux</em>. C'est ce croisement qui crée les problèmes d'intégration que l'EA veut maîtriser.</div>
+
+    <div class="question">2. Vrai ou faux : « L'EA remplace le modèle d'alignement stratégique de Henderson &amp; Venkatraman. »</div>
+    <div class="opts">
+      <button class="opt" onclick="answer(this,false)">Vrai</button>
+      <button class="opt" onclick="answer(this,true)">Faux</button>
+    </div>
+    <div class="expl">✔ Faux : l'EA <strong>opérationnalise</strong> l'alignement. Le modèle H&amp;V donne la vision (fit stratégique + intégration fonctionnelle) ; l'EA est l'<em>instrument</em> qui coordonne les projets pour la réaliser.</div>
+
+    <div class="question">3. Dans la définition de l'EA, quels sont les deux rôles clés de l'instrument ?</div>
+    <div class="opts">
+      <button class="opt" onclick="answer(this,true)">Articuler l'orientation future + coordonner/piloter la transformation</button>
+      <button class="opt" onclick="answer(this,false)">Programmer les applications + gérer les budgets</button>
+      <button class="opt" onclick="answer(this,false)">Remplacer les processus métier + automatiser les décisions</button>
+    </div>
+    <div class="expl">✔ Les deux verbes de la définition : <strong>articuler</strong> (dire où on va) et <strong>coordonner/piloter</strong> (y aller de façon cohérente).</div>
+  </div>
+</section>
+
+<!-- ============================================================ SECTION 2 -->
+<section id="s2">
+  <div class="eyebrow">Section 2</div>
+  <h2>La méthode TOGAF et son cycle ADM</h2>
+  <p class="lead"><strong>TOGAF</strong> = <em>The Open Group Architecture Framework</em>. C'est la <strong>méthode</strong> (le « comment faire ») la plus utilisée pour pratiquer l'architecture d'entreprise.</p>
+
+  <h3>2.1 Pourquoi TOGAF ?</h3>
+  <p>Le cours donne 7 arguments (slide 12) — retiens-en l'esprit : c'est un <strong>standard ouvert, neutre et éprouvé</strong> :</p>
+  <ul>
+    <li>Basé sur les <strong>meilleures pratiques</strong></li>
+    <li><strong>Neutre</strong> vis-à-vis des fournisseurs (pas lié à un éditeur de logiciels)</li>
+    <li><strong>Norme ouverte</strong> avec documentation ouverte</li>
+    <li>Évite de <strong>réinventer la roue</strong></li>
+    <li><strong>Adaptable</strong> aux normes industrielles</li>
+    <li><strong>Largement adopté</strong></li>
+    <li><strong>Complémentaire</strong> avec d'autres cadres (dont… ArchiMate !)</li>
+  </ul>
+
+  <h3>2.2 Le cycle ADM (Architecture Development Method)</h3>
+  <p>Le cœur de TOGAF est un <strong>cycle itératif de phases</strong>. Clique sur chaque phase de la roue pour découvrir son contenu 👇</p>
+
+  <div class="adm-wrap">
+    <svg viewBox="0 0 430 520" style="width:100%">
+      <defs><marker id="admArr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 z" fill="#9aa7b5"/></marker></defs>
+      <!-- circular guide arrows -->
+      <circle cx="215" cy="280" r="150" fill="none" stroke="#c7cfd8" stroke-width="2" stroke-dasharray="5 6"/>
+      <!-- Preliminary -->
+      <g class="adm-node" data-phase="prelim" transform="translate(215,45)">
+        <ellipse cx="0" cy="0" rx="90" ry="26" fill="#e8ecf1" stroke="var(--accent)" stroke-width="2"/>
+        <text text-anchor="middle" y="5" font-size="13" font-weight="600">Préliminaire</text>
+      </g>
+      <line x1="215" y1="72" x2="215" y2="100" stroke="#9aa7b5" stroke-width="2" marker-end="url(#admArr)"/>
+      <!-- A top -->
+      <g class="adm-node" data-phase="A" transform="translate(215,130)">
+        <ellipse cx="0" cy="0" rx="88" ry="26" fill="#fff" stroke="var(--accent)" stroke-width="2"/>
+        <text text-anchor="middle" y="-1" font-size="12.5" font-weight="600">A. Vision de</text>
+        <text text-anchor="middle" y="13" font-size="12.5" font-weight="600">l'architecture</text>
+      </g>
+      <!-- B right upper -->
+      <g class="adm-node" data-phase="B" transform="translate(352,205)">
+        <ellipse cx="0" cy="0" rx="72" ry="26" fill="var(--biz)" stroke="var(--biz-b)" stroke-width="2"/>
+        <text text-anchor="middle" y="-1" font-size="12.5" font-weight="600">B. Architecture</text>
+        <text text-anchor="middle" y="13" font-size="12.5" font-weight="600">métier</text>
+      </g>
+      <!-- C right lower -->
+      <g class="adm-node" data-phase="C" transform="translate(360,320)">
+        <ellipse cx="0" cy="0" rx="70" ry="28" fill="var(--app)" stroke="var(--app-b)" stroke-width="2"/>
+        <text text-anchor="middle" y="-6" font-size="12" font-weight="600">C. Architecture</text>
+        <text text-anchor="middle" y="7" font-size="12" font-weight="600">des systèmes</text>
+        <text text-anchor="middle" y="20" font-size="12" font-weight="600">d'information</text>
+      </g>
+      <!-- D bottom right -->
+      <g class="adm-node" data-phase="D" transform="translate(300,425)">
+        <ellipse cx="0" cy="0" rx="72" ry="26" fill="var(--tech)" stroke="var(--tech-b)" stroke-width="2"/>
+        <text text-anchor="middle" y="-1" font-size="12.5" font-weight="600">D. Architecture</text>
+        <text text-anchor="middle" y="13" font-size="12.5" font-weight="600">technologique</text>
+      </g>
+      <!-- E bottom left -->
+      <g class="adm-node" data-phase="E" transform="translate(130,425)">
+        <ellipse cx="0" cy="0" rx="72" ry="26" fill="#fff" stroke="var(--accent)" stroke-width="2"/>
+        <text text-anchor="middle" y="-1" font-size="12.5" font-weight="600">E. Opportunités</text>
+        <text text-anchor="middle" y="13" font-size="12.5" font-weight="600">et solutions</text>
+      </g>
+      <!-- F left lower -->
+      <g class="adm-node" data-phase="F" transform="translate(72,320)">
+        <ellipse cx="0" cy="0" rx="68" ry="26" fill="#fff" stroke="var(--accent)" stroke-width="2"/>
+        <text text-anchor="middle" y="-1" font-size="12.5" font-weight="600">F. Planning de</text>
+        <text text-anchor="middle" y="13" font-size="12.5" font-weight="600">migration</text>
+      </g>
+      <!-- G left upper -->
+      <g class="adm-node" data-phase="G" transform="translate(78,205)">
+        <ellipse cx="0" cy="0" rx="72" ry="26" fill="#fff" stroke="var(--accent)" stroke-width="2"/>
+        <text text-anchor="middle" y="-1" font-size="12.5" font-weight="600">G. Gouvernance de</text>
+        <text text-anchor="middle" y="13" font-size="12.5" font-weight="600">mise en œuvre</text>
+      </g>
+      <!-- H top-left back to A: represent as node near top left -->
+      <g class="adm-node" data-phase="H" transform="translate(120,120)">
+        <ellipse cx="0" cy="0" rx="62" ry="24" fill="#fff" stroke="var(--accent)" stroke-width="2"/>
+        <text text-anchor="middle" y="-1" font-size="12.5" font-weight="600">H. Gestion du</text>
+        <text text-anchor="middle" y="13" font-size="12.5" font-weight="600">changement</text>
+      </g>
+      <!-- Center -->
+      <g class="adm-node" data-phase="req" transform="translate(215,280)">
+        <ellipse cx="0" cy="0" rx="78" ry="34" fill="#f0d060" stroke="#a8891a" stroke-width="2.5"/>
+        <text text-anchor="middle" y="-3" font-size="12.5" font-weight="700">Gestion des</text>
+        <text text-anchor="middle" y="12" font-size="12.5" font-weight="700">exigences</text>
+      </g>
+    </svg>
+    <div class="adm-detail" id="admDetail">
+      <span class="phase-tag">Clique sur une phase</span>
+      <h4 style="margin-top:10px">La roue ADM</h4>
+      <p style="font-size:.9rem">Les phases <strong>A → H</strong> s'enchaînent en boucle (démarche <em>itérative</em>, comme le cycle de vie BPM du chapitre 3). La <strong>Gestion des exigences</strong> est au <strong>centre</strong> : elle alimente <em>toutes</em> les phases en continu. Note le code couleur : B = métier 🟡, C = SI 🔵, D = technologie 🟢 → ce sont exactement <strong>les 3 couches d'ArchiMate</strong> !</p>
+    </div>
+  </div>
+
+  <h3>2.3 Le pattern commun des phases B, C, D : as-is → gap → to-be</h3>
+  <p>Les trois phases d'architecture (métier, SI, technologique) suivent <strong>la même logique en 3 temps</strong> — c'est un grand classique d'examen :</p>
+  <figure>
+    <svg viewBox="0 0 660 150" style="max-width:660px;width:100%">
+      <defs><marker id="gapArr" markerWidth="10" markerHeight="10" refX="8" refY="3.5" orient="auto"><path d="M0,0 L9,3.5 L0,7 z" fill="#2e4057"/></marker></defs>
+      <rect x="20" y="30" width="160" height="60" rx="10" fill="#e8ecf1" stroke="var(--accent)" stroke-width="2"/>
+      <text x="100" y="55" text-anchor="middle" font-weight="700" font-size="14">Architecture as-is</text>
+      <text x="100" y="75" text-anchor="middle" font-size="11.5" fill="#556">« de référence » (existant)</text>
+      <rect x="250" y="30" width="160" height="60" rx="10" fill="#fdf3d5" stroke="#c9a227" stroke-width="2"/>
+      <text x="330" y="55" text-anchor="middle" font-weight="700" font-size="14">Analyse de gap</text>
+      <text x="330" y="75" text-anchor="middle" font-size="11.5" fill="#556">quelles lacunes ?</text>
+      <rect x="480" y="30" width="160" height="60" rx="10" fill="#e3f2e3" stroke="var(--tech-b)" stroke-width="2"/>
+      <text x="560" y="55" text-anchor="middle" font-weight="700" font-size="14">Architecture cible</text>
+      <text x="560" y="75" text-anchor="middle" font-size="11.5" fill="#556">« to-be » (visée)</text>
+      <line x1="182" y1="60" x2="245" y2="60" stroke="#2e4057" stroke-width="2.5" marker-end="url(#gapArr)"/>
+      <line x1="412" y1="60" x2="475" y2="60" stroke="#2e4057" stroke-width="2.5" marker-end="url(#gapArr)"/>
+      <text x="330" y="125" text-anchor="middle" font-size="12.5" fill="#2e4057" font-weight="600">→ Plan d'action / feuille de route pour combler les gaps</text>
+    </svg>
+    <figcaption>Le triptyque as-is / gap / to-be, commun aux phases B, C et D (slide 16)</figcaption>
+  </figure>
+  <p>L'<strong>analyse de gap</strong> identifie 4 types de lacunes (slide 16) :</p>
+  <ul>
+    <li>Gaps dans les <strong>processus</strong></li>
+    <li>Gaps dans les <strong>personnes (compétences)</strong></li>
+    <li>Gaps <strong>financiers</strong></li>
+    <li>Gaps <strong>matériels</strong></li>
+  </ul>
+  <div class="box tip"><div class="t">💡 Lien avec le chapitre 3</div>
+    Tu reconnais la logique ? C'est la même que le <strong>cycle de vie BPM</strong> : découvrir le processus actuel (as-is) → analyser → redesign (to-be) → implémenter → monitorer. Et la migration Baseline → Transition(s) → Target rappelle la roue <strong>PDCA</strong> : on avance par étapes intermédiaires qu'on peut « fêter ».
+  </div>
+
+  <div class="quiz">
+    <div class="qt">✏️ Vérifie ta compréhension</div>
+    <div class="question">1. Où se situe la « Gestion des exigences » dans le cycle ADM ?</div>
+    <div class="opts">
+      <button class="opt" onclick="answer(this,false)">C'est la première phase, avant la phase Préliminaire</button>
+      <button class="opt" onclick="answer(this,true)">Au centre : elle interagit avec toutes les phases en continu</button>
+      <button class="opt" onclick="answer(this,false)">C'est la dernière phase, après la gestion du changement</button>
+    </div>
+    <div class="expl">✔ Les exigences sont identifiées, stockées dans un <strong>référentiel</strong> et <strong>intégrées dans toutes les autres phases</strong>. D'où sa position centrale dans la roue.</div>
+
+    <div class="question">2. Remets dans l'ordre : quelle phase vient juste après « B. Architecture métier » ?</div>
+    <div class="opts">
+      <button class="opt" onclick="answer(this,false)">D. Architecture technologique</button>
+      <button class="opt" onclick="answer(this,true)">C. Architecture des systèmes d'information</button>
+      <button class="opt" onclick="answer(this,false)">F. Planning de migration</button>
+    </div>
+    <div class="expl">✔ B → C → D suit la logique <strong>descendante des couches</strong> : métier d'abord, puis SI qui le supporte, puis technologie qui supporte le SI. Exactement l'ordre des couches ArchiMate.</div>
+
+    <div class="question">3. Une entreprise compare son architecture actuelle à son architecture visée et découvre que ses employés n'ont pas les compétences pour le nouveau CRM. De quoi s'agit-il ?</div>
+    <div class="opts">
+      <button class="opt" onclick="answer(this,true)">D'une analyse de gap révélant un gap dans les personnes (compétences)</button>
+      <button class="opt" onclick="answer(this,false)">D'une phase de gestion du changement révélant un gap matériel</button>
+      <button class="opt" onclick="answer(this,false)">D'une vision d'architecture révélant un gap financier</button>
+    </div>
+    <div class="expl">✔ Comparer as-is et to-be = <strong>analyse de gap</strong>. Les compétences manquantes = gap dans les <strong>personnes</strong> (un des 4 types : processus, personnes, financier, matériel).</div>
+  </div>
+</section>
+
+<!-- ============================================================ SECTION 3 -->
+<section id="s3">
+  <div class="eyebrow">Section 3</div>
+  <h2>ArchiMate : le langage et ses 3 couches</h2>
+  <p class="lead">TOGAF dit <strong>comment procéder</strong> ; ArchiMate dit <strong>comment dessiner</strong>. Sans langage commun, chaque couche utiliserait sa propre notation (BPMN pour les processus, UML pour les applis, schémas réseau pour l'infra…) — impossible de voir les liens <em>entre</em> couches.</p>
+
+  <div class="box def"><div class="t">📖 À retenir</div>
+    <strong>ArchiMate</strong> est un langage de modélisation <strong>unifié</strong> pour l'architecture d'entreprise, maintenu (comme TOGAF) par l'<strong>Open Group</strong>. Il est <strong>complémentaire à TOGAF</strong> : la roue ADM structure la démarche, ArchiMate exprime les modèles produits par les phases B, C et D.
+  </div>
+
+  <h3>3.1 Les 3 couches (définitions exactes du cours — slide 40) <span class="pill">★★★</span></h3>
+  <table>
+    <tr><th style="width:170px">Couche</th><th>Définition du cours</th></tr>
+    <tr>
+      <td style="background:var(--biz);font-weight:700">Couche métier<br><span style="font-weight:400;font-size:.78rem">(Business)</span></td>
+      <td>Propose des <strong>produits et services à des clients externes</strong>, mis en œuvre dans l'organisation par des <strong>processus métier</strong> exécutés par des <strong>acteurs métier</strong>.</td>
+    </tr>
+    <tr>
+      <td style="background:var(--app);font-weight:700">Couche des systèmes d'information<br><span style="font-weight:400;font-size:.78rem">(Application)</span></td>
+      <td><strong>Soutient la couche métier</strong> avec des <strong>services d'application</strong> mis en œuvre par des <strong>applications (logicielles)</strong>.</td>
+    </tr>
+    <tr>
+      <td style="background:var(--tech);font-weight:700">Couche technologique<br><span style="font-weight:400;font-size:.78rem">(Technology)</span></td>
+      <td>Propose des <strong>services d'infrastructure</strong> (traitement, stockage, communication) nécessaires au fonctionnement des applications, mis en œuvre par du <strong>matériel</strong> informatique/communication et des <strong>logiciels système</strong>.</td>
+    </tr>
+  </table>
+  <div class="box tip"><div class="t">💡 La logique verticale</div>
+    Chaque couche <strong>sert</strong> celle du dessus via des <strong>services</strong> : la technologie sert les applications, les applications servent le métier, le métier sert les clients. Le mot-clé qui circule entre les couches, c'est <strong>« service »</strong>.
+  </div>
+
+  <h3>3.2 L'exemple fil rouge : le permis de stationnement</h3>
+  <p>Le cours utilise un exemple complet (slides 31-39) : une <strong>municipalité délivre un permis de stationnement</strong> à un citoyen. Voici le modèle simplifié, couche par couche :</p>
+
+  <figure>
+    <svg viewBox="0 0 700 460" style="width:100%;max-width:700px">
+      <defs>
+        <marker id="servArr" markerWidth="10" markerHeight="10" refX="8" refY="3.5" orient="auto"><path d="M0,0 L8,3.5 L0,7" fill="none" stroke="#556" stroke-width="1.6"/></marker>
+        <marker id="realTri" markerWidth="12" markerHeight="12" refX="10" refY="4.5" orient="auto"><path d="M0,0 L10,4.5 L0,9 z" fill="#fff" stroke="#556" stroke-width="1.4"/></marker>
+      </defs>
+      <!-- Citizen band -->
+      <rect x="10" y="8" width="680" height="70" rx="8" fill="#f2f2f2" stroke="#aaa"/>
+      <text x="22" y="28" font-size="11" font-weight="700" fill="#666">EXPÉRIENCE DU CITOYEN (parcours)</text>
+      <g font-size="10.5">
+        <rect x="30" y="36" width="140" height="32" rx="6" fill="#fff" stroke="#888"/><text x="100" y="56" text-anchor="middle">Consulter les infos produit</text>
+        <rect x="200" y="36" width="140" height="32" rx="6" fill="#fff" stroke="#888"/><text x="270" y="56" text-anchor="middle">Fournir les informations</text>
+        <rect x="370" y="36" width="120" height="32" rx="6" fill="#fff" stroke="#888"/><text x="430" y="56" text-anchor="middle">Payer</text>
+        <rect x="520" y="36" width="150" height="32" rx="6" fill="#fff" stroke="#888"/><text x="595" y="56" text-anchor="middle">Recevoir le permis</text>
+      </g>
+      <!-- Business services -->
+      <rect x="10" y="92" width="680" height="120" rx="8" fill="var(--biz)" stroke="var(--biz-b)" stroke-width="1.6" opacity=".55"/>
+      <text x="22" y="112" font-size="11" font-weight="700" fill="#8a6d0b">COUCHE MÉTIER — services métier (l'interface citoyen ↔ administration)</text>
+      <g font-size="10.5">
+        <rect x="30" y="120" width="140" height="30" rx="15" fill="#fffef4" stroke="var(--biz-b)" stroke-width="1.6"/><text x="100" y="139" text-anchor="middle">Information provision</text>
+        <rect x="200" y="120" width="140" height="30" rx="15" fill="#fffef4" stroke="var(--biz-b)" stroke-width="1.6"/><text x="270" y="139" text-anchor="middle">Intake</text>
+        <rect x="370" y="120" width="120" height="30" rx="15" fill="#fffef4" stroke="var(--biz-b)" stroke-width="1.6"/><text x="430" y="139" text-anchor="middle">Payment</text>
+        <rect x="520" y="120" width="150" height="30" rx="15" fill="#fffef4" stroke="var(--biz-b)" stroke-width="1.6"/><text x="595" y="139" text-anchor="middle">Permit provision</text>
+      </g>
+      <!-- Business process -->
+      <rect x="30" y="166" width="640" height="36" rx="18" fill="#fff9db" stroke="var(--biz-b)" stroke-width="1.8"/>
+      <text x="350" y="188" text-anchor="middle" font-size="11.5" font-weight="600">Processus métier « Provide Parking Permit » : Show info → Intake application → Assess application → Receive payment → Provide permit</text>
+      <!-- realization arrows process -> services -->
+      <line x1="100" y1="164" x2="100" y2="153" stroke="#556" stroke-width="1.4" stroke-dasharray="4 3" marker-end="url(#realTri)"/>
+      <line x1="270" y1="164" x2="270" y2="153" stroke="#556" stroke-width="1.4" stroke-dasharray="4 3" marker-end="url(#realTri)"/>
+      <line x1="430" y1="164" x2="430" y2="153" stroke="#556" stroke-width="1.4" stroke-dasharray="4 3" marker-end="url(#realTri)"/>
+      <line x1="595" y1="164" x2="595" y2="153" stroke="#556" stroke-width="1.4" stroke-dasharray="4 3" marker-end="url(#realTri)"/>
+      <!-- App layer -->
+      <rect x="10" y="226" width="680" height="200" rx="8" fill="var(--app)" stroke="var(--app-b)" stroke-width="1.6" opacity=".5"/>
+      <text x="22" y="246" font-size="11" font-weight="700" fill="#1d5a75">COUCHE APPLICATION — les systèmes qui supportent le processus</text>
+      <!-- serving arrows app->process -->
+      <line x1="120" y1="268" x2="120" y2="206" stroke="#556" stroke-width="1.5" marker-end="url(#servArr)"/>
+      <line x1="350" y1="268" x2="350" y2="206" stroke="#556" stroke-width="1.5" marker-end="url(#servArr)"/>
+      <line x1="580" y1="268" x2="580" y2="206" stroke="#556" stroke-width="1.5" marker-end="url(#servArr)"/>
+      <text x="360" y="238" font-size="9.5" fill="#556" transform="rotate(0)"></text>
+      <g font-size="10.5">
+        <text x="22" y="286" font-size="10" font-weight="700" fill="#1d5a75">Front-office (citoyen) :</text>
+        <rect x="30" y="296" width="150" height="34" fill="#eaf6fc" stroke="var(--app-b)" stroke-width="1.6"/><text x="105" y="317" text-anchor="middle">Portal citizens</text>
+        <rect x="200" y="296" width="150" height="34" fill="#eaf6fc" stroke="var(--app-b)" stroke-width="1.6"/><text x="275" y="317" text-anchor="middle">Web intake</text>
+        <rect x="370" y="296" width="130" height="34" fill="#eaf6fc" stroke="var(--app-b)" stroke-width="1.6"/><text x="435" y="317" text-anchor="middle">Payment</text>
+        <text x="22" y="358" font-size="10" font-weight="700" fill="#1d5a75">Back-office (agents) :</text>
+        <rect x="30" y="368" width="90" height="34" fill="#eaf6fc" stroke="var(--app-b)" stroke-width="1.6"/><text x="75" y="389" text-anchor="middle">CMS</text>
+        <rect x="140" y="368" width="180" height="34" fill="#eaf6fc" stroke="var(--app-b)" stroke-width="1.6"/><text x="230" y="389" text-anchor="middle">Backoffice citizens affairs</text>
+        <rect x="340" y="368" width="180" height="34" fill="#eaf6fc" stroke="var(--app-b)" stroke-width="1.6"/><text x="430" y="389" text-anchor="middle">Basic information registers</text>
+        <rect x="540" y="368" width="130" height="34" fill="#eaf6fc" stroke="var(--app-b)" stroke-width="1.6"/><text x="605" y="389" text-anchor="middle">DMS (documents)</text>
+      </g>
+      <text x="350" y="448" text-anchor="middle" font-size="10.5" fill="#556">Flèches pleines à pointe ouverte = <tspan font-weight="700">serving</tspan> (l'app sert le processus) · flèches pointillées à triangle creux = <tspan font-weight="700">realization</tspan> (le processus réalise le service)</text>
+    </svg>
+    <figcaption>Le modèle « Parking Permit » simplifié (slides 31-37)</figcaption>
+  </figure>
+
+  <p>Lecture pédagogique du modèle, de haut en bas :</p>
+  <ol>
+    <li><strong>Le parcours citoyen</strong> : consulter les infos → fournir les infos → payer → recevoir le permis. C'est l'<em>expérience visible</em> du service.</li>
+    <li><strong>Les services métier</strong> (Information provision, Intake, Payment, Permit provision) : l'<em>interface</em> entre le citoyen et l'administration.</li>
+    <li><strong>Le processus métier interne</strong> « Provide Parking Permit » et ses activités (Show product information, Intake application, <em>Assess application</em>, Receive payment, Provide permit). Remarque : <em>Assess application</em> (vérifier l'éligibilité) est interne — le citoyen ne le voit pas !</li>
+    <li><strong>Les applications</strong> : front-office orientées citoyen (Portal citizens, Web intake, Payment) et back-office orientées agents (CMS, Backoffice citizens affairs, Basic information registers, DMS).</li>
+  </ol>
+
+  <h3>3.3 Les 2 problèmes que le modèle révèle (slides 38-39)</h3>
+  <div class="elem-grid">
+    <div class="box warn" style="margin:0"><div class="t">⚠ Problème 1 : architecture en silos</div>
+      Le processus repose sur <strong>plusieurs SI distincts</strong> (portail, formulaire, paiement, gestion des dossiers, DMS, registres) → <strong>intégrations complexes</strong>, <strong>transferts de données multiples</strong>, risques d'<strong>erreurs et incohérences</strong>.</div>
+    <div class="box warn" style="margin:0"><div class="t">⚠ Problème 2 : mauvaise expérience utilisateur</div>
+      Le parcours citoyen traverse <strong>plusieurs interfaces</strong> (portail, formulaire, paiement). Si ces systèmes sont distincts, le citoyen est <strong>redirigé</strong> d'un système à l'autre → expérience <strong>fragmentée ou confuse</strong>.</div>
+  </div>
+  <div class="box tip"><div class="t">💡 Pourquoi c'est puissant</div>
+    C'est exactement l'intérêt de l'EA : <strong>le modèle rend les problèmes visibles</strong> (silos, fragmentation) <em>avant</em> qu'on investisse. On retrouve la fonction « prédictive » d'un bon modèle (chapitre 1).
+  </div>
+
+  <h3>3.4 Comment « décoder » une couche : les questions à se poser <span class="pill">★★</span></h3>
+  <p>Le cours donne une grille de questions pour lire/construire chaque couche. C'est ta <strong>check-list de modélisation</strong> pour les exercices :</p>
+  <table>
+    <tr><th style="width:50%;background:var(--biz-d)">Décoder la couche MÉTIER (slide 41)</th><th style="background:var(--app-d)">Décoder la couche APPLICATION (slide 58)</th></tr>
+    <tr><td>Quels sont les principaux <strong>acteurs</strong> (internes/externes) ?</td><td>Quelles sont les principales applications ? → <strong>Composants applicatifs</strong></td></tr>
+    <tr><td>Quels sont leurs <strong>rôles</strong> ?</td><td>Quelles fonctionnalités clés exposent-elles ? → <strong>Services d'application</strong></td></tr>
+    <tr><td>Quels <strong>processus métier</strong> sont associés à ces acteurs ?</td><td>Comment les utilisateurs interagissent-ils ? → <strong>Interface d'application (GUI)</strong></td></tr>
+    <tr><td>Quels <strong>événements métier</strong> déclenchent ces processus ?</td><td>Quels comportements internes ? → <strong>Processus / fonction / événement d'application</strong></td></tr>
+    <tr><td>Quelles <strong>fonctions métier</strong> permettent ces processus ?</td><td>Comment les applis interagissent-elles entre elles ? → <strong>Interface (API) / collaboration d'application</strong></td></tr>
+    <tr><td>Les acteurs externes passent-ils par des <strong>services métier</strong> ? Via quelles <strong>interfaces métier</strong> ?</td><td>À quelles données accèdent-elles ? → <strong>Objets de données</strong></td></tr>
+    <tr><td>Y a-t-il des <strong>produits, objets métier ou contrats</strong> clés ?</td><td></td></tr>
+  </table>
+
+  <div class="quiz">
+    <div class="qt">✏️ Vérifie ta compréhension</div>
+    <div class="question">1. Quelle est la relation entre TOGAF et ArchiMate ?</div>
+    <div class="opts">
+      <button class="opt" onclick="answer(this,false)">Ce sont deux méthodes concurrentes : on choisit l'une ou l'autre</button>
+      <button class="opt" onclick="answer(this,false)">ArchiMate est la méthode, TOGAF est le langage</button>
+      <button class="opt" onclick="answer(this,true)">Ils sont complémentaires : TOGAF est la méthode (le processus), ArchiMate le langage (la notation)</button>
+    </div>
+    <div class="expl">✔ Les deux sont maintenus par l'<strong>Open Group</strong>. TOGAF structure la démarche (roue ADM), ArchiMate exprime les modèles des phases B, C, D. Analogie ch. 3 : la <strong>méthode de Bruce Silver</strong> (démarche) vs la <strong>notation BPMN</strong> (langage).</div>
+
+    <div class="question">2. Dans l'exemple du permis de stationnement, « Assess application » (vérifier l'éligibilité) n'apparaît pas dans le parcours citoyen. Pourquoi ?</div>
+    <div class="opts">
+      <button class="opt" onclick="answer(this,true)">C'est une activité interne du processus métier, invisible pour le citoyen ; le citoyen ne voit que les services exposés</button>
+      <button class="opt" onclick="answer(this,false)">C'est un oubli du modèle : toute activité doit être visible du client</button>
+      <button class="opt" onclick="answer(this,false)">Parce que c'est une activité de la couche technologique</button>
+    </div>
+    <div class="expl">✔ Distinction clé : le <strong>service</strong> = comportement <em>exposé</em> à l'environnement ; le <strong>processus</strong> = comportement <em>interne</em> qui réalise ce service. Le citoyen consomme « Intake » et « Permit provision », pas la vérification interne.</div>
+
+    <div class="question">3. Quelle couche « propose des services d'infrastructure (traitement, stockage, communication) » ?</div>
+    <div class="opts">
+      <button class="opt" onclick="answer(this,false)">La couche métier</button>
+      <button class="opt" onclick="answer(this,false)">La couche application</button>
+      <button class="opt" onclick="answer(this,true)">La couche technologique</button>
+    </div>
+    <div class="expl">✔ Définition exacte du cours. Mémo : <strong>technologie → sert → applications → servent → métier → sert → clients</strong>.</div>
+  </div>
+</section>
+
+<!-- ============================================================ SECTION 4 -->
+<section id="s4">
+  <div class="eyebrow">Section 4</div>
+  <h2>La couche Métier : les éléments <span class="pill">★★★</span></h2>
+  <p class="lead">ArchiMate classe chaque élément dans une des <strong>3 colonnes</strong> : la <strong>structure active</strong> (qui agit ?), le <strong>comportement</strong> (que fait-on ?) et la <strong>structure passive</strong> (sur quoi agit-on ?). Cette grille est la clé pour tout mémoriser.</p>
+
+  <div class="legend-inline">
+    <span><span class="sw" style="background:#fffef4;border-color:var(--biz-b)"></span> Éléments jaunes = couche métier</span>
+    <span>◻ coins carrés = structure <strong>active</strong></span>
+    <span>▢ coins arrondis = <strong>comportement</strong></span>
+    <span>▤ bandeau = structure <strong>passive</strong></span>
+  </div>
+
+  <span class="cat-label cat-active">Structure active — « qui ? »</span>
+  <div class="elem-grid">
+    <div class="elem biz">
+      <span class="shape am"><svg width="46" height="34"><rect x="1" y="1" width="44" height="32" fill="#fffbe6" stroke="var(--biz-b)" stroke-width="1.6"/><circle cx="36" cy="9" r="3" fill="none" stroke="#8a6d0b" stroke-width="1.4"/><path d="M36 12 v7 M31 15 h10 M36 19 l-4 6 M36 19 l4 6" stroke="#8a6d0b" stroke-width="1.4" fill="none"/></svg></span>
+      <h5>Acteur métier <em style="font-weight:400;font-size:.78rem">(Business actor)</em></h5>
+      <p><strong>Entité métier capable d'exécuter un comportement.</strong> Concret : humains, départements, unités d'affaires. Nom = un <strong>nom commun ou propre</strong>.</p>
+      <p class="ex">Ex : Greg, Centre de contact ArchiSurance, ABC Corporation</p>
+    </div>
+    <div class="elem biz">
+      <span class="shape am"><svg width="46" height="34"><rect x="1" y="1" width="44" height="32" fill="#fffbe6" stroke="var(--biz-b)" stroke-width="1.6"/><ellipse cx="33" cy="10" rx="6" ry="4" fill="none" stroke="#8a6d0b" stroke-width="1.4"/><path d="M27 10 v8 a6 4 0 0 0 12 0 v-8" fill="none" stroke="#8a6d0b" stroke-width="1.4"/></svg></span>
+      <h5>Rôle métier <em style="font-weight:400;font-size:.78rem">(Business role)</em></h5>
+      <p><strong>Responsabilité d'exécuter un comportement spécifique</strong>, à laquelle un acteur peut être <em>assigné</em>. C'est le rôle qui reçoit les processus/fonctions ; l'acteur assigné au rôle les exécute au final.</p>
+      <p class="ex">Ex : Analyste sinistres voyage, Spécialiste, Fournisseur</p>
+    </div>
+    <div class="elem biz">
+      <span class="shape am"><svg width="46" height="34"><rect x="1" y="1" width="44" height="32" fill="#fffbe6" stroke="var(--biz-b)" stroke-width="1.6"/><circle cx="30" cy="14" r="6" fill="none" stroke="#8a6d0b" stroke-width="1.4"/><circle cx="38" cy="14" r="6" fill="none" stroke="#8a6d0b" stroke-width="1.4"/></svg></span>
+      <h5>Collaboration métier</h5>
+      <p><strong>Agrégat de deux ou plusieurs éléments de structure active interne</strong> qui travaillent ensemble pour un comportement collectif. Souvent <em>temporaire</em> : pas besoin d'un statut officiel permanent (≠ département).</p>
+      <p class="ex">Ex : « Évaluation des réclamations à haut risque » = Spécialiste + Représentant du service clientèle</p>
+    </div>
+    <div class="elem biz">
+      <span class="shape am"><svg width="46" height="34"><rect x="1" y="1" width="44" height="32" fill="#fffbe6" stroke="var(--biz-b)" stroke-width="1.6"/><line x1="26" y1="17" x2="34" y2="17" stroke="#8a6d0b" stroke-width="1.4"/><circle cx="38" cy="17" r="4.5" fill="none" stroke="#8a6d0b" stroke-width="1.4"/></svg></span>
+      <h5>Interface métier</h5>
+      <p><strong>Point d'accès où un service métier est mis à disposition de l'environnement.</strong> Souvent appelée un <strong>canal</strong> (téléphone, internet, guichet…). Un même service peut être exposé via plusieurs interfaces.</p>
+      <p class="ex">Ex : Téléphone, E-mail, Chat en ligne</p>
+    </div>
+  </div>
+
+  <div class="box warn"><div class="t">⚠ Piège d'examen n°1 : acteur ≠ rôle</div>
+    <strong>L'acteur</strong> = l'entité concrète (Greg, le département X). <strong>Le rôle</strong> = la responsabilité abstraite (Analyste sinistres). Un acteur peut être <strong>assigné</strong> à plusieurs rôles, et un rôle peut être tenu par plusieurs acteurs. À l'examen : « Greg remplit le rôle d'Analyste » → relation d'<strong>assignation</strong> de l'acteur vers le rôle. Astuce : si on peut dire « c'est le métier/la casquette » → rôle ; « c'est la personne/l'organisation » → acteur.
+  </div>
+
+  <h4>L'exemple ArchiSurance (slide 48) — à savoir raconter</h4>
+  <ul style="font-size:.93rem">
+    <li>Le <strong>Centre de contact ArchiSurance</strong> (acteur) est <strong>composé</strong> de trois acteurs : Greg, Joan, Larry.</li>
+    <li>Il dispose de trois <strong>interfaces</strong> : Téléphone, E-mail, Chat en ligne.</li>
+    <li>Greg est <strong>assigné</strong> au rôle « Analyste des demandes d'indemnisation voyage », Joan au rôle « Spécialiste produits habitation », Larry au rôle « Représentant du service clientèle ».</li>
+    <li>Les deux premiers rôles sont des <strong>spécialisations</strong> du rôle « Spécialiste ».</li>
+    <li>« Évaluation des réclamations à haut risque » = <strong>collaboration</strong> entre « Spécialiste » et « Représentant du service clientèle ».</li>
+  </ul>
+
+  <span class="cat-label cat-behav">Comportement — « quoi ? »</span>
+  <div class="elem-grid">
+    <div class="elem biz">
+      <span class="shape am"><svg width="46" height="34"><rect x="1" y="1" width="44" height="32" rx="9" fill="#fffbe6" stroke="var(--biz-b)" stroke-width="1.6"/><path d="M25 17 h12 m0 0 l-4 -4 m4 4 l-4 4" stroke="#8a6d0b" stroke-width="1.5" fill="none"/></svg></span>
+      <h5>Processus métier</h5>
+      <p><strong>Séquence de comportements métier qui atteint un résultat spécifique</strong> (produits ou services définis). Regroupe le comportement par <strong>résultat à produire</strong>. Reste une <em>boîte noire</em> : le détail se modélise en BPMN.</p>
+      <p class="ex">Ex : Accepter le sinistre, Attribuer le sinistre, Payer la réclamation</p>
+    </div>
+    <div class="elem biz">
+      <span class="shape am"><svg width="46" height="34"><rect x="1" y="1" width="44" height="32" rx="9" fill="#fffbe6" stroke="var(--biz-b)" stroke-width="1.6"/><path d="M31 24 v-9 m0 0 l-5 -5 m5 5 l5 -5" stroke="#8a6d0b" stroke-width="1.5" fill="none"/></svg></span>
+      <h5>Fonction métier</h5>
+      <p><strong>Collection de comportements métier basée sur un ensemble de critères choisis</strong> — typiquement les <strong>ressources et compétences requises</strong>. Regroupe par <strong>savoir-faire</strong>, pas par résultat.</p>
+      <p class="ex">Ex : Gestion des sinistres, Gestion de la clientèle, Traitement des paiements</p>
+    </div>
+    <div class="elem biz">
+      <span class="shape am"><svg width="46" height="34"><rect x="1" y="1" width="44" height="32" rx="9" fill="#fffbe6" stroke="var(--biz-b)" stroke-width="1.6"/><path d="M28 11 a7 7 0 0 0 0 12 M34 11 a7 7 0 0 1 0 12" fill="none" stroke="#8a6d0b" stroke-width="1.5"/></svg></span>
+      <h5>Interaction métier</h5>
+      <p><strong>Unité de comportement collectif exécutée par (une collaboration de) deux rôles ou plus.</strong> C'est le pendant « comportement » de la collaboration (structure).</p>
+      <p class="ex">Ex : Statuer sur une réclamation à haut risque (2 personnes obligatoires, anti-fraude)</p>
+    </div>
+    <div class="elem biz">
+      <span class="shape am"><svg width="46" height="34"><rect x="1" y="1" width="44" height="32" rx="9" fill="#fffbe6" stroke="var(--biz-b)" stroke-width="1.6"/><path d="M24 11 h12 l5 6 -5 6 h-12 z" fill="none" stroke="#8a6d0b" stroke-width="1.5"/></svg></span>
+      <h5>Événement métier</h5>
+      <p><strong>Élément de comportement qui dénote un changement d'état</strong> de l'organisation. <strong>Instantané</strong> (pas de durée !). Peut venir de l'extérieur ou de l'intérieur. Nom = <strong>verbe au passé</strong> (« claim received »).</p>
+      <p class="ex">Ex : Sinistre déclaré → déclenche « Accepter le sinistre »</p>
+    </div>
+    <div class="elem biz" style="grid-column:1/-1">
+      <span class="shape am"><svg width="46" height="34"><rect x="1" y="1" width="44" height="32" rx="16" fill="#fffbe6" stroke="var(--biz-b)" stroke-width="1.6"/></svg></span>
+      <h5>Service métier</h5>
+      <p><strong>Comportement métier explicitement défini et exposé.</strong> Il expose la fonctionnalité des rôles/collaborations à leur <strong>environnement</strong> ; on y accède via une ou plusieurs <strong>interfaces</strong>. Doit être une unité de comportement <strong>utile du point de vue de l'environnement</strong> (du client !). Nom = idéalement un verbe en « -ing » ou avec « service ».</p>
+      <p class="ex">Ex : Traitement des sinistres (Claims processing), Intake, Payment</p>
+    </div>
+  </div>
+
+  <div class="box warn"><div class="t">⚠ Piège d'examen n°2 : processus ≠ fonction</div>
+    Les deux décrivent du comportement <em>interne</em>, mais le critère de regroupement diffère : le <strong>processus</strong> regroupe ce qui est nécessaire pour <strong>réaliser un produit/service</strong> (logique de résultat, séquence) ; la <strong>fonction</strong> regroupe selon les <strong>ressources, compétences, connaissances</strong> requises (logique de savoir-faire, stable). Ex : la fonction « Gestion des sinistres » <em>contient</em> les processus « Accepter le sinistre », « Attribuer le sinistre »…
+  </div>
+  <div class="box warn"><div class="t">⚠ Piège d'examen n°3 : service ≠ interface</div>
+    Le <strong>service</strong> = le <em>comportement</em> exposé (ce qu'on offre). L'<strong>interface</strong> = le <em>point d'accès / canal</em> par lequel on y accède (comment on l'atteint). « Traitement des sinistres » est un service ; « Téléphone » est une interface. Un même service peut passer par plusieurs interfaces, et une interface peut exposer plusieurs services.
+  </div>
+
+  <h4>L'exemple « Gestion des sinistres » (slide 51) — le scénario type de l'examen</h4>
+  <div class="box def"><div class="t">📖 Scénario à maîtriser</div>
+    <ul style="margin:4px 0;font-size:.92rem">
+      <li>La <strong>fonction métier</strong> « Gestion des sinistres » est <strong>composée</strong> de plusieurs processus métier et d'une interaction métier. Elle <strong>réalise</strong> le <strong>service métier</strong> « Traitement des sinistres ».</li>
+      <li>L'<strong>événement</strong> « Sinistre déclaré » <strong>déclenche</strong> le processus « Accepter le sinistre », qui déclenche « Attribuer le sinistre ».</li>
+      <li>Selon le type de réclamation : processus « Statuer sur une réclamation standard » <em>ou</em> <strong>interaction</strong> « Statuer sur une réclamation à haut risque » (2 personnes obligatoires → anti-fraude).</li>
+      <li>Après évaluation : « Informer le client » et « Payer la réclamation » en <strong>parallèle</strong>, puis « Clôturer la réclamation ».</li>
+    </ul>
+  </div>
+
+  <span class="cat-label cat-passive">Structure passive — « sur quoi ? » (+ le Produit)</span>
+  <div class="elem-grid">
+    <div class="elem biz">
+      <span class="shape am"><svg width="46" height="34"><rect x="1" y="1" width="44" height="32" fill="#fffbe6" stroke="var(--biz-b)" stroke-width="1.6"/><line x1="1" y1="9" x2="45" y2="9" stroke="var(--biz-b)" stroke-width="1.6"/></svg></span>
+      <h5>Objet métier <em style="font-weight:400;font-size:.78rem">(Business object)</em></h5>
+      <p><strong>Concept utilisé dans un domaine métier particulier.</strong> Modélise un <em>type</em> d'objet (comme une classe UML / un type d'entité du ch. 2), dont plusieurs instances existent. Vision <em>métier</em> de l'information, indépendante de l'informatique.</p>
+      <p class="ex">Ex : Réclamation, Police d'assurance</p>
+    </div>
+    <div class="elem biz">
+      <span class="shape am"><svg width="46" height="34"><rect x="1" y="1" width="44" height="32" fill="#fffbe6" stroke="var(--biz-b)" stroke-width="1.6"/><line x1="1" y1="9" x2="45" y2="9" stroke="var(--biz-b)" stroke-width="1.6"/><line x1="1" y1="25" x2="45" y2="25" stroke="var(--biz-b)" stroke-width="1.6"/></svg></span>
+      <h5>Contrat</h5>
+      <p><strong>Spécification formelle ou informelle d'un accord entre un fournisseur et un consommateur</strong> : droits, obligations, paramètres fonctionnels et non-fonctionnels. C'est une <strong>spécialisation de l'objet métier</strong>. Peut être un <strong>SLA</strong>.</p>
+      <p class="ex">Ex : Police d'assurance, Contrat « Conduisez bien et économisez »</p>
+    </div>
+    <div class="elem biz">
+      <span class="shape am"><svg width="46" height="34"><path d="M2 4 h42 v22 q-10 8 -21 0 q-11 8 -21 0 z" fill="#fffbe6" stroke="var(--biz-b)" stroke-width="1.6"/></svg></span>
+      <h5>Représentation</h5>
+      <p><strong>Forme perceptible de l'information portée par un objet métier.</strong> Le support concret : document, message… Classable par <strong>médium</strong> (électronique, papier, audio) ou <strong>format</strong> (PDF, HTML…).</p>
+      <p class="ex">Ex : Formulaire de soumission, Lettre de réclamation</p>
+    </div>
+    <div class="elem biz">
+      <span class="shape am"><svg width="46" height="34"><rect x="1" y="1" width="44" height="32" fill="#fffbe6" stroke="var(--biz-b)" stroke-width="1.6"/><rect x="1" y="1" width="20" height="9" fill="#fffbe6" stroke="var(--biz-b)" stroke-width="1.6"/></svg></span>
+      <h5>Produit</h5>
+      <p><strong>Collection cohérente de services et/ou d'éléments de structure passive, accompagnée d'un contrat</strong>, offerte comme un tout à des clients (internes ou externes). Couvre les produits intangibles (services, information) comme physiques.</p>
+      <p class="ex">Ex : produit « Assurance » = contrat « Police » + service « Service client »</p>
+    </div>
+  </div>
+
+  <div class="box warn"><div class="t">⚠ Piège d'examen n°4 : objet métier ≠ représentation ≠ objet de données</div>
+    Trois niveaux pour « la même » information : l'<strong>objet métier</strong> (le concept : <em>la Réclamation</em>) peut être <strong>réalisé</strong> par une <strong>représentation</strong> (la forme perceptible : <em>la lettre de réclamation papier</em>) et/ou par un <strong>objet de données</strong> (couche application : <em>l'enregistrement Réclamation dans la base</em>). Exemple du cours : l'objet « Réclamation » a 3 représentations selon l'étape du processus — Formulaire de soumission, Résumé du dossier, Lettre de réclamation.
+  </div>
+
+  <h4>L'exemple « Produit Assurance » (slide 54)</h4>
+  <p style="font-size:.93rem">Le produit <strong>« Assurance »</strong> comprend le contrat « Police d'assurance » et le service « Service client », qui <strong>agrège</strong> 4 services : Demande, Renouvellement, Traitement des sinistres, Recours. Le produit <strong>« Assurance automobile »</strong> est une <strong>spécialisation</strong> de « Assurance », avec en plus le service « Conduisez bien et économisez » et son contrat associé. → Repère les relations : <em>composition/agrégation</em> + <em>spécialisation</em>.</p>
+
+  <div class="quiz">
+    <div class="qt">✏️ Vérifie ta compréhension — couche métier</div>
+    <div class="question">1. « Le guichet de la gare » et « le vendeur de billets » : comment les modéliser ?</div>
+    <div class="opts">
+      <button class="opt" onclick="answer(this,false)">Deux acteurs métier</button>
+      <button class="opt" onclick="answer(this,true)">Le guichet = interface métier (canal d'accès), le vendeur de billets = rôle métier (responsabilité)</button>
+      <button class="opt" onclick="answer(this,false)">Le guichet = service métier, le vendeur = collaboration métier</button>
+    </div>
+    <div class="expl">✔ Le guichet est un <strong>point d'accès</strong> au service (comme téléphone/e-mail chez ArchiSurance) → interface. « Vendeur de billets » décrit une <strong>responsabilité</strong> qu'on peut assigner à Paul ou Marie → rôle. Paul, lui, serait un acteur.</div>
+
+    <div class="question">2. « Gestion de la clientèle » regroupe tout ce qui touche à la relation client, quel que soit le produit concerné. C'est…</div>
+    <div class="opts">
+      <button class="opt" onclick="answer(this,false)">Un processus métier (séquence vers un résultat)</button>
+      <button class="opt" onclick="answer(this,true)">Une fonction métier (regroupement par compétences/ressources)</button>
+      <button class="opt" onclick="answer(this,false)">Un service métier (comportement exposé)</button>
+    </div>
+    <div class="expl">✔ Pas de résultat spécifique ni de séquence : on regroupe par <strong>savoir-faire</strong> → fonction. Les processus (« Traiter une plainte ») vivent <em>à l'intérieur</em> de la fonction.</div>
+
+    <div class="question">3. Pourquoi « Statuer sur une réclamation à haut risque » est-elle modélisée comme une interaction et non un processus ?</div>
+    <div class="opts">
+      <button class="opt" onclick="answer(this,true)">Parce que la politique d'entreprise impose que deux rôles y participent toujours (anti-fraude) : comportement collectif</button>
+      <button class="opt" onclick="answer(this,false)">Parce qu'elle est déclenchée par un événement externe</button>
+      <button class="opt" onclick="answer(this,false)">Parce qu'elle ne produit aucun résultat</button>
+    </div>
+    <div class="expl">✔ <strong>Interaction = comportement collectif de ≥ 2 rôles</strong> (via une collaboration). Le motif du cours : deux personnes impliquées pour minimiser le risque de fraude.</div>
+
+    <div class="question">4. Vrai ou faux : « Un événement métier a une durée, comme un processus. »</div>
+    <div class="opts">
+      <button class="opt" onclick="answer(this,false)">Vrai</button>
+      <button class="opt" onclick="answer(this,true)">Faux</button>
+    </div>
+    <div class="expl">✔ Faux : contrairement aux processus, fonctions et interactions, l'événement est <strong>instantané</strong> — il n'a <strong>pas de durée</strong>. Même logique qu'en BPMN (ch. 3) : « atomique, instantané ».</div>
+  </div>
+</section>
+
+<!-- ============================================================ SECTION 5 -->
+<section id="s5">
+  <div class="eyebrow">Section 5</div>
+  <h2>La couche Application : les éléments <span class="pill">★★★</span></h2>
+  <p class="lead">Bonne nouvelle : la couche application est <strong>le miroir de la couche métier</strong>. Mêmes trois colonnes, mêmes logiques — mais tout est <em>logiciel</em> et les noms commencent par « application ».</p>
+
+  <span class="cat-label cat-app-active">Structure active — « quelle appli ? »</span>
+  <div class="elem-grid">
+    <div class="elem app">
+      <span class="shape am"><svg width="46" height="34"><rect x="8" y="1" width="37" height="32" fill="#eaf6fc" stroke="var(--app-b)" stroke-width="1.6"/><rect x="2" y="7" width="12" height="6" fill="#eaf6fc" stroke="var(--app-b)" stroke-width="1.4"/><rect x="2" y="18" width="12" height="6" fill="#eaf6fc" stroke="var(--app-b)" stroke-width="1.4"/></svg></span>
+      <h5>Composant applicatif <em style="font-weight:400;font-size:.78rem">(Application component)</em></h5>
+      <p><strong>Encapsulation de fonctionnalité applicative alignée sur la structure d'implémentation, modulaire et remplaçable.</strong> Unité autonome : déployable, réutilisable, remplaçable indépendamment. Sa fonctionnalité n'est accessible que via ses <strong>interfaces</strong>.</p>
+      <p class="ex">Ex : Devis (Quotation), Achat (Purchase), CRM, DMS</p>
+    </div>
+    <div class="elem app">
+      <span class="shape am"><svg width="46" height="34"><rect x="1" y="1" width="44" height="32" fill="#eaf6fc" stroke="var(--app-b)" stroke-width="1.6"/><circle cx="30" cy="14" r="6" fill="none" stroke="var(--app-d)" stroke-width="1.4"/><circle cx="38" cy="14" r="6" fill="none" stroke="var(--app-d)" stroke-width="1.4"/></svg></span>
+      <h5>Collaboration d'application</h5>
+      <p><strong>Agrégat de deux composants applicatifs ou plus qui coopèrent</strong> pour un comportement collectif. Typiquement <em>logique ou temporaire</em> : n'existe pas comme entité séparée dans l'entreprise.</p>
+      <p class="ex">Ex : « Vente d'assurances voyage en ligne » = Devis + Achat</p>
+    </div>
+    <div class="elem app">
+      <span class="shape am"><svg width="46" height="34"><rect x="1" y="1" width="44" height="32" fill="#eaf6fc" stroke="var(--app-b)" stroke-width="1.6"/><line x1="26" y1="17" x2="34" y2="17" stroke="var(--app-d)" stroke-width="1.4"/><circle cx="38" cy="17" r="4.5" fill="none" stroke="var(--app-d)" stroke-width="1.4"/></svg></span>
+      <h5>Interface d'application</h5>
+      <p><strong>Point d'accès où des services d'application sont mis à disposition</strong> d'un utilisateur, d'un autre composant, ou d'un nœud. Deux visages : <strong>GUI</strong> (vers l'humain) ou <strong>API</strong> (vers une autre appli).</p>
+      <p class="ex">Ex : Interface de services Web (API) servant le composant « Site Web de voyage »</p>
+    </div>
+  </div>
+
+  <span class="cat-label cat-app-behav">Comportement — « que fait l'appli ? »</span>
+  <div class="elem-grid">
+    <div class="elem app">
+      <span class="shape am"><svg width="46" height="34"><rect x="1" y="1" width="44" height="32" rx="9" fill="#eaf6fc" stroke="var(--app-b)" stroke-width="1.6"/><path d="M31 24 v-9 m0 0 l-5 -5 m5 5 l5 -5" stroke="var(--app-d)" stroke-width="1.5" fill="none"/></svg></span>
+      <h5>Fonction d'application</h5>
+      <p><strong>Comportement automatisé qui peut être exécuté par un composant applicatif.</strong> Comportement <em>interne</em> ; s'il est exposé, c'est via des services. Peut <strong>réaliser</strong> un ou plusieurs services d'application.</p>
+      <p class="ex">Ex : Transférer le devis, Finaliser l'achat, Comptabilité</p>
+    </div>
+    <div class="elem app">
+      <span class="shape am"><svg width="46" height="34"><rect x="1" y="1" width="44" height="32" rx="9" fill="#eaf6fc" stroke="var(--app-b)" stroke-width="1.6"/><path d="M28 11 a7 7 0 0 0 0 12 M34 11 a7 7 0 0 1 0 12" fill="none" stroke="var(--app-d)" stroke-width="1.5"/></svg></span>
+      <h5>Interaction d'application</h5>
+      <p><strong>Unité de comportement collectif exécutée par (une collaboration de) deux composants ou plus</strong> — p.ex. le schéma de communication entre eux.</p>
+      <p class="ex">Ex : « Souscrire une assurance voyage » (Purchase Travel Insurance)</p>
+    </div>
+    <div class="elem app">
+      <span class="shape am"><svg width="46" height="34"><rect x="1" y="1" width="44" height="32" rx="9" fill="#eaf6fc" stroke="var(--app-b)" stroke-width="1.6"/><path d="M25 17 h12 m0 0 l-4 -4 m4 4 l-4 4" stroke="var(--app-d)" stroke-width="1.5" fill="none"/></svg></span>
+      <h5>Processus d'application</h5>
+      <p><strong>Séquence de comportements applicatifs qui atteint un résultat spécifique.</strong> Comportement interne requis pour réaliser un ensemble de services.</p>
+      <p class="ex">Ex : « Obtenir une assurance voyage », Claims adjudication</p>
+    </div>
+    <div class="elem app">
+      <span class="shape am"><svg width="46" height="34"><rect x="1" y="1" width="44" height="32" rx="9" fill="#eaf6fc" stroke="var(--app-b)" stroke-width="1.6"/><path d="M24 11 h12 l5 6 -5 6 h-12 z" fill="none" stroke="var(--app-d)" stroke-width="1.5"/></svg></span>
+      <h5>Événement d'application</h5>
+      <p><strong>Élément de comportement applicatif qui dénote un changement d'état.</strong> Sans durée, comme au niveau métier. Nom = verbe au passé.</p>
+      <p class="ex">Ex : « Demande de devis (reçue) » déclenche le processus d'application</p>
+    </div>
+    <div class="elem app" style="grid-column:1/-1">
+      <span class="shape am"><svg width="46" height="34"><rect x="1" y="1" width="44" height="32" rx="16" fill="#eaf6fc" stroke="var(--app-b)" stroke-width="1.6"/></svg></span>
+      <h5>Service d'application</h5>
+      <p><strong>Comportement applicatif explicitement défini et exposé.</strong> Réalisé par une ou plusieurs fonctions d'application, accessible via des interfaces. Doit être <strong>utile en soi pour ses utilisateurs</strong> (une unité de comportement significative pour l'environnement).</p>
+      <p class="ex">Ex : Obtenir un devis, Souscrire l'assurance proposée</p>
+    </div>
+  </div>
+
+  <span class="cat-label cat-app-passive">Structure passive — « quelles données ? »</span>
+  <div class="elem-grid">
+    <div class="elem app" style="grid-column:1/-1">
+      <span class="shape am"><svg width="46" height="34"><rect x="1" y="1" width="44" height="32" fill="#eaf6fc" stroke="var(--app-b)" stroke-width="1.6"/><line x1="1" y1="9" x2="45" y2="9" stroke="var(--app-b)" stroke-width="1.6"/></svg></span>
+      <h5>Objet de données <em style="font-weight:400;font-size:.78rem">(Data object)</em></h5>
+      <p><strong>Données structurées pour un traitement automatisé.</strong> Doit être un morceau d'information <strong>autonome, avec un sens clair pour le métier</strong> (pas seulement pour l'application). Peut <strong>réaliser</strong> un objet métier. Lien direct avec le chapitre 2 : c'est ce qu'on retrouve dans les tables de la base de données !</p>
+      <p class="ex">Ex du cours : « Devis d'assurance en ligne » composé de « Prix proposé » + « Conditions générales » + « Certificat d'authenticité » ; « Devis assurance auto » et « Devis assurance voyage » en sont des spécialisations (voyage contient en plus « Itinéraire acheté »)</p>
+    </div>
+  </div>
+
+  <h3>Le tableau miroir métier ↔ application <span class="pill">★★★</span></h3>
+  <p>Apprends <strong>une seule grille</strong>, tu connais les deux couches :</p>
+  <table>
+    <tr><th>Colonne</th><th style="background:var(--biz-d)">Couche métier 🟡</th><th style="background:var(--app-d)">Couche application 🔵</th></tr>
+    <tr><td rowspan="4"><strong>Structure active</strong><br><span style="font-size:.78rem">qui agit ?</span></td><td>Acteur métier</td><td style="color:#888">— (pas d'équivalent : l'« acteur » logiciel <em>est</em> le composant)</td></tr>
+    <tr><td>Rôle métier</td><td>Composant applicatif</td></tr>
+    <tr><td>Collaboration métier</td><td>Collaboration d'application</td></tr>
+    <tr><td>Interface métier (canal)</td><td>Interface d'application (GUI / API)</td></tr>
+    <tr><td rowspan="5"><strong>Comportement</strong><br><span style="font-size:.78rem">que fait-on ?</span></td><td>Processus métier</td><td>Processus d'application</td></tr>
+    <tr><td>Fonction métier</td><td>Fonction d'application</td></tr>
+    <tr><td>Interaction métier</td><td>Interaction d'application</td></tr>
+    <tr><td>Événement métier</td><td>Événement d'application</td></tr>
+    <tr><td>Service métier</td><td>Service d'application</td></tr>
+    <tr><td rowspan="2"><strong>Structure passive</strong><br><span style="font-size:.78rem">sur quoi ?</span></td><td>Objet métier (+ Contrat, Représentation)</td><td>Objet de données</td></tr>
+    <tr><td>Produit (collection services + contrat)</td><td style="color:#888">—</td></tr>
+  </table>
+
+  <h4>L'exemple fil rouge « assurance voyage en ligne » (slides 62-66)</h4>
+  <div class="box def"><div class="t">📖 Scénario à maîtriser</div>
+    <ul style="margin:4px 0;font-size:.92rem">
+      <li>La <strong>collaboration</strong> « Vente d'assurances voyage en ligne » regroupe deux <strong>composants</strong> : « Devis » et « Achat ». Elle fournit une <strong>interface</strong> « Interface de services Web » qui <strong>sert</strong> le composant « Site Web de voyage ».</li>
+      <li>La <strong>fonction</strong> « Souscrire une assurance voyage » se compose de « Transférer le devis » (qui <strong>réalise</strong> le <strong>service</strong> « Obtenir un devis ») et « Finaliser l'achat » (qui <strong>réalise</strong> « Souscrire l'assurance proposée »). Ces fonctions modélisent le comportement des composants « Devis » et « Achat ».</li>
+      <li>L'<strong>événement</strong> « Demande de devis » <strong>déclenche</strong> le <strong>processus</strong> « Obtenir une assurance voyage », pris en charge (<strong>servi</strong>) par les deux services.</li>
+      <li>Côté données : « Devis d'assurance en ligne » est <strong>composé</strong> de 3 objets ; les devis auto et voyage en sont des <strong>spécialisations</strong>.</li>
+    </ul>
+  </div>
+
+  <div class="quiz">
+    <div class="qt">✏️ Vérifie ta compréhension — couche application</div>
+    <div class="question">1. Une API REST exposée par le composant « Paiement » vers d'autres applications : quel élément ?</div>
+    <div class="opts">
+      <button class="opt" onclick="answer(this,false)">Un service d'application</button>
+      <button class="opt" onclick="answer(this,true)">Une interface d'application</button>
+      <button class="opt" onclick="answer(this,false)">Une collaboration d'application</button>
+    </div>
+    <div class="expl">✔ L'API est un <strong>point d'accès</strong> → interface. Ce qu'on obtient <em>via</em> l'API (« traiter un paiement ») est le <strong>service</strong>. Retiens : interface = GUI (vers l'humain) ou API (vers une appli).</div>
+
+    <div class="question">2. Quelle propriété définit le composant applicatif ?</div>
+    <div class="opts">
+      <button class="opt" onclick="answer(this,true)">Modulaire et remplaçable : unité autonome dont la fonctionnalité n'est accessible que via ses interfaces</button>
+      <button class="opt" onclick="answer(this,false)">Instantané et sans durée</button>
+      <button class="opt" onclick="answer(this,false)">Temporaire et sans statut officiel dans l'organisation</button>
+    </div>
+    <div class="expl">✔ « Modulaire et remplaçable » + encapsulation. L'option 2 décrit l'<em>événement</em>, l'option 3 la <em>collaboration</em>.</div>
+
+    <div class="question">3. Dans l'exemple du cours, qu'est-ce qui « réalise » le service d'application « Obtenir un devis » ?</div>
+    <div class="opts">
+      <button class="opt" onclick="answer(this,false)">Le composant « Site Web de voyage »</button>
+      <button class="opt" onclick="answer(this,true)">La fonction d'application « Transférer le devis »</button>
+      <button class="opt" onclick="answer(this,false)">L'événement « Demande de devis »</button>
+    </div>
+    <div class="expl">✔ Schéma canonique : le <strong>composant</strong> est <em>assigné</em> à la <strong>fonction</strong>, la fonction <strong>réalise</strong> le <strong>service</strong>, le service est exposé via l'<strong>interface</strong>. Grave-toi cette chaîne !</div>
+
+    <div class="question">4. Vrai ou faux : « Un objet de données peut réaliser un objet métier. »</div>
+    <div class="opts">
+      <button class="opt" onclick="answer(this,true)">Vrai</button>
+      <button class="opt" onclick="answer(this,false)">Faux</button>
+    </div>
+    <div class="expl">✔ Vrai — c'est même LE lien inter-couches de la structure passive : l'objet métier « Réclamation » (concept) est réalisé par l'objet de données « Réclamation » (enregistrement structuré) et/ou par une représentation (document).</div>
+  </div>
+</section>
+
+<!-- ============================================================ SECTION 6 -->
+<section id="s6">
+  <div class="eyebrow">Section 6</div>
+  <h2>Les 12 relations ArchiMate <span class="pill">★★★</span></h2>
+  <p class="lead">Les relations sont le <strong>squelette</strong> de tout modèle ArchiMate — et la source n°1 d'erreurs à l'examen. Elles se classent en <strong>4 familles</strong>. Pour chacune : la notation, la définition du cours, et une phrase-mémo.</p>
+
+  <h3>Famille 1 — Relations structurelles</h3>
+  <table class="rel-table">
+    <tr><th style="width:150px">Relation</th><th style="width:190px">Notation</th><th>Définition &amp; mémo</th></tr>
+    <tr><td><strong>Composition</strong></td>
+      <td><svg width="170" height="26"><line x1="18" y1="13" x2="150" y2="13" stroke="#333" stroke-width="1.8"/><path d="M4 13 l9 -5.5 9 5.5 -9 5.5 z" fill="#333"/></svg></td>
+      <td>Un élément <strong>consiste en</strong> un ou plusieurs autres concepts. <em>Losange <strong>plein</strong> côté « tout ».</em> Lien fort : la partie n'existe pas sans le tout. <span class="mono">Mémo : « est composé de » — le losange plein « avale » ses parties.</span></td></tr>
+    <tr><td><strong>Agrégation</strong></td>
+      <td><svg width="170" height="26"><line x1="18" y1="13" x2="150" y2="13" stroke="#333" stroke-width="1.8"/><path d="M4 13 l9 -5.5 9 5.5 -9 5.5 z" fill="#fff" stroke="#333" stroke-width="1.6"/></svg></td>
+      <td>Un élément <strong>regroupe</strong> plusieurs autres concepts. <em>Losange <strong>creux</strong>.</em> Lien faible : les parties peuvent exister indépendamment. <span class="mono">Mémo : le produit « Assurance » agrège des services qui existent aussi seuls.</span></td></tr>
+    <tr><td><strong>Assignation</strong></td>
+      <td><svg width="170" height="26"><line x1="8" y1="13" x2="148" y2="13" stroke="#333" stroke-width="1.8"/><circle cx="8" cy="13" r="4" fill="#333"/><path d="M148 13 l-9 -5 v10 z" fill="#333"/></svg></td>
+      <td><strong>Allocation de responsabilité, exécution d'un comportement.</strong> <em>Boule pleine côté « qui », flèche pleine côté « quoi ».</em> Relie la structure <strong>active</strong> au <strong>comportement</strong> (ou l'acteur au rôle). <span class="mono">Mémo : « Greg est assigné au rôle d'Analyste » ; « le composant Devis est assigné à la fonction Transférer le devis ».</span></td></tr>
+    <tr><td><strong>Réalisation</strong></td>
+      <td><svg width="170" height="26"><line x1="8" y1="13" x2="136" y2="13" stroke="#333" stroke-width="1.6" stroke-dasharray="5 4"/><path d="M150 13 l-12 -6.5 v13 z" fill="#fff" stroke="#333" stroke-width="1.6"/></svg></td>
+      <td>Une entité joue un <strong>rôle critique dans la création/réalisation</strong> d'une entité <strong>plus abstraite</strong>. <em>Pointillés + triangle <strong>creux</strong> vers l'abstrait.</em> <span class="mono">Mémo : le concret réalise l'abstrait — le processus réalise le service, l'objet de données réalise l'objet métier.</span></td></tr>
+  </table>
+
+  <h3>Famille 2 — Relations de dépendance</h3>
+  <table class="rel-table">
+    <tr><th style="width:150px">Relation</th><th style="width:190px">Notation</th><th>Définition &amp; mémo</th></tr>
+    <tr><td><strong>Serving</strong><br><span style="font-size:.78rem">(service)</span></td>
+      <td><svg width="170" height="26"><line x1="8" y1="13" x2="146" y2="13" stroke="#333" stroke-width="1.8"/><path d="M138 6 l10 7 -10 7" fill="none" stroke="#333" stroke-width="1.8"/></svg></td>
+      <td>Un élément <strong>fournit sa fonctionnalité</strong> à un autre. <em>Trait plein + pointe <strong>ouverte</strong>.</em> Direction : <strong>du fournisseur vers le bénéficiaire</strong>. <span class="mono">Mémo : le service d'application → sert → le processus métier. La flèche « donne ».</span></td></tr>
+    <tr><td><strong>Accès</strong></td>
+      <td><svg width="170" height="26"><line x1="8" y1="13" x2="146" y2="13" stroke="#333" stroke-width="1.6" stroke-dasharray="2 4"/><path d="M139 8 l8 5 -8 5" fill="none" stroke="#333" stroke-width="1.6"/></svg></td>
+      <td>Capacité d'un comportement (ou structure active) à <strong>observer ou agir sur</strong> un élément de structure <strong>passive</strong>. <em>Pointillés fins.</em> <span class="mono">Mémo : le processus accède à l'objet métier (lecture/écriture) — pense aux data objects de BPMN.</span></td></tr>
+    <tr><td><strong>Influence</strong></td>
+      <td><svg width="170" height="26"><line x1="8" y1="13" x2="146" y2="13" stroke="#333" stroke-width="1.6" stroke-dasharray="6 4"/><path d="M138 7 l9 6 -9 6" fill="none" stroke="#333" stroke-width="1.6"/><text x="70" y="9" font-size="10">+/−</text></svg></td>
+      <td>Un élément <strong>affecte la mise en œuvre ou l'atteinte d'un élément de motivation</strong> (objectif, principe…). <span class="mono">Mémo : la seule relation tournée vers la motivation ; peut porter + ou −.</span></td></tr>
+  </table>
+
+  <h3>Famille 3 — Relations dynamiques</h3>
+  <table class="rel-table">
+    <tr><th style="width:150px">Relation</th><th style="width:190px">Notation</th><th>Définition &amp; mémo</th></tr>
+    <tr><td><strong>Déclenchement</strong><br><span style="font-size:.78rem">(triggering)</span></td>
+      <td><svg width="170" height="26"><line x1="8" y1="13" x2="146" y2="13" stroke="#333" stroke-width="1.8"/><path d="M148 13 l-11 -6 v12 z" fill="#333"/></svg></td>
+      <td><strong>Relation temporelle ou causale</strong> entre éléments. <em>Trait plein + flèche <strong>pleine</strong>.</em> <span class="mono">Mémo : l'événement « Sinistre déclaré » déclenche « Accepter le sinistre » — comme le flux de séquence en BPMN.</span></td></tr>
+    <tr><td><strong>Flux</strong> <span style="font-size:.78rem">(flow)</span></td>
+      <td><svg width="170" height="26"><line x1="8" y1="13" x2="146" y2="13" stroke="#333" stroke-width="1.8" stroke-dasharray="6 4"/><path d="M148 13 l-11 -6 v12 z" fill="#333"/></svg></td>
+      <td><strong>Transfert d'un élément à un autre</strong> (information, biens…). <em>Pointillés + flèche <strong>pleine</strong>.</em> <span class="mono">Mémo : « quelque chose circule » sans forcément déclencher — comme le flux de message en BPMN.</span></td></tr>
+  </table>
+
+  <h3>Famille 4 — Autres relations</h3>
+  <table class="rel-table">
+    <tr><th style="width:150px">Relation</th><th style="width:190px">Notation</th><th>Définition &amp; mémo</th></tr>
+    <tr><td><strong>Spécialisation</strong></td>
+      <td><svg width="170" height="26"><line x1="8" y1="13" x2="136" y2="13" stroke="#333" stroke-width="1.8"/><path d="M150 13 l-12 -6.5 v13 z" fill="#fff" stroke="#333" stroke-width="1.6"/></svg></td>
+      <td>Un élément est <strong>un type particulier</strong> d'un autre élément. <em>Trait <strong>plein</strong> + triangle creux vers le générique.</em> <span class="mono">Mémo : « Assurance auto » est une sorte d'« Assurance ». C'est le « is-a ».</span></td></tr>
+    <tr><td><strong>Association</strong></td>
+      <td><svg width="170" height="26"><line x1="8" y1="13" x2="150" y2="13" stroke="#333" stroke-width="1.8"/></svg></td>
+      <td><strong>Relation non spécifiée</strong>, ou non représentée par une autre relation ArchiMate. <em>Simple trait.</em> <span class="mono">Mémo : le joker — à n'utiliser que si rien d'autre ne convient.</span></td></tr>
+    <tr><td><strong>Jonction</strong></td>
+      <td><svg width="170" height="26"><line x1="8" y1="13" x2="76" y2="13" stroke="#333" stroke-width="1.8"/><line x1="84" y1="13" x2="150" y2="6" stroke="#333" stroke-width="1.8"/><line x1="84" y1="13" x2="150" y2="20" stroke="#333" stroke-width="1.8"/><circle cx="80" cy="13" r="4.5" fill="#333"/></svg></td>
+      <td>Sert à <strong>connecter des relations du même type</strong> (séparer/rassembler des chemins). <span class="mono">Mémo : le « gateway » d'ArchiMate — l'équivalent des branchements BPMN.</span></td></tr>
+  </table>
+
+  <div class="box warn"><div class="t">⚠ Pièges d'examen sur les relations</div>
+    <ul style="margin:4px 0">
+      <li><strong>Réalisation vs spécialisation</strong> : même triangle creux, mais réalisation = trait <strong>pointillé</strong> (concret → abstrait), spécialisation = trait <strong>plein</strong> (sous-type → type).</li>
+      <li><strong>Déclenchement vs flux</strong> : même flèche pleine, mais déclenchement = trait <strong>plein</strong> (cause/séquence), flux = trait <strong>pointillé</strong> (transfert).</li>
+      <li><strong>Serving vs réalisation</strong> : le processus <strong>réalise</strong> le service (il le fabrique) ; le service <strong>sert</strong> son consommateur (il lui est utile). Fabricant → réalise ; fournisseur → sert.</li>
+      <li><strong>Composition vs agrégation</strong> : plein = partie inséparable du tout ; creux = regroupement de parties autonomes.</li>
+      <li><strong>Sens des flèches</strong> : serving part du fournisseur ; réalisation pointe vers l'abstrait ; assignation part de la structure active.</li>
+    </ul>
+  </div>
+
+  <div class="quiz">
+    <div class="qt">✏️ Vérifie ta compréhension — relations</div>
+    <div class="question">1. « Le processus métier "Provide Parking Permit" _____ le service métier "Permit provision". »</div>
+    <div class="opts">
+      <button class="opt" onclick="answer(this,false)">sert (serving)</button>
+      <button class="opt" onclick="answer(this,true)">réalise (realization)</button>
+      <button class="opt" onclick="answer(this,false)">déclenche (triggering)</button>
+    </div>
+    <div class="expl">✔ Le processus (concret, interne) <strong>réalise</strong> le service (abstrait, exposé). Pointillés + triangle creux vers le service.</div>
+
+    <div class="question">2. « Greg remplit le rôle d'Analyste des sinistres. » Quelle relation entre l'acteur Greg et le rôle ?</div>
+    <div class="opts">
+      <button class="opt" onclick="answer(this,true)">Assignation (boule pleine côté Greg, flèche vers le rôle)</button>
+      <button class="opt" onclick="answer(this,false)">Composition (losange plein côté Greg)</button>
+      <button class="opt" onclick="answer(this,false)">Spécialisation (triangle creux vers Greg)</button>
+    </div>
+    <div class="expl">✔ Acteur → rôle = <strong>assignation</strong> (allocation de responsabilité). La composition, c'était Centre de contact ⬥— Greg/Joan/Larry ; la spécialisation, c'était Analyste ▷ Spécialiste.</div>
+
+    <div class="question">3. Une flèche en pointillés avec pointe pleine entre deux fonctions : « rapport mensuel » circule de l'une à l'autre. C'est…</div>
+    <div class="opts">
+      <button class="opt" onclick="answer(this,false)">Un déclenchement</button>
+      <button class="opt" onclick="answer(this,true)">Un flux (flow)</button>
+      <button class="opt" onclick="answer(this,false)">Un accès</button>
+    </div>
+    <div class="expl">✔ Pointillé + flèche <strong>pleine</strong> + « quelque chose est transféré » = <strong>flux</strong>. (Accès = pointillé fin + pointe ouverte, vers un élément <em>passif</em>.)</div>
+
+    <div class="question">4. Le processus « Assess application » lit l'objet métier « Demande de permis ». Quelle relation ?</div>
+    <div class="opts">
+      <button class="opt" onclick="answer(this,true)">Accès (le comportement observe/agit sur la structure passive)</button>
+      <button class="opt" onclick="answer(this,false)">Serving</button>
+      <button class="opt" onclick="answer(this,false)">Agrégation</button>
+    </div>
+    <div class="expl">✔ Comportement ↔ structure <strong>passive</strong> = <strong>accès</strong> (lecture/écriture). Le serving relie des éléments qui se <em>rendent service</em>, pas des données.</div>
+  </div>
+</section>
+
+<!-- ============================================================ SECTION 7 -->
+<section id="s7">
+  <div class="eyebrow">Section 7</div>
+  <h2>L'articulation inter-couches <span class="pill">★★★</span></h2>
+  <p class="lead">C'est ici que tout se rejoint — et c'est le cœur des exercices de modélisation. Comment les couches se « parlent »-elles ? Avec seulement <strong>trois relations clés</strong> : <strong>serving</strong>, <strong>réalisation</strong> et <strong>accès</strong>.</p>
+
+  <h3>Le pattern canonique (à connaître par cœur)</h3>
+  <figure>
+    <svg viewBox="0 0 700 470" style="width:100%;max-width:700px">
+      <defs>
+        <marker id="sv2" markerWidth="10" markerHeight="10" refX="8" refY="3.5" orient="auto"><path d="M0,0 L8,3.5 L0,7" fill="none" stroke="#334" stroke-width="1.7"/></marker>
+        <marker id="rl2" markerWidth="12" markerHeight="12" refX="10" refY="4.5" orient="auto"><path d="M0,0 L10,4.5 L0,9 z" fill="#fff" stroke="#334" stroke-width="1.4"/></marker>
+        <marker id="ac2" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6" fill="none" stroke="#667" stroke-width="1.3"/></marker>
+      </defs>
+      <!-- Business layer -->
+      <rect x="10" y="10" width="680" height="140" rx="10" fill="var(--biz)" opacity=".45"/>
+      <text x="24" y="32" font-size="11.5" font-weight="700" fill="#8a6d0b">COUCHE MÉTIER</text>
+      <rect x="60" y="46" width="180" height="40" fill="#fffbe6" stroke="var(--biz-b)" stroke-width="1.8"/>
+      <text x="150" y="64" text-anchor="middle" font-size="12" font-weight="600">Acteur / Rôle</text>
+      <text x="150" y="78" text-anchor="middle" font-size="10" fill="#776">ex : Agent communal</text>
+      <rect x="330" y="46" width="200" height="40" rx="10" fill="#fffbe6" stroke="var(--biz-b)" stroke-width="1.8"/>
+      <text x="430" y="64" text-anchor="middle" font-size="12" font-weight="600">Processus métier</text>
+      <text x="430" y="78" text-anchor="middle" font-size="10" fill="#776">ex : Provide Parking Permit</text>
+      <rect x="470" y="100" width="190" height="36" fill="#fffbe6" stroke="var(--biz-b)" stroke-width="1.8"/>
+      <line x1="470" y1="109" x2="660" y2="109" stroke="var(--biz-b)" stroke-width="1.8"/>
+      <text x="565" y="128" text-anchor="middle" font-size="11.5" font-weight="600">Objet métier « Demande »</text>
+      <!-- assignment actor->process -->
+      <line x1="242" y1="66" x2="322" y2="66" stroke="#334" stroke-width="1.8"/>
+      <circle cx="244" cy="66" r="4" fill="#334"/><path d="M330 66 l-10 -5 v10 z" fill="#334"/>
+      <text x="286" y="58" text-anchor="middle" font-size="10" fill="#334">assignation</text>
+      <!-- access process->business object -->
+      <line x1="470" y1="90" x2="520" y2="104" stroke="#667" stroke-width="1.4" stroke-dasharray="2 4" marker-end="url(#ac2)"/>
+      <text x="472" y="102" font-size="10" fill="#667">accès</text>
+
+      <!-- App service -->
+      <rect x="10" y="170" width="680" height="290" rx="10" fill="var(--app)" opacity=".4"/>
+      <text x="24" y="192" font-size="11.5" font-weight="700" fill="#1d5a75">COUCHE APPLICATION</text>
+      <rect x="330" y="206" width="200" height="38" rx="19" fill="#eaf6fc" stroke="var(--app-b)" stroke-width="1.8"/>
+      <text x="430" y="223" text-anchor="middle" font-size="12" font-weight="600">Service d'application</text>
+      <text x="430" y="237" text-anchor="middle" font-size="10" fill="#567">ex : Enregistrer la demande</text>
+      <!-- serving app service -> business process -->
+      <line x1="430" y1="204" x2="430" y2="92" stroke="#334" stroke-width="1.9" marker-end="url(#sv2)"/>
+      <text x="442" y="150" font-size="10.5" fill="#334" font-weight="600">serving (sert)</text>
+
+      <!-- app function + component -->
+      <rect x="330" y="290" width="200" height="38" rx="10" fill="#eaf6fc" stroke="var(--app-b)" stroke-width="1.8"/>
+      <text x="430" y="308" text-anchor="middle" font-size="12" font-weight="600">Fonction d'application</text>
+      <text x="430" y="321" text-anchor="middle" font-size="10" fill="#567">ex : Traiter le formulaire</text>
+      <!-- realization function->service -->
+      <line x1="430" y1="288" x2="430" y2="252" stroke="#334" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#rl2)"/>
+      <text x="442" y="272" font-size="10.5" fill="#334" font-weight="600">réalisation</text>
+
+      <g>
+        <rect x="70" y="290" width="180" height="42" fill="#eaf6fc" stroke="var(--app-b)" stroke-width="1.8"/>
+        <rect x="60" y="297" width="20" height="8" fill="#eaf6fc" stroke="var(--app-b)" stroke-width="1.4"/>
+        <rect x="60" y="311" width="20" height="8" fill="#eaf6fc" stroke="var(--app-b)" stroke-width="1.4"/>
+        <text x="162" y="308" text-anchor="middle" font-size="12" font-weight="600">Composant applicatif</text>
+        <text x="162" y="322" text-anchor="middle" font-size="10" fill="#567">ex : Web intake</text>
+      </g>
+      <!-- assignment component->function -->
+      <line x1="252" y1="310" x2="322" y2="310" stroke="#334" stroke-width="1.8"/>
+      <circle cx="254" cy="310" r="4" fill="#334"/><path d="M330 310 l-10 -5 v10 z" fill="#334"/>
+      <text x="288" y="302" text-anchor="middle" font-size="10" fill="#334">assignation</text>
+
+      <!-- data object -->
+      <rect x="470" y="380" width="190" height="36" fill="#eaf6fc" stroke="var(--app-b)" stroke-width="1.8"/>
+      <line x1="470" y1="389" x2="660" y2="389" stroke="var(--app-b)" stroke-width="1.8"/>
+      <text x="565" y="408" text-anchor="middle" font-size="11.5" font-weight="600">Objet de données « Demande »</text>
+      <!-- realization data object -> business object -->
+      <line x1="565" y1="378" x2="565" y2="142" stroke="#334" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#rl2)"/>
+      <text x="577" y="265" font-size="10.5" fill="#334" font-weight="600">réalisation</text>
+      <!-- access function -> data object -->
+      <line x1="480" y1="328" x2="530" y2="376" stroke="#667" stroke-width="1.4" stroke-dasharray="2 4" marker-end="url(#ac2)"/>
+      <text x="468" y="352" font-size="10" fill="#667">accès</text>
+      <text x="150" y="430" font-size="10.5" fill="#445">La couche technologique suit exactement</text>
+      <text x="150" y="444" font-size="10.5" fill="#445">la même logique sous la couche application.</text>
+    </svg>
+    <figcaption>Le pattern inter-couches complet : assignation → réalisation → serving → accès</figcaption>
+  </figure>
+
+  <p>Lis ce schéma comme une histoire (de bas en haut) :</p>
+  <ol>
+    <li>Le <strong>composant applicatif</strong> (Web intake) est <strong>assigné</strong> à la <strong>fonction d'application</strong> — c'est lui qui l'exécute.</li>
+    <li>La fonction <strong>réalise</strong> le <strong>service d'application</strong> — le comportement interne fabrique le comportement exposé.</li>
+    <li>Le service d'application <strong>sert</strong> le <strong>processus métier</strong> — l'IT rend service au métier. ⬅ <strong>C'est LA flèche qui traverse les couches !</strong></li>
+    <li>Côté données : l'<strong>objet de données</strong> <strong>réalise</strong> l'<strong>objet métier</strong>, et le comportement y <strong>accède</strong>.</li>
+    <li>Au niveau métier : l'<strong>acteur/rôle</strong> est <strong>assigné</strong> au <strong>processus</strong>, qui <strong>réalise</strong> à son tour le <strong>service métier</strong> offert au client.</li>
+  </ol>
+
+  <div class="box tip"><div class="t">💡 La règle d'or inter-couches</div>
+    Entre deux couches, on retrouve presque toujours les mêmes verbes : la couche du dessous <strong>SERT</strong> (serving) la couche du dessus ; le concret <strong>RÉALISE</strong> l'abstrait ; la structure active est <strong>ASSIGNÉE</strong> au comportement ; le comportement <strong>ACCÈDE</strong> à la structure passive. Si tu maîtrises ces 4 verbes, tu peux justifier n'importe quelle flèche d'un modèle.
+  </div>
+
+  <div class="box warn"><div class="t">⚠ Erreurs de modélisation courantes (check-list avant de rendre ta copie)</div>
+    <ul style="margin:4px 0">
+      <li>❌ Faire <strong>servir le métier vers l'application</strong> (le serving monte : app → métier, techno → app).</li>
+      <li>❌ Confondre le sens de la <strong>réalisation</strong> (elle pointe vers l'élément le plus abstrait : service, objet métier).</li>
+      <li>❌ Relier un acteur <em>directement</em> à un service d'application au lieu de passer par le processus ou une interface.</li>
+      <li>❌ Utiliser une <strong>association</strong> partout par facilité — l'examinateur attend la relation précise.</li>
+      <li>❌ Oublier que l'<strong>événement</strong> se connecte par du <strong>déclenchement</strong>, pas du serving.</li>
+      <li>❌ Mettre un élément <strong>comportemental</strong> avec des coins carrés (ou l'inverse) — la forme fait partie de la sémantique !</li>
+    </ul>
+  </div>
+
+  <div class="quiz">
+    <div class="qt">✏️ Vérifie ta compréhension — inter-couches</div>
+    <div class="question">1. Complète la chaîne : composant applicatif —(assignation)→ fonction d'application —(?)→ service d'application —(?)→ processus métier</div>
+    <div class="opts">
+      <button class="opt" onclick="answer(this,true)">réalisation, puis serving</button>
+      <button class="opt" onclick="answer(this,false)">serving, puis réalisation</button>
+      <button class="opt" onclick="answer(this,false)">composition, puis accès</button>
+    </div>
+    <div class="expl">✔ La fonction <strong>réalise</strong> le service (concret → abstrait), le service <strong>sert</strong> le processus (couche inférieure → supérieure).</div>
+
+    <div class="question">2. Dans quel sens va la flèche serving entre couches ?</div>
+    <div class="opts">
+      <button class="opt" onclick="answer(this,false)">Du métier vers l'application : le métier commande</button>
+      <button class="opt" onclick="answer(this,true)">De l'application vers le métier : l'IT fournit sa fonctionnalité au métier</button>
+      <button class="opt" onclick="answer(this,false)">Dans les deux sens, c'est symétrique</button>
+    </div>
+    <div class="expl">✔ Serving part toujours du <strong>fournisseur</strong> : techno → app → métier → client. Même logique que la définition des 3 couches (« soutient la couche métier »).</div>
+
+    <div class="question">3. L'objet métier « Police d'assurance » et l'objet de données « Police d'assurance » (table SQL) : quelle relation ?</div>
+    <div class="opts">
+      <button class="opt" onclick="answer(this,false)">L'objet métier réalise l'objet de données</button>
+      <button class="opt" onclick="answer(this,true)">L'objet de données réalise l'objet métier</button>
+      <button class="opt" onclick="answer(this,false)">Ils sont reliés par un flux</button>
+    </div>
+    <div class="expl">✔ Le concret (données structurées) <strong>réalise</strong> l'abstrait (concept métier). La flèche (triangle creux, pointillés) pointe vers l'objet <strong>métier</strong>.</div>
+  </div>
+</section>
+
+<!-- ============================================================ SECTION 8 -->
+<section id="s8">
+  <div class="eyebrow">Section 8</div>
+  <h2>🎯 L'essentiel pour l'examen</h2>
+  <p class="lead">Mon classement des priorités pour ce chapitre, selon la structure de l'examen (~40&nbsp;% théorie/situations + ~40&nbsp;% modélisation BPMN &amp; ArchiMate).</p>
+
+  <div class="box exam"><div class="t">★★★ À maîtriser absolument (très forte probabilité)</div>
+    <ul style="margin:6px 0">
+      <li><strong>Les 3 couches d'ArchiMate</strong> et leurs définitions exactes (qui sert qui, avec quoi). C'est la colonne vertébrale de tout le chapitre.</li>
+      <li><strong>La grille structure active / comportement / structure passive</strong> et le placement de chaque élément dedans — indispensable pour les QCM « quel élément pour cette situation ? » ET pour les exercices de modélisation.</li>
+      <li><strong>Les 12 relations</strong> : notation, sens des flèches, et les paires piégeuses (réalisation vs spécialisation, déclenchement vs flux, serving vs réalisation, composition vs agrégation).</li>
+      <li><strong>Le pattern inter-couches</strong> : composant —assignation→ fonction —réalisation→ service —serving→ processus ; objet de données —réalisation→ objet métier ; comportement —accès→ passif.</li>
+      <li><strong>Les distinctions conceptuelles</strong> : acteur ≠ rôle · processus ≠ fonction · service ≠ interface · objet métier ≠ représentation ≠ objet de données.</li>
+      <li><strong>La roue ADM</strong> : ordre des phases, gestion des exigences au centre, pattern as-is → gap → to-be des phases B/C/D et les 4 types de gaps.</li>
+    </ul>
+  </div>
+  <div class="box exam" style="background:#3d5068"><div class="t">★★ Important (probable en question de cours ou de situation)</div>
+    <ul style="margin:6px 0">
+      <li>La <strong>définition de l'EA</strong> (descriptions cohérentes / instrument d'articulation et de coordination) et le problème silos vs processus transversaux.</li>
+      <li>Le lien <strong>EA ↔ modèle d'alignement Henderson-Venkatraman</strong> (ch. 1) : l'EA opérationnalise l'alignement.</li>
+      <li>La <strong>complémentarité TOGAF (méthode) / ArchiMate (langage)</strong>, tous deux Open Group.</li>
+      <li>Les exemples du cours à savoir <strong>raconter et re-modéliser</strong> : permis de stationnement (+ ses 2 problèmes), ArchiSurance (centre de contact, gestion des sinistres, produit assurance, vente en ligne).</li>
+      <li>Les <strong>questions de décodage</strong> de chaque couche (grilles des slides 41 et 58).</li>
+    </ul>
+  </div>
+  <div class="box exam" style="background:#51637a"><div class="t">★ Bon à savoir (moins central)</div>
+    <ul style="margin:6px 0">
+      <li>Les 7 raisons de choisir TOGAF (retenir l'esprit : standard ouvert, neutre, éprouvé).</li>
+      <li>Les conventions de nommage (service en « -ing », événement au passé, acteur/objet = nom).</li>
+      <li>Le contrat comme spécialisation de l'objet métier, le SLA ; la classification des représentations (médium/format).</li>
+    </ul>
+  </div>
+
+  <h3>Carte mémo finale — tout le chapitre en un schéma</h3>
+  <figure>
+    <svg viewBox="0 0 700 210" style="width:100%;max-width:700px">
+      <rect x="10" y="10" width="330" height="190" rx="10" fill="#e8ecf1" stroke="var(--accent)" stroke-width="2"/>
+      <text x="175" y="36" text-anchor="middle" font-weight="700" font-size="14">TOGAF = la MÉTHODE</text>
+      <text x="175" y="58" text-anchor="middle" font-size="11.5">Roue ADM : Préliminaire → A…H (boucle)</text>
+      <text x="175" y="76" text-anchor="middle" font-size="11.5">Gestion des exigences au centre</text>
+      <text x="175" y="100" text-anchor="middle" font-size="11.5" font-weight="600">B (métier) · C (SI) · D (techno) :</text>
+      <text x="175" y="118" text-anchor="middle" font-size="11.5">as-is → analyse de gap → to-be</text>
+      <text x="175" y="136" text-anchor="middle" font-size="11.5">→ feuille de route (4 types de gaps)</text>
+      <text x="175" y="170" text-anchor="middle" font-size="11" fill="#556" font-style="italic">« Comment mener la démarche »</text>
+      <rect x="360" y="10" width="330" height="190" rx="10" fill="#fff" stroke="var(--accent)" stroke-width="2"/>
+      <text x="525" y="36" text-anchor="middle" font-weight="700" font-size="14">ArchiMate = le LANGAGE</text>
+      <rect x="385" y="50" width="280" height="30" rx="5" fill="var(--biz)" stroke="var(--biz-b)"/><text x="525" y="70" text-anchor="middle" font-size="11.5" font-weight="600">Métier : acteurs, processus, services…</text>
+      <rect x="385" y="86" width="280" height="30" rx="5" fill="var(--app)" stroke="var(--app-b)"/><text x="525" y="106" text-anchor="middle" font-size="11.5" font-weight="600">Application : composants, données…</text>
+      <rect x="385" y="122" width="280" height="30" rx="5" fill="var(--tech)" stroke="var(--tech-b)"/><text x="525" y="142" text-anchor="middle" font-size="11.5" font-weight="600">Technologie : infrastructure</text>
+      <text x="525" y="172" text-anchor="middle" font-size="11.5">+ 12 relations · 3 colonnes par couche</text>
+      <text x="525" y="190" text-anchor="middle" font-size="11" fill="#556" font-style="italic">« Comment dessiner les modèles »</text>
+    </svg>
+  </figure>
+</section>
+
+<!-- ============================================================ SECTION 9 -->
+<section id="s9">
+  <div class="eyebrow">Section 9</div>
+  <h2>🏋️ Exercices d'entraînement</h2>
+  <p class="lead">Trois formats, comme à l'examen : QCM de synthèse, questions de situation, et modélisation. Réponds d'abord sur papier, puis vérifie avec les corrections dépliables.</p>
+
+  <h3>Exercice 1 — QCM de synthèse (8 questions)</h3>
+  <div class="quiz">
+    <div class="qt">Série QCM chronométrée (vise ~8 minutes)</div>
+
+    <div class="question">1.1 — Quel est l'ordre correct des premières phases de la roue ADM ?</div>
+    <div class="opts">
+      <button class="opt" onclick="answer(this,false)">Vision → Préliminaire → Métier → Technologique</button>
+      <button class="opt" onclick="answer(this,true)">Préliminaire → A. Vision → B. Métier → C. SI → D. Technologique</button>
+      <button class="opt" onclick="answer(this,false)">Préliminaire → B. Métier → A. Vision → C. SI</button>
+    </div>
+    <div class="expl">✔ Préliminaire d'abord (contexte, gouvernance, outils), puis A (vision + principes + approbation), puis B → C → D dans l'ordre des couches.</div>
+
+    <div class="question">1.2 — La phase « G. Gouvernance de mise en œuvre » consiste à…</div>
+    <div class="opts">
+      <button class="opt" onclick="answer(this,true)">Formuler des recommandations pour les projets, assurer la gouvernance pendant la mise en œuvre et garantir la conformité avec l'architecture</button>
+      <button class="opt" onclick="answer(this,false)">Créer la feuille de route architecturale complète et les architectures de transition</button>
+      <button class="opt" onclick="answer(this,false)">Mettre en place un processus de gestion des changements architecturaux</button>
+    </div>
+    <div class="expl">✔ La 2e réponse décrit la phase E (Opportunités et solutions), la 3e décrit la phase H (Gestion du changement).</div>
+
+    <div class="question">1.3 — « Le portail MyMunicipality permet aux citoyens d'accéder au service de demande de permis. » Le portail est…</div>
+    <div class="opts">
+      <button class="opt" onclick="answer(this,false)">Un service d'application</button>
+      <button class="opt" onclick="answer(this,true)">Un composant applicatif (avec une interface vers le citoyen)</button>
+      <button class="opt" onclick="answer(this,false)">Un objet de données</button>
+    </div>
+    <div class="expl">✔ Le portail est un <strong>logiciel</strong> modulaire → composant applicatif. Ce qu'il offre (« demande de permis en ligne ») est le service ; l'écran par lequel on y accède est l'interface (GUI).</div>
+
+    <div class="question">1.4 — Quelle affirmation sur le service métier est correcte ?</div>
+    <div class="opts">
+      <button class="opt" onclick="answer(this,false)">Il décrit le comportement interne nécessaire pour produire un résultat</button>
+      <button class="opt" onclick="answer(this,true)">Il expose un comportement explicitement défini, utile du point de vue de l'environnement, accessible via une ou plusieurs interfaces</button>
+      <button class="opt" onclick="answer(this,false)">Il est instantané et dénote un changement d'état</button>
+    </div>
+    <div class="expl">✔ La 1re réponse décrit le <em>processus</em>, la 3e l'<em>événement</em>. Le service = comportement <strong>exposé</strong> et <strong>utile pour le consommateur</strong>.</div>
+
+    <div class="question">1.5 — « Assurance habitation » par rapport à « Assurance » : quelle relation ?</div>
+    <div class="opts">
+      <button class="opt" onclick="answer(this,false)">Réalisation (pointillés + triangle creux)</button>
+      <button class="opt" onclick="answer(this,true)">Spécialisation (trait plein + triangle creux)</button>
+      <button class="opt" onclick="answer(this,false)">Agrégation (losange creux)</button>
+    </div>
+    <div class="expl">✔ « est une sorte de » = <strong>spécialisation</strong>. Attention au piège : même triangle que la réalisation, mais trait <strong>plein</strong>.</div>
+
+    <div class="question">1.6 — Deux composants « Devis » et « Achat » travaillent ensemble temporairement pour la vente en ligne. On modélise cela par…</div>
+    <div class="opts">
+      <button class="opt" onclick="answer(this,true)">Une collaboration d'application (agrégat de composants), dont le comportement est une interaction d'application</button>
+      <button class="opt" onclick="answer(this,false)">Une composition entre les deux composants</button>
+      <button class="opt" onclick="answer(this,false)">Un flux de données entre deux objets de données</button>
+    </div>
+    <div class="expl">✔ Coopération de ≥ 2 composants = <strong>collaboration</strong> (structure) + <strong>interaction</strong> (comportement collectif). Exemple exact du cours (slide 62).</div>
+
+    <div class="question">1.7 — La gestion des exigences dans TOGAF : quelle affirmation est FAUSSE ?</div>
+    <div class="opts">
+      <button class="opt" onclick="answer(this,false)">Les exigences sont stockées dans un référentiel d'exigences</button>
+      <button class="opt" onclick="answer(this,false)">Les exigences sont intégrées dans les autres phases</button>
+      <button class="opt" onclick="answer(this,true)">Les exigences ne sont collectées qu'une seule fois, en phase préliminaire</button>
+    </div>
+    <div class="expl">✔ C'est justement l'inverse : la gestion des exigences est <strong>continue</strong> et <strong>centrale</strong>, elle interagit avec toutes les phases. (Lien ch. 2 : l'ingénierie des exigences n'est jamais « one shot ».)</div>
+
+    <div class="question">1.8 — Quel élément appartient à la structure PASSIVE de la couche métier ?</div>
+    <div class="opts">
+      <button class="opt" onclick="answer(this,false)">La collaboration métier</button>
+      <button class="opt" onclick="answer(this,false)">L'interaction métier</button>
+      <button class="opt" onclick="answer(this,true)">La représentation</button>
+    </div>
+    <div class="expl">✔ Passif = ce sur quoi on agit : objet métier, contrat, représentation. La collaboration est <em>active</em>, l'interaction est du <em>comportement</em>.</div>
+  </div>
+
+  <h3>Exercice 2 — Question de situation (style « appliquer la théorie »)</h3>
+  <div class="box def"><div class="t">📋 Énoncé</div>
+    <p style="margin:4px 0">L'université <strong>UniCampus</strong> veut digitaliser l'inscription de ses étudiants. Aujourd'hui : le service inscriptions utilise un logiciel maison, la comptabilité utilise un ERP pour les paiements de minerval, et la bibliothèque a son propre système de création de comptes. L'étudiant doit s'adresser aux trois services séparément, et ses données sont réencodées trois fois.</p>
+    <p style="margin:4px 0"><strong>a)</strong> Diagnostique le problème avec le vocabulaire du chapitre. <strong>b)</strong> Explique ce que l'architecture d'entreprise apporterait, en citant les phases TOGAF pertinentes. <strong>c)</strong> Quels sont les deux risques (vus dans l'exemple du permis de stationnement) que ce cas illustre ?</p>
+  </div>
+  <details class="solution"><summary>Voir la correction détaillée</summary><div class="sol-body">
+    <p><strong>a) Diagnostic.</strong> Les SI d'UniCampus sont organisés par <strong>domaine fonctionnel</strong> (inscriptions, comptabilité, bibliothèque) : ce sont des <strong>applications cloisonnées (silos)</strong>. Or le processus « Inscrire un étudiant » est <strong>transversal</strong> : il traverse les trois domaines. Ce décalage impose des transferts de données multiples (réencodage ×3) → risques d'erreurs et d'incohérences.</p>
+    <p><strong>b) Apport de l'EA.</strong> L'EA fournit un <strong>ensemble cohérent de descriptions</strong> pour gouverner l'évolution, et sert d'<strong>instrument de coordination</strong> vers la transformation. Concrètement, via l'ADM : phase <strong>B</strong> — modéliser le processus d'inscription as-is et cible ; phase <strong>C</strong> — cartographier les applications as-is (3 silos) et concevoir la cible (p.ex. un référentiel étudiant unique / des services d'application partagés) ; <strong>analyse de gap</strong> pour identifier les lacunes (processus, compétences, financières, matérielles) ; phases <strong>E-F</strong> — feuille de route et plan de migration (baseline → transitions → target) ; phase <strong>G</strong> — gouvernance pour garantir que les projets respectent l'architecture cible.</p>
+    <p><strong>c) Les deux risques du cours.</strong> ① <strong>Architecture en silos</strong> : intégrations complexes, transferts multiples, incohérences de données. ② <strong>Mauvaise expérience utilisateur</strong> : l'étudiant est redirigé entre plusieurs interfaces → parcours fragmenté et confus.</p>
+  </div></details>
+
+  <h3>Exercice 3 — Choisir le bon élément ArchiMate (6 items)</h3>
+  <div class="quiz">
+    <div class="qt">Pour chaque situation, quel élément ?</div>
+
+    <div class="question">3.1 — « Le département des inscriptions d'UniCampus »</div>
+    <div class="opts">
+      <button class="opt" onclick="answer(this,true)">Acteur métier</button>
+      <button class="opt" onclick="answer(this,false)">Rôle métier</button>
+      <button class="opt" onclick="answer(this,false)">Fonction métier</button>
+    </div>
+    <div class="expl">✔ Un département est une entité concrète capable d'exécuter du comportement → <strong>acteur</strong> (comme « Centre de contact ArchiSurance »).</div>
+
+    <div class="question">3.2 — « Conseiller académique » (responsabilité que Mme Dupont et M. Martin exercent tous les deux)</div>
+    <div class="opts">
+      <button class="opt" onclick="answer(this,false)">Acteur métier</button>
+      <button class="opt" onclick="answer(this,true)">Rôle métier</button>
+      <button class="opt" onclick="answer(this,false)">Collaboration métier</button>
+    </div>
+    <div class="expl">✔ Une <strong>responsabilité</strong> à laquelle plusieurs acteurs sont assignés = <strong>rôle</strong>.</div>
+
+    <div class="question">3.3 — « Dossier d'inscription » (le concept, indépendamment de sa forme papier ou numérique)</div>
+    <div class="opts">
+      <button class="opt" onclick="answer(this,true)">Objet métier</button>
+      <button class="opt" onclick="answer(this,false)">Représentation</button>
+      <button class="opt" onclick="answer(this,false)">Objet de données</button>
+    </div>
+    <div class="expl">✔ Le <strong>concept</strong> métier = objet métier. Le formulaire PDF serait une <strong>représentation</strong> ; l'enregistrement en base serait un <strong>objet de données</strong> (qui <em>réalise</em> l'objet métier).</div>
+
+    <div class="question">3.4 — « Paiement du minerval reçu » (déclenche la validation de l'inscription)</div>
+    <div class="opts">
+      <button class="opt" onclick="answer(this,false)">Service métier</button>
+      <button class="opt" onclick="answer(this,true)">Événement métier</button>
+      <button class="opt" onclick="answer(this,false)">Processus métier</button>
+    </div>
+    <div class="expl">✔ Changement d'état instantané, nommé au passé, qui <strong>déclenche</strong> un processus → <strong>événement</strong>.</div>
+
+    <div class="question">3.5 — « Guichet en ligne » par lequel l'étudiant accède au service d'inscription</div>
+    <div class="opts">
+      <button class="opt" onclick="answer(this,false)">Service métier</button>
+      <button class="opt" onclick="answer(this,false)">Produit</button>
+      <button class="opt" onclick="answer(this,true)">Interface métier</button>
+    </div>
+    <div class="expl">✔ Point d'accès / canal = <strong>interface</strong>. Le service, c'est « Inscription » ; le guichet en ligne n'est que le chemin pour l'atteindre.</div>
+
+    <div class="question">3.6 — « Gestion financière » (tout ce qui demande des compétences comptables, quel que soit le processus)</div>
+    <div class="opts">
+      <button class="opt" onclick="answer(this,false)">Processus métier</button>
+      <button class="opt" onclick="answer(this,true)">Fonction métier</button>
+      <button class="opt" onclick="answer(this,false)">Interaction métier</button>
+    </div>
+    <div class="expl">✔ Regroupement par <strong>compétences/ressources</strong> (et non par résultat) = <strong>fonction</strong>.</div>
+  </div>
+
+  <h3>Exercice 4 — Modélisation guidée (le grand classique)</h3>
+  <div class="box def"><div class="t">📋 Énoncé : « BiblioTech »</div>
+    <p style="margin:4px 0">La bibliothèque universitaire offre à ses lecteurs un service de <strong>réservation d'ouvrages en ligne</strong>. Le processus interne « Traiter une réservation » est exécuté par le rôle <strong>Bibliothécaire</strong> (tenu par l'actrice <strong>Sofia</strong>). Il est déclenché par l'événement « Réservation soumise ». Le processus consulte l'objet métier « Catalogue ». Côté IT : le composant applicatif <strong>« BiblioApp »</strong> exécute la fonction d'application « Vérifier la disponibilité », qui réalise le service d'application « Consultation du stock » utilisé par le processus métier. Les données du catalogue sont stockées dans l'objet de données « Catalogue (DB) ».</p>
+    <p style="margin:4px 0"><strong>Consigne :</strong> dessine le modèle ArchiMate sur papier (formes + couleurs + les 8 relations), puis compare.</p>
+  </div>
+  <details class="solution"><summary>Voir le modèle corrigé + les 8 relations justifiées</summary><div class="sol-body">
+    <figure>
+    <svg viewBox="0 0 700 430" style="width:100%;max-width:700px">
+      <defs>
+        <marker id="sv3" markerWidth="10" markerHeight="10" refX="8" refY="3.5" orient="auto"><path d="M0,0 L8,3.5 L0,7" fill="none" stroke="#334" stroke-width="1.7"/></marker>
+        <marker id="rl3" markerWidth="12" markerHeight="12" refX="10" refY="4.5" orient="auto"><path d="M0,0 L10,4.5 L0,9 z" fill="#fff" stroke="#334" stroke-width="1.4"/></marker>
+        <marker id="ac3" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6" fill="none" stroke="#667" stroke-width="1.3"/></marker>
+        <marker id="tr3" markerWidth="11" markerHeight="11" refX="9" refY="4" orient="auto"><path d="M0,0 L9,4 L0,8 z" fill="#334"/></marker>
+      </defs>
+      <rect x="10" y="8" width="680" height="230" rx="10" fill="var(--biz)" opacity=".4"/>
+      <text x="22" y="28" font-size="11" font-weight="700" fill="#8a6d0b">MÉTIER</text>
+      <!-- service métier -->
+      <rect x="250" y="36" width="220" height="34" rx="17" fill="#fffbe6" stroke="var(--biz-b)" stroke-width="1.8"/>
+      <text x="360" y="57" text-anchor="middle" font-size="11.5" font-weight="600">Réservation d'ouvrages en ligne</text>
+      <!-- actor & role -->
+      <rect x="30" y="100" width="90" height="36" fill="#fffbe6" stroke="var(--biz-b)" stroke-width="1.8"/>
+      <text x="75" y="122" text-anchor="middle" font-size="11.5" font-weight="600">Sofia 👤</text>
+      <rect x="160" y="100" width="120" height="36" fill="#fffbe6" stroke="var(--biz-b)" stroke-width="1.8"/>
+      <text x="220" y="122" text-anchor="middle" font-size="11.5" font-weight="600">Bibliothécaire ⛃</text>
+      <!-- event -->
+      <rect x="30" y="170" width="150" height="36" rx="18" fill="#fffbe6" stroke="var(--biz-b)" stroke-width="1.8"/>
+      <text x="105" y="188" text-anchor="middle" font-size="11" font-weight="600">Réservation soumise ⬠</text>
+      <text x="105" y="200" text-anchor="middle" font-size="9.5" fill="#776">événement</text>
+      <!-- process -->
+      <rect x="250" y="170" width="220" height="38" rx="10" fill="#fffbe6" stroke="var(--biz-b)" stroke-width="1.8"/>
+      <text x="360" y="188" text-anchor="middle" font-size="11.5" font-weight="600">Traiter une réservation →</text>
+      <text x="360" y="201" text-anchor="middle" font-size="9.5" fill="#776">processus</text>
+      <!-- business object -->
+      <rect x="530" y="170" width="140" height="36" fill="#fffbe6" stroke="var(--biz-b)" stroke-width="1.8"/>
+      <line x1="530" y1="179" x2="670" y2="179" stroke="var(--biz-b)" stroke-width="1.8"/>
+      <text x="600" y="198" text-anchor="middle" font-size="11.5" font-weight="600">Catalogue</text>
+      <!-- R1 assignment Sofia->role -->
+      <line x1="122" y1="118" x2="152" y2="118" stroke="#334" stroke-width="1.8"/><circle cx="124" cy="118" r="3.5" fill="#334"/><path d="M160 118 l-9 -4.5 v9 z" fill="#334"/>
+      <text x="140" y="110" text-anchor="middle" font-size="9" fill="#334">①</text>
+      <!-- R2 assignment role->process -->
+      <line x1="240" y1="136" x2="290" y2="166" stroke="#334" stroke-width="1.8"/><circle cx="242" cy="137" r="3.5" fill="#334"/><path d="M295 169 l-11 -1 5 -8 z" fill="#334"/>
+      <text x="256" y="148" font-size="9" fill="#334">②</text>
+      <!-- R3 triggering event->process -->
+      <line x1="182" y1="188" x2="242" y2="188" stroke="#334" stroke-width="1.8" marker-end="url(#tr3)"/>
+      <text x="212" y="180" text-anchor="middle" font-size="9" fill="#334">③</text>
+      <!-- R4 realization process->service -->
+      <line x1="360" y1="168" x2="360" y2="76" stroke="#334" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#rl3)"/>
+      <text x="370" y="125" font-size="9" fill="#334">④</text>
+      <!-- R5 access process->object -->
+      <line x1="472" y1="188" x2="522" y2="188" stroke="#667" stroke-width="1.4" stroke-dasharray="2 4" marker-end="url(#ac3)"/>
+      <text x="497" y="180" text-anchor="middle" font-size="9" fill="#667">⑤</text>
+      <!-- APP layer -->
+      <rect x="10" y="252" width="680" height="170" rx="10" fill="var(--app)" opacity=".4"/>
+      <text x="22" y="272" font-size="11" font-weight="700" fill="#1d5a75">APPLICATION</text>
+      <!-- app service -->
+      <rect x="250" y="282" width="220" height="34" rx="17" fill="#eaf6fc" stroke="var(--app-b)" stroke-width="1.8"/>
+      <text x="360" y="303" text-anchor="middle" font-size="11.5" font-weight="600">Consultation du stock</text>
+      <!-- serving app service->process -->
+      <line x1="360" y1="280" x2="360" y2="212" stroke="#334" stroke-width="1.9" marker-end="url(#sv3)"/>
+      <text x="372" y="248" font-size="9" fill="#334">⑥</text>
+      <!-- app function -->
+      <rect x="250" y="356" width="220" height="36" rx="10" fill="#eaf6fc" stroke="var(--app-b)" stroke-width="1.8"/>
+      <text x="360" y="374" text-anchor="middle" font-size="11.5" font-weight="600">Vérifier la disponibilité ⇧</text>
+      <text x="360" y="387" text-anchor="middle" font-size="9.5" fill="#567">fonction</text>
+      <!-- realization function->app service -->
+      <line x1="360" y1="354" x2="360" y2="324" stroke="#334" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#rl3)"/>
+      <text x="372" y="342" font-size="9" fill="#334">⑦</text>
+      <!-- component -->
+      <g>
+        <rect x="55" y="356" width="140" height="40" fill="#eaf6fc" stroke="var(--app-b)" stroke-width="1.8"/>
+        <rect x="47" y="362" width="16" height="7" fill="#eaf6fc" stroke="var(--app-b)" stroke-width="1.3"/>
+        <rect x="47" y="374" width="16" height="7" fill="#eaf6fc" stroke="var(--app-b)" stroke-width="1.3"/>
+        <text x="128" y="380" text-anchor="middle" font-size="11.5" font-weight="600">BiblioApp</text>
+      </g>
+      <!-- assignment component->function -->
+      <line x1="197" y1="376" x2="242" y2="376" stroke="#334" stroke-width="1.8"/><circle cx="199" cy="376" r="3.5" fill="#334"/><path d="M250 376 l-9 -4.5 v9 z" fill="#334"/>
+      <text x="222" y="368" text-anchor="middle" font-size="9" fill="#334">⑧</text>
+      <!-- data object -->
+      <rect x="530" y="356" width="140" height="36" fill="#eaf6fc" stroke="var(--app-b)" stroke-width="1.8"/>
+      <line x1="530" y1="365" x2="670" y2="365" stroke="var(--app-b)" stroke-width="1.8"/>
+      <text x="600" y="384" text-anchor="middle" font-size="11.5" font-weight="600">Catalogue (DB)</text>
+      <!-- realization data->business object -->
+      <line x1="600" y1="354" x2="600" y2="212" stroke="#334" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#rl3)"/>
+      <text x="610" y="290" font-size="9" fill="#334">⑨</text>
+    </svg>
+    </figure>
+    <p><strong>Les relations, une à une :</strong></p>
+    <ol style="font-size:.9rem">
+      <li><strong>Assignation</strong> Sofia → Bibliothécaire : l'acteur est assigné au rôle (boule + flèche pleine).</li>
+      <li><strong>Assignation</strong> Bibliothécaire → « Traiter une réservation » : le rôle exécute le processus.</li>
+      <li><strong>Déclenchement</strong> « Réservation soumise » → processus : relation causale, trait plein + flèche pleine.</li>
+      <li><strong>Réalisation</strong> processus → service métier : le comportement interne fabrique le service exposé (pointillés + triangle creux).</li>
+      <li><strong>Accès</strong> processus → objet métier « Catalogue » : le comportement consulte la structure passive (pointillé fin).</li>
+      <li><strong>Serving</strong> service d'application → processus métier : LA relation inter-couches (pointe ouverte, du bas vers le haut).</li>
+      <li><strong>Réalisation</strong> fonction d'application → service d'application.</li>
+      <li><strong>Assignation</strong> BiblioApp → fonction : le composant exécute le comportement.</li>
+      <li><strong>Réalisation</strong> objet de données → objet métier (bonus : le lien passif inter-couches).</li>
+    </ol>
+    <p><strong>Auto-évaluation :</strong> ✔ formes correctes (carré = actif, arrondi = comportement, bandeau = passif) ? ✔ couleurs par couche ? ✔ sens du serving (app → métier) ? ✔ sens des réalisations (vers l'abstrait) ? Si oui : tu es prêt·e pour l'exercice d'examen.</p>
+  </div></details>
+
+  <h3>Exercice 5 — Question ouverte de théorie (rédaction)</h3>
+  <div class="box def"><div class="t">📋 Énoncé</div>
+    « Expliquez pourquoi TOGAF et ArchiMate sont complémentaires, en illustrant votre réponse avec les phases B, C et D de l'ADM et les trois couches d'ArchiMate. » (≈ 10 lignes)
+  </div>
+  <details class="solution"><summary>Voir les éléments de réponse attendus</summary><div class="sol-body">
+    <p>Points à couvrir pour une réponse complète :</p>
+    <ul style="font-size:.9rem">
+      <li><strong>TOGAF = méthode</strong> : la roue ADM organise <em>la démarche</em> d'architecture (phases itératives, gestion des exigences au centre). Il dit <em>quoi faire et dans quel ordre</em>, mais ne fournit pas de notation pour dessiner les architectures.</li>
+      <li><strong>ArchiMate = langage</strong> : notation graphique standardisée (éléments + relations + sémantique — comme BPMN pour les processus) pour <em>exprimer</em> les modèles. Il dit <em>comment représenter</em>, mais pas comment mener le projet.</li>
+      <li><strong>La correspondance directe</strong> : la phase <strong>B</strong> (architecture métier) produit des modèles en <strong>couche métier</strong> ; la phase <strong>C</strong> (architecture des SI) en <strong>couche application</strong> ; la phase <strong>D</strong> (architecture technologique) en <strong>couche technologique</strong>. Pour chaque phase, ArchiMate permet de modéliser l'as-is et le to-be et de visualiser les gaps.</li>
+      <li>Bonus : les deux standards sont maintenus par l'<strong>Open Group</strong> ; sans langage unifié, chaque couche utiliserait sa propre notation, rendant invisibles les liens inter-couches (serving, réalisation) — or c'est précisément l'alignement métier-IT (ch. 1) qu'on veut voir.</li>
+    </ul>
+  </div></details>
+</section>
+
+</main>
+
+<footer>
+  Chapitre 4 · Architecture &amp; Modélisation d'Entreprise — app de révision basée exclusivement sur les slides 2025-2026 (Prof. Simonofski, UNamur).<br>
+  Séquence conseillée : lire une section → faire son mini-quiz → passer à la suivante → terminer par les exercices d'entraînement.
+</footer>
+
+<script>
+// ---------- Quiz QCM ----------
+function answer(btn, isCorrect){
+  const opts = btn.parentElement;
+  if(opts.dataset.done) return;
+  opts.dataset.done = "1";
+  [...opts.children].forEach(b=>{ b.disabled = true; });
+  if(isCorrect){ btn.classList.add('correct'); }
+  else{
+    btn.classList.add('wrong');
+    // highlight correct one
+    [...opts.children].forEach(b=>{
+      if(b.getAttribute('onclick').includes('true')) b.classList.add('correct');
+    });
+  }
+  const expl = opts.nextElementSibling;
+  if(expl && expl.classList.contains('expl')) expl.classList.add('show');
+}
+
+// ---------- ADM wheel ----------
+const admData = {
+  prelim:{tag:"Phase Préliminaire",title:"Analyse préliminaire",items:["Examiner le contexte organisationnel","Identifier les unités opérationnelles concernées","Définir le cadre opérationnel et les méthodologies","Établir le modèle organisationnel","Mettre en place la gouvernance","Sélectionner les outils"],note:"On prépare le terrain avant de commencer le cycle A→H."},
+  A:{tag:"Phase A",title:"Vision de l'architecture",items:["Développer une vision globale des capacités de l'EA et de la valeur commerciale","Définir les principes de conception","Obtenir l'approbation"],note:"On vend le projet : quelle valeur, quels principes, quel feu vert."},
+  B:{tag:"Phase B 🟡",title:"Architecture métier",items:["Décrire l'architecture métier de référence (as-is)","Développer l'architecture métier cible (to-be)","Identifier les composants de la feuille de route selon les lacunes (gap)"],note:"→ Se modélise avec la couche MÉTIER d'ArchiMate. Pattern : as-is → gap → to-be."},
+  C:{tag:"Phase C 🔵",title:"Architecture des systèmes d'information",items:["Décrire l'architecture de base du SI (as-is)","Développer l'architecture cible du SI (to-be)","Identifier les composants de la feuille de route selon les lacunes"],note:"→ Se modélise avec la couche APPLICATION d'ArchiMate."},
+  D:{tag:"Phase D 🟢",title:"Architecture technologique",items:["Décrire l'architecture technologique de base","Développer l'architecture technologique cible","Identifier les éléments de la feuille de route selon les lacunes"],note:"→ Se modélise avec la couche TECHNOLOGIQUE d'ArchiMate."},
+  E:{tag:"Phase E",title:"Opportunités et solutions",items:["Créer une feuille de route architecturale complète","Définir les architectures de transition si nécessaire","Définir les éléments constitutifs de la solution globale pour finaliser l'architecture cible"],note:"On passe des modèles aux projets concrets."},
+  F:{tag:"Phase F",title:"Planning de migration",items:["Finaliser la feuille de route et le plan de migration","S'assurer que le plan est bien coordonné","S'assurer que la valeur et le coût des lots de travaux sont compris par les parties prenantes"],note:"Baseline → architecture(s) de Transition → Target : on avance par étapes (esprit PDCA, ch. 3)."},
+  G:{tag:"Phase G",title:"Gouvernance de mise en œuvre",items:["Formuler des recommandations pour les projets de mise en œuvre","Assurer la gouvernance pendant la mise en œuvre de la solution","Garantir la conformité avec l'architecture"],note:"Le gardien : les projets doivent respecter l'architecture cible."},
+  H:{tag:"Phase H",title:"Gestion du changement",items:["Veiller à ce que l'architecture reste adaptée à l'usage prévu","Mettre en place un processus de gestion des changements architecturaux"],note:"L'architecture vit : on boucle vers un nouveau cycle si nécessaire."},
+  req:{tag:"Centre de la roue",title:"Gestion des exigences",items:["Identifier et gérer les exigences","Les stocker dans un référentiel d'exigences","Les intégrer dans les autres phases"],note:"Position CENTRALE : elle alimente toutes les phases en continu. Lien ch. 2 : ingénierie des exigences & MoSCoW."}
+};
+document.querySelectorAll('.adm-node').forEach(node=>{
+  node.addEventListener('click',()=>{
+    document.querySelectorAll('.adm-node').forEach(n=>n.classList.remove('active'));
+    node.classList.add('active');
+    const d = admData[node.dataset.phase];
+    document.getElementById('admDetail').innerHTML =
+      '<span class="phase-tag">'+d.tag+'</span><h4 style="margin-top:10px">'+d.title+'</h4><ul>'+
+      d.items.map(i=>'<li>'+i+'</li>').join('')+'</ul><p style="font-size:.85rem;color:#556;border-top:1px dashed #ccc;padding-top:8px">💡 '+d.note+'</p>';
+  });
+});
+</script>
+<a href="../index.html#/theorie" style="position:fixed;left:14px;bottom:14px;z-index:99999;display:inline-flex;align-items:center;gap:6px;background:#0e7c86;color:#fff;text-decoration:none;font:600 13px/1 system-ui,sans-serif;padding:9px 14px;border-radius:999px;box-shadow:0 2px 10px rgba(0,0,0,.25);" title="Revenir au site BPMN &amp; ArchiMate — TP interactifs">&#8592; Parcours SIG</a>
+</body>
+</html>

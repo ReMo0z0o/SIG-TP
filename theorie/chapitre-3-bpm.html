@@ -1,0 +1,1513 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SIG — Chapitre 3 · Gestion & Modélisation des Processus Métiers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F3F5F9;
+  --surface:#FFFFFF;
+  --ink:#1C2534;
+  --muted:#59647A;
+  --line:#D9DFE9;
+  --start:#1E8E5A;   /* vert start event */
+  --start-bg:#E7F5EE;
+  --end:#C6423C;     /* rouge end event */
+  --end-bg:#FBECEA;
+  --gate:#D9930D;    /* ambre gateway */
+  --gate-bg:#FCF3E0;
+  --task:#2F6DB5;    /* bleu activité */
+  --task-bg:#E9F1FA;
+  --violet:#6B4FA3;
+  --violet-bg:#F0EBF8;
+  --radius:14px;
+  --mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
+  --disp:'Space Grotesk','Inter',system-ui,sans-serif;
+  --body:'Inter',system-ui,-apple-system,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--body);color:var(--ink);background:var(--paper);
+  background-image:radial-gradient(circle,#C7CFDD 1px,transparent 1px);
+  background-size:26px 26px;
+  line-height:1.65;font-size:16px;
+}
+/* ---------- Layout : pool + lanes ---------- */
+.app{display:grid;grid-template-columns:270px 1fr;min-height:100vh;max-width:1340px;margin:0 auto}
+aside{
+  background:var(--surface);border-right:2px solid var(--ink);
+  position:sticky;top:0;height:100vh;overflow-y:auto;
+  display:flex;flex-direction:row;
+}
+.pool-label{
+  writing-mode:vertical-rl;transform:rotate(180deg);
+  background:var(--ink);color:#fff;font-family:var(--mono);font-size:.72rem;
+  letter-spacing:.18em;text-transform:uppercase;
+  display:flex;align-items:center;justify-content:center;
+  padding:14px 8px;min-width:36px;font-weight:600;
+}
+nav{flex:1;padding:18px 14px;display:flex;flex-direction:column;gap:4px}
+nav .nav-head{font-family:var(--disp);font-weight:700;font-size:1.02rem;padding:4px 10px 12px;line-height:1.3;border-bottom:1px solid var(--line);margin-bottom:8px}
+nav .nav-head span{display:block;font-family:var(--mono);font-weight:600;font-size:.66rem;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;margin-bottom:4px}
+nav button{
+  all:unset;cursor:pointer;display:flex;align-items:center;gap:10px;
+  padding:9px 10px;border-radius:9px;font-size:.87rem;font-weight:500;color:var(--ink);
+  border:1px solid transparent;
+}
+nav button .dot{width:10px;height:10px;border-radius:50%;border:2px solid var(--muted);flex:none;background:#fff}
+nav button:hover{background:var(--paper)}
+nav button.active{background:var(--task-bg);border-color:var(--task);font-weight:600}
+nav button.active .dot{border-color:var(--task);background:var(--task)}
+nav button.done .dot{border-color:var(--start);background:var(--start)}
+nav .nav-note{margin-top:auto;font-size:.72rem;color:var(--muted);padding:12px 10px;border-top:1px solid var(--line);line-height:1.5}
+main{padding:44px 52px 90px;min-width:0}
+section.page{display:none;max-width:860px;animation:fadein .3s ease}
+section.page.visible{display:block}
+@keyframes fadein{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* ---------- Typo ---------- */
+.eyebrow{font-family:var(--mono);font-size:.7rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.eyebrow::before{content:"";width:22px;height:2px;background:var(--task)}
+h1{font-family:var(--disp);font-size:2.15rem;line-height:1.12;font-weight:700;letter-spacing:-.015em;margin-bottom:14px}
+h2{font-family:var(--disp);font-size:1.42rem;font-weight:700;letter-spacing:-.01em;margin:44px 0 12px;display:flex;align-items:center;gap:12px}
+h2 .glyph{flex:none}
+h3{font-family:var(--disp);font-size:1.08rem;font-weight:600;margin:26px 0 8px}
+p{margin-bottom:12px}
+p.lead{font-size:1.08rem;color:#31415C}
+strong{font-weight:650}
+em{font-style:italic}
+.slideref{font-family:var(--mono);font-size:.68rem;font-weight:600;color:var(--muted);background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:2px 9px;white-space:nowrap;vertical-align:2px}
+ul.clean{margin:0 0 14px 22px}
+ul.clean li{margin-bottom:6px}
+ol.clean{margin:0 0 14px 24px}
+ol.clean li{margin-bottom:7px}
+
+/* ---------- Cartes & callouts ---------- */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:22px 24px;margin:16px 0;box-shadow:0 1px 2px rgba(28,37,52,.05)}
+.callout{border-radius:var(--radius);padding:18px 20px 16px;margin:18px 0;border:1px solid;position:relative}
+.callout .co-tag{font-family:var(--mono);font-size:.66rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;display:inline-block;margin-bottom:8px;padding:2px 9px;border-radius:20px;color:#fff}
+.co-def{background:var(--task-bg);border-color:#BCD3EC}
+.co-def .co-tag{background:var(--task)}
+.co-exam{background:var(--gate-bg);border-color:#EBD3A0}
+.co-exam .co-tag{background:var(--gate)}
+.co-trap{background:var(--end-bg);border-color:#EFC5C1}
+.co-trap .co-tag{background:var(--end)}
+.co-link{background:var(--violet-bg);border-color:#D5C8EC}
+.co-link .co-tag{background:var(--violet)}
+.co-simple{background:var(--start-bg);border-color:#BEE2CF}
+.co-simple .co-tag{background:var(--start)}
+.callout p:last-child{margin-bottom:0}
+
+/* ---------- Tables ---------- */
+table{width:100%;border-collapse:collapse;margin:16px 0;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;font-size:.9rem}
+table{display:table}
+th{background:var(--ink);color:#fff;text-align:left;padding:10px 14px;font-family:var(--disp);font-weight:600;font-size:.84rem}
+td{padding:10px 14px;border-top:1px solid var(--line);vertical-align:top}
+tr:nth-child(even) td{background:#FAFBFD}
+
+/* ---------- Figures SVG ---------- */
+figure{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:20px;margin:18px 0;overflow-x:auto}
+figure svg{display:block;margin:0 auto;max-width:100%;height:auto}
+figcaption{font-size:.8rem;color:var(--muted);text-align:center;margin-top:12px;font-family:var(--mono);letter-spacing:.02em}
+
+/* ---------- Quiz ---------- */
+.quiz{background:var(--surface);border:2px solid var(--ink);border-radius:var(--radius);margin:24px 0;overflow:hidden}
+.quiz-head{background:var(--ink);color:#fff;padding:10px 18px;display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:.72rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase}
+.quiz-head svg{flex:none}
+.quiz-body{padding:18px 20px}
+.quiz-q{font-weight:600;margin-bottom:14px}
+.quiz-opts{display:flex;flex-direction:column;gap:8px}
+.quiz-opts button{
+  all:unset;cursor:pointer;border:1.5px solid var(--line);border-radius:10px;
+  padding:10px 14px;font-size:.92rem;background:#FAFBFD;transition:border-color .15s;
+  display:flex;gap:10px;align-items:flex-start;line-height:1.45;
+}
+.quiz-opts button:hover:not(:disabled){border-color:var(--task)}
+.quiz-opts button:disabled{cursor:default}
+.quiz-opts button.correct{border-color:var(--start);background:var(--start-bg)}
+.quiz-opts button.wrong{border-color:var(--end);background:var(--end-bg)}
+.quiz-fb{display:none;margin-top:14px;padding:13px 15px;border-radius:10px;font-size:.9rem;line-height:1.55}
+.quiz-fb.ok{display:block;background:var(--start-bg);border:1px solid #BEE2CF}
+.quiz-fb.ko{display:block;background:var(--end-bg);border:1px solid #EFC5C1}
+.quiz-fb b{display:block;margin-bottom:3px}
+
+/* reveal (question ouverte) */
+details.reveal{background:var(--surface);border:2px solid var(--ink);border-radius:var(--radius);margin:24px 0;overflow:hidden}
+details.reveal summary{
+  cursor:pointer;list-style:none;background:var(--ink);color:#fff;padding:11px 18px;
+  font-family:var(--mono);font-size:.72rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+  display:flex;align-items:center;gap:10px;
+}
+details.reveal summary::-webkit-details-marker{display:none}
+details.reveal summary::after{content:"— cliquer pour la correction";margin-left:auto;font-weight:500;letter-spacing:.05em;text-transform:none;opacity:.75}
+details.reveal[open] summary::after{content:"— masquer"}
+details.reveal .rv-q{padding:16px 20px;border-bottom:1px dashed var(--line);font-weight:600}
+details.reveal .rv-a{padding:16px 20px;background:#FAFBFD;font-size:.93rem}
+details.reveal .rv-a p{margin-bottom:10px}
+details.reveal .rv-a p:last-child{margin-bottom:0}
+
+/* classify game */
+.classify{background:var(--surface);border:2px solid var(--ink);border-radius:var(--radius);margin:24px 0;overflow:hidden}
+.classify .cl-body{padding:18px 20px}
+.cl-item{border:1.5px solid var(--line);border-radius:10px;padding:12px 14px;margin-bottom:12px;background:#FAFBFD}
+.cl-item .cl-txt{font-size:.92rem;margin-bottom:9px}
+.cl-btns{display:flex;gap:8px;flex-wrap:wrap}
+.cl-btns button{all:unset;cursor:pointer;font-family:var(--mono);font-size:.7rem;font-weight:600;letter-spacing:.08em;padding:5px 12px;border-radius:20px;border:1.5px solid var(--line);background:#fff}
+.cl-btns button:hover:not(:disabled){border-color:var(--task)}
+.cl-btns button:disabled{cursor:default;opacity:.55}
+.cl-btns button.picked-ok{border-color:var(--start);background:var(--start-bg);opacity:1}
+.cl-btns button.picked-ko{border-color:var(--end);background:var(--end-bg);opacity:1}
+.cl-btns button.answer{border-color:var(--start);background:var(--start-bg);opacity:1}
+.cl-exp{display:none;font-size:.82rem;color:#3A465C;margin-top:8px;padding-top:8px;border-top:1px dashed var(--line)}
+.cl-item.done .cl-exp{display:block}
+
+/* ---------- Priorités ---------- */
+.prio{border:2px solid var(--gate);background:var(--gate-bg);border-radius:var(--radius);padding:22px 24px;margin:36px 0 10px}
+.prio h3{margin:0 0 12px;display:flex;align-items:center;gap:10px;font-size:1.05rem}
+.prio table{font-size:.86rem;margin:8px 0 0}
+.prio th{background:var(--gate)}
+.stars{font-family:var(--mono);color:var(--gate);letter-spacing:2px;white-space:nowrap;font-weight:700}
+
+/* ---------- Divers ---------- */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+.grid2 .card{margin:0}
+.pill{display:inline-block;font-family:var(--mono);font-size:.66rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 10px;border-radius:20px;margin-right:6px}
+.pill.va{background:var(--start-bg);color:var(--start);border:1px solid #BEE2CF}
+.pill.bva{background:var(--task-bg);color:var(--task);border:1px solid #BCD3EC}
+.pill.nva{background:var(--end-bg);color:var(--end);border:1px solid #EFC5C1}
+.nextbtn{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:10px;background:var(--ink);color:#fff;font-family:var(--disp);font-weight:600;font-size:.95rem;padding:13px 24px;border-radius:12px;margin-top:36px}
+.nextbtn:hover{background:#2A3650}
+.hero-token{display:inline-flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:30px;padding:6px 16px;font-family:var(--mono);font-size:.72rem;font-weight:600;color:var(--muted);margin-bottom:20px}
+.hero-token .tk{width:11px;height:11px;border-radius:50%;background:var(--start);box-shadow:0 0 0 3px var(--start-bg)}
+blockquote{border-left:3px solid var(--task);padding:6px 0 6px 18px;margin:16px 0;font-style:italic;color:#31415C}
+blockquote cite{display:block;font-style:normal;font-family:var(--mono);font-size:.72rem;margin-top:6px;color:var(--muted)}
+code{font-family:var(--mono);font-size:.82em;background:#EDF0F6;border:1px solid var(--line);border-radius:5px;padding:1px 6px}
+
+@media(max-width:940px){
+  .app{grid-template-columns:1fr}
+  aside{position:static;height:auto;border-right:none;border-bottom:2px solid var(--ink)}
+  .pool-label{writing-mode:horizontal-tb;transform:none;min-width:0;padding:8px 14px;justify-content:flex-start}
+  aside{flex-direction:column}
+  nav{flex-direction:row;flex-wrap:wrap;padding:12px}
+  nav .nav-head,nav .nav-note{display:none}
+  main{padding:28px 18px 70px}
+  .grid2{grid-template-columns:1fr}
+  h1{font-size:1.7rem}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside>
+  <div class="pool-label">Pool · SIG 2025–26</div>
+  <nav id="nav">
+    <div class="nav-head"><span>Chapitre 3</span>Gestion & Modélisation des Processus Métiers</div>
+    <button data-page="p0" class="active"><span class="dot"></span>Vue d'ensemble</button>
+    <button data-page="p1"><span class="dot"></span>1 · Introduction au BPM</button>
+    <button data-page="p2"><span class="dot"></span>2 · Modélisation & BPMN</button>
+    <button data-page="p3"><span class="dot"></span>3 · Analyse & amélioration</button>
+    <button data-page="p4"><span class="dot"></span>4 · Surveillance</button>
+    <button data-page="p5"><span class="dot"></span>★ Examen & entraînement</button>
+    <div class="nav-note">Basé sur le deck 2025-2026 du Prof. Simonofski (129 slides). Les numéros <span class="slideref">S. xx</span> renvoient aux slides.</div>
+  </nav>
+</aside>
+<main>
+
+<!-- ============================================================ PAGE 0 -->
+<section class="page visible" id="p0">
+  <div class="hero-token"><span class="tk"></span>START EVENT · le jeton entre dans le processus</div>
+  <div class="eyebrow">Chapitre 3 · Prof. Simonofski · UNamur</div>
+  <h1>Gestion & Modélisation des Processus Métiers</h1>
+  <p class="lead">Ce chapitre est le cœur de la partie « modélisation » du cours — et le pilier des <strong>40 % d'exercices de modélisation</strong> de l'examen. Il répond à trois questions : <em>qu'est-ce qu'un processus métier et pourquoi le gérer ?</em> · <em>comment le modéliser (BPMN) ?</em> · <em>comment l'analyser, l'améliorer et le surveiller ?</em></p>
+
+  <div class="callout co-link"><span class="co-tag">Lien chapitres précédents</span>
+    <p><strong>Chapitre 1 (SIG & modélisation)</strong> : on y a vu qu'un modèle est une <em>abstraction utile de la réalité</em> (les 5 qualités d'un modèle : abstrait, compréhensible, précis, prédictif, peu coûteux). Un modèle BPMN est exactement cela : une simplification d'un processus réel, construite <em>pour</em> une audience et <em>pour</em> un objectif. <strong>Chapitre 2 (cycle de conception d'un SI)</strong> : les deux problèmes majeurs des projets SI <span class="slideref">S. 6</span> sont le manque de connaissance des problématiques métiers et le manque de communication entre le métier et l'informatique. La modélisation des processus attaque frontalement ces deux problèmes : elle rend le métier explicite et donne un <em>langage commun</em> business ↔ IT.</p>
+  </div>
+
+  <h2>La carte du chapitre</h2>
+  <figure>
+    <svg viewBox="0 0 760 210" role="img" aria-label="Structure du chapitre en 4 parties">
+      <defs><marker id="arr" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L8,4.5 L0,9 z" fill="#1C2534"/></marker></defs>
+      <circle cx="34" cy="105" r="14" fill="#E7F5EE" stroke="#1E8E5A" stroke-width="2.5"/>
+      <line x1="48" y1="105" x2="86" y2="105" stroke="#1C2534" stroke-width="2" marker-end="url(#arr)"/>
+      <g font-family="Inter,sans-serif" font-size="13" font-weight="600" fill="#1C2534" text-anchor="middle">
+        <rect x="90" y="78" width="140" height="54" rx="10" fill="#E9F1FA" stroke="#2F6DB5" stroke-width="2"/>
+        <text x="160" y="101">1 · Introduction</text><text x="160" y="118" font-weight="400" font-size="11.5">définition, cycle de vie</text>
+        <rect x="264" y="78" width="140" height="54" rx="10" fill="#E9F1FA" stroke="#2F6DB5" stroke-width="2"/>
+        <text x="334" y="101">2 · Modélisation</text><text x="334" y="118" font-weight="400" font-size="11.5">BPMN 2.0</text>
+        <rect x="438" y="78" width="140" height="54" rx="10" fill="#E9F1FA" stroke="#2F6DB5" stroke-width="2"/>
+        <text x="508" y="101">3 · Analyse</text><text x="508" y="118" font-weight="400" font-size="11.5">Lean, redesign, PICK</text>
+        <rect x="612" y="78" width="110" height="54" rx="10" fill="#E9F1FA" stroke="#2F6DB5" stroke-width="2"/>
+        <text x="667" y="101">4 · Suivi</text><text x="667" y="118" font-weight="400" font-size="11.5">process mining</text>
+      </g>
+      <line x1="230" y1="105" x2="260" y2="105" stroke="#1C2534" stroke-width="2" marker-end="url(#arr)"/>
+      <line x1="404" y1="105" x2="434" y2="105" stroke="#1C2534" stroke-width="2" marker-end="url(#arr)"/>
+      <line x1="578" y1="105" x2="608" y2="105" stroke="#1C2534" stroke-width="2" marker-end="url(#arr)"/>
+      <text x="380" y="30" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="11" fill="#59647A" letter-spacing="2">AGENDA DU CHAPITRE — S. 7</text>
+      <text x="380" y="185" text-anchor="middle" font-family="Inter,sans-serif" font-size="11.5" fill="#59647A">Chaque partie de l'app suit une section du cycle de vie de la gestion des processus</text>
+    </svg>
+  </figure>
+
+  <h2>Pourquoi ce chapitre avant de parler technologie ?</h2>
+  <blockquote>« La première règle de toute technologie utilisée pour automatiser des opérations déjà efficientes est qu'elle va permettre de magnifier l'efficience. La seconde règle est que cette automatisation appliquée à des opérations inefficientes va magnifier leur inefficience. »<cite>Bill Gates — <span class="slideref">S. 13</span></cite></blockquote>
+  <p>C'est <strong>l'idée-mère du chapitre</strong> : digitaliser un mauvais processus, c'est « <strong>automatiser le chaos</strong> » <span class="slideref">S. 22</span>. On produit alors du chaos plus vite, à plus grande échelle. Il faut donc d'abord <em>comprendre, modéliser et améliorer</em> le processus, et seulement ensuite le digitaliser. Retenez la chaîne logique du slide 14 : les <strong>systèmes d'information permettent l'amélioration des processus</strong>, et ce sont les <strong>processus (améliorés) qui délivrent la création de valeur</strong> — pas la technologie en elle-même.</p>
+
+  <div class="callout co-exam"><span class="co-tag">À l'examen</span>
+    <p>Cette citation et l'idée « d'abord le processus, ensuite la technologie » sont une question de théorie/mise en situation typique (40 % de l'examen) : <em>« Une commune veut acheter un logiciel pour accélérer le traitement des demandes. Que lui conseillez-vous d'abord ? »</em> → Réponse attendue : analyser et améliorer le processus <em>avant</em> de digitaliser, sinon on magnifie l'inefficience.</p>
+  </div>
+
+  <button class="nextbtn" data-goto="p1">Commencer la partie 1 →</button>
+</section>
+
+<!-- ============================================================ PAGE 1 -->
+<section class="page" id="p1">
+  <div class="eyebrow">Partie 1 · Slides 8–32</div>
+  <h1>Introduction à la gestion des processus métiers</h1>
+
+  <h2><svg class="glyph" width="26" height="26" viewBox="0 0 26 26"><rect x="3" y="6" width="20" height="14" rx="5" fill="#E9F1FA" stroke="#2F6DB5" stroke-width="2"/></svg>1.1 · Qu'est-ce qu'un processus métier ?</h2>
+
+  <div class="callout co-def"><span class="co-tag">Définition à connaître par cœur</span>
+    <p>Un processus métier est « un ensemble <strong>d'événements</strong>, <strong>d'activités</strong> et <strong>de décisions</strong> impliquant des <strong>acteurs</strong> et des <strong>ressources</strong> qui collectivement mènent à un <strong>résultat de valeur</strong> pour l'organisation et ses clients. » <span class="slideref">S. 11</span></p>
+  </div>
+
+  <p>Décortiquons cette définition, car chaque mot correspondra plus tard à un symbole BPMN :</p>
+  <table>
+    <tr><th>Composant</th><th>Ce que c'est</th><th>Exemple (machine à laver cassée <span style="color:#fff" class="slideref">S. 10</span>)</th><th>Futur symbole BPMN</th></tr>
+    <tr><td><strong>Événement</strong></td><td>Quelque chose qui <em>arrive</em>, instantané, sans durée</td><td>« Le client appelle le service après-vente »</td><td>Cercle</td></tr>
+    <tr><td><strong>Activité</strong></td><td>Du <em>travail</em> à effectuer, qui prend du temps</td><td>« Diagnostiquer la panne »</td><td>Rectangle arrondi</td></tr>
+    <tr><td><strong>Décision</strong></td><td>Un point où le flux diverge selon une condition</td><td>« Sous garantie ou non ? »</td><td>Losange (gateway)</td></tr>
+    <tr><td><strong>Acteurs / ressources</strong></td><td>Qui fait le travail (humains <em>et</em> systèmes)</td><td>Technicien, service garantie, ERP</td><td>Pools & lanes</td></tr>
+    <tr><td><strong>Résultat de valeur</strong></td><td>Ce que le processus produit, positif ou négatif</td><td>Machine réparée (ou client parti)</td><td>End event(s)</td></tr>
+  </table>
+
+  <p><strong>Exemples du secteur public</strong> <span class="slideref">S. 11</span> — le professeur ancre tout le chapitre dans l'administration publique, retenez-en au moins deux : demande et délivrance de documents administratifs (carte d'identité, permis de conduire), gestion d'un changement d'adresse (déclaration → contrôle de police → mise à jour des registres), gestion d'une demande d'allocation de chômage, gestion d'un marché public.</p>
+
+  <div class="callout co-simple"><span class="co-tag">En clair</span>
+    <p>Un processus métier, c'est <em>tout ce qui se passe entre un déclencheur et un résultat qui a de la valeur</em>. Ce n'est pas une tâche isolée (« imprimer un document ») ni un département (« le service RH ») : c'est le <strong>fil transversal</strong> qui relie événements, travail et décisions jusqu'à un résultat pour le client/citoyen.</p>
+  </div>
+
+  <div class="quiz" data-answer="2">
+    <div class="quiz-head"><svg width="16" height="16" viewBox="0 0 16 16"><path d="M8 1 L15 8 L8 15 L1 8 Z" fill="#D9930D"/></svg>Checkpoint 1.1</div>
+    <div class="quiz-body">
+      <div class="quiz-q">Lequel de ces éléments est un <em>processus métier</em> au sens du cours ?</div>
+      <div class="quiz-opts">
+        <button>Le service population d'une commune</button>
+        <button>Le logiciel de gestion des dossiers de la commune</button>
+        <button>Le traitement d'une demande de changement de domicile, de la déclaration du citoyen à la mise à jour du registre national</button>
+        <button>L'activité « encoder le rapport de police »</button>
+      </div>
+      <div class="quiz-fb"></div>
+      <div class="quiz-exp" hidden><b>Exact.</b> Un processus est une <em>collection</em> d'événements, activités et décisions menant à un résultat de valeur. Un service = un acteur, un logiciel = une ressource/un SI, « encoder le rapport » = une seule activité.</div>
+    </div>
+  </div>
+
+  <h2><svg class="glyph" width="26" height="26" viewBox="0 0 26 26"><circle cx="13" cy="13" r="10" fill="#FCF3E0" stroke="#D9930D" stroke-width="2"/></svg>1.2 · La gestion des processus métiers (BPM)</h2>
+
+  <div class="callout co-def"><span class="co-tag">Définition</span>
+    <p>La <strong>Gestion des Processus Métiers</strong> (Business Process Management, BPM) est une <strong>discipline</strong> qui regroupe des <strong>principes, des méthodes et des outils</strong> pour <strong>concevoir, analyser, exécuter et suivre</strong> des processus métiers, avec l'objectif de pouvoir <strong>les améliorer</strong>. <span class="slideref">S. 14</span></p>
+  </div>
+  <p>Structure de la définition à mémoriser : <strong>3 ingrédients</strong> (principes, méthodes, outils) × <strong>4 verbes</strong> (concevoir, analyser, exécuter, suivre) × <strong>1 but</strong> (améliorer). Si on vous demande la définition, ces trois blocs doivent y être.</p>
+
+  <h3>Pourquoi la gestion des processus ? Les 5 apports dans la digitalisation <span class="slideref">S. 20–25</span></h3>
+  <ol class="clean">
+    <li><strong>Donner du sens à la digitalisation</strong> — aligner les initiatives digitales sur les <em>objectifs métiers</em> (pas seulement sur la technologie), clarifier le « pourquoi » du changement, prioriser les processus à plus fort impact.</li>
+    <li><strong>Maîtriser et optimiser les processus avant la digitalisation</strong> — éviter de digitaliser des processus inefficaces (« automatiser le chaos »), identifier le gaspillage, les doublons, les activités sans valeur ajoutée.</li>
+    <li><strong>Favoriser la collaboration et l'adoption</strong> — vision partagée entre services, meilleure communication business ↔ IT grâce aux modèles communs, faciliter la conduite du changement.</li>
+    <li><strong>Intégrer systèmes, données et organisation</strong> — montrer les interactions acteurs/données/applications, aider à définir les exigences fonctionnelles des SI, repérer les opportunités de standardisation et d'interopérabilité.</li>
+    <li><strong>Piloter la performance et l'amélioration continue</strong> — définir les KPIs, créer une culture de la mesure, favoriser l'innovation continue.</li>
+  </ol>
+  <p><em>Moyen mnémotechnique :</em> <strong>S-M-C-I-P</strong> → <strong>S</strong>ens, <strong>M</strong>aîtriser avant, <strong>C</strong>ollaboration, <strong>I</strong>ntégrer, <strong>P</strong>iloter.</p>
+
+  <h2><svg class="glyph" width="26" height="26" viewBox="0 0 26 26"><circle cx="13" cy="13" r="10" fill="none" stroke="#1E8E5A" stroke-width="2.5"/><path d="M13 3 A10 10 0 0 1 23 13" fill="none" stroke="#C6423C" stroke-width="2.5"/></svg>1.3 · Le cycle de vie de la gestion des processus <span class="slideref">S. 15, 26</span></h2>
+  <p>C'est <strong>LE schéma structurant du chapitre</strong> : les 4 sections du cours suivent ce cycle. Six phases, chacune avec son <em>livrable</em> (ce qu'elle produit et transmet à la suivante). Apprenez les phases <strong>dans l'ordre</strong> avec leurs livrables.</p>
+
+  <figure>
+    <svg viewBox="0 0 720 470" role="img" aria-label="Cycle de vie de la gestion des processus">
+      <defs><marker id="arr2" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L7,4 L0,8 z" fill="#59647A"/></marker></defs>
+      <g font-family="Inter,sans-serif">
+        <!-- circle arrows -->
+        <path d="M 360 95 A 150 150 0 0 1 494 180" fill="none" stroke="#59647A" stroke-width="2" marker-end="url(#arr2)"/>
+        <path d="M 505 235 A 150 150 0 0 1 460 355" fill="none" stroke="#59647A" stroke-width="2" marker-end="url(#arr2)"/>
+        <path d="M 410 385 A 150 150 0 0 1 300 383" fill="none" stroke="#59647A" stroke-width="2" marker-end="url(#arr2)"/>
+        <path d="M 250 355 A 150 150 0 0 1 208 240" fill="none" stroke="#59647A" stroke-width="2" marker-end="url(#arr2)"/>
+        <path d="M 218 180 A 150 150 0 0 1 345 94" fill="none" stroke="#59647A" stroke-width="2" marker-end="url(#arr2)"/>
+        <!-- nodes -->
+        <g text-anchor="middle" font-size="13" font-weight="600" fill="#1C2534">
+          <rect x="290" y="48" width="140" height="42" rx="10" fill="#E9F1FA" stroke="#2F6DB5" stroke-width="2"/><text x="360" y="74">1 · Identification</text>
+          <rect x="470" y="182" width="140" height="42" rx="10" fill="#E9F1FA" stroke="#2F6DB5" stroke-width="2"/><text x="540" y="208">2 · Découverte</text>
+          <rect x="405" y="358" width="130" height="42" rx="10" fill="#E9F1FA" stroke="#2F6DB5" stroke-width="2"/><text x="470" y="384">3 · Analyse</text>
+          <rect x="185" y="358" width="130" height="42" rx="10" fill="#E9F1FA" stroke="#2F6DB5" stroke-width="2"/><text x="250" y="384">4 · Re-design</text>
+          <rect x="95" y="182" width="155" height="42" rx="10" fill="#E9F1FA" stroke="#2F6DB5" stroke-width="2"/><text x="172" y="208">5 · Implémentation</text>
+          <rect x="305" y="270" width="110" height="40" rx="10" fill="#E7F5EE" stroke="#1E8E5A" stroke-width="2"/><text x="360" y="295">6 · Suivi</text>
+        </g>
+        <path d="M 172 224 Q 230 275 300 288" fill="none" stroke="#59647A" stroke-width="2" marker-end="url(#arr2)"/>
+        <path d="M 360 270 Q 360 180 340 94" fill="none" stroke="#59647A" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#arr2)"/>
+        <!-- livrables -->
+        <g font-size="10.5" fill="#59647A" font-style="italic">
+          <text x="475" y="130">→ liste organisée et priorisée</text>
+          <text x="475" y="144">   des processus</text>
+          <text x="560" y="300">→ modèles « as-is »</text>
+          <text x="298" y="430" text-anchor="middle">→ insights sur les problèmes et leur impact</text>
+          <text x="90" y="300">→ modèles « to-be »</text>
+          <text x="90" y="314">   (améliorés)</text>
+          <text x="205" y="255">→ modèles exécutables</text>
+          <text x="415" y="180">insights performance</text>
+          <text x="415" y="194">& conformité ↺</text>
+        </g>
+      </g>
+    </svg>
+    <figcaption>Cycle de vie BPM (S. 15) — chaque flèche porte un livrable ; le suivi relance le cycle</figcaption>
+  </figure>
+
+  <table>
+    <tr><th>Phase</th><th>Question posée</th><th>Livrable</th></tr>
+    <tr><td><strong>1. Identification</strong></td><td>Quels processus existent et lesquels prioriser ?</td><td>Liste organisée et <strong>priorisée</strong> des processus (carte high-level)</td></tr>
+    <tr><td><strong>2. Découverte</strong></td><td>Comment le processus fonctionne-t-il <em>aujourd'hui</em> ?</td><td>Modèles des processus actuels « <strong>as-is</strong> »</td></tr>
+    <tr><td><strong>3. Analyse</strong></td><td>Où sont les problèmes et quel est leur impact ?</td><td>Insights sur les problèmes et leur impact</td></tr>
+    <tr><td><strong>4. Re-design</strong></td><td>Comment le processus <em>devrait</em>-il fonctionner ?</td><td>Modèles des processus améliorés « <strong>to-be</strong> »</td></tr>
+    <tr><td><strong>5. Implémentation</strong></td><td>Comment passer du to-be à la réalité ?</td><td>Modèles des processus <strong>exécutables</strong></td></tr>
+    <tr><td><strong>6. Suivi (monitoring)</strong></td><td>Le processus performe-t-il comme prévu ?</td><td>Insights sur le respect (conformité) et la performance → relance le cycle</td></tr>
+  </table>
+
+  <div class="callout co-trap"><span class="co-tag">Piège classique</span>
+    <p>Ne confondez pas <strong>as-is</strong> (le processus tel qu'il existe, produit de la <em>découverte</em>) et <strong>to-be</strong> (le processus amélioré, produit du <em>re-design</em>). Autre piège : à l'étape d'<em>identification</em>, on ne modélise <strong>pas</strong> en détail <span class="slideref">S. 28</span> — on produit seulement un listing/une carte high-level ; la modélisation détaillée est le rôle de la découverte.</p>
+  </div>
+
+  <h3>Identification : objectifs & types de processus <span class="slideref">S. 27–32</span></h3>
+  <ul class="clean">
+    <li>Donner une <strong>vision globale</strong> du fonctionnement de l'organisation ;</li>
+    <li>Comprendre <strong>quels processus existent</strong>, les <strong>nommer et catégoriser</strong> ;</li>
+    <li>Identifier les processus <strong>prioritaires</strong> pour la transformation ;</li>
+    <li>Éviter de s'attaquer à des <strong>sous-processus sans cohérence d'ensemble</strong>.</li>
+  </ul>
+  <p>Trois <strong>types de processus</strong> <span class="slideref">S. 27, 32</span> :</p>
+  <table>
+    <tr><th>Type</th><th>Rôle</th><th>Exemples du cours</th></tr>
+    <tr><td><strong>Stratégiques</strong></td><td>Pilotent et orientent l'organisation</td><td>Établissement des priorités de transformation, budgets, gestion du changement</td></tr>
+    <tr><td><strong>Opérationnels</strong></td><td>Cœur de métier, délivrent la valeur au client/citoyen</td><td>Traitement des demandes de subventions, accueil des citoyens, décisions sur les aides sociales</td></tr>
+    <tr><td><strong>Support</strong></td><td>Soutiennent les processus opérationnels</td><td>RH, IT, comptabilité…</td></tr>
+  </table>
+
+  <div class="quiz" data-answer="1">
+    <div class="quiz-head"><svg width="16" height="16" viewBox="0 0 16 16"><path d="M8 1 L15 8 L8 15 L1 8 Z" fill="#D9930D"/></svg>Checkpoint 1.2</div>
+    <div class="quiz-body">
+      <div class="quiz-q">Le livrable de la phase de <strong>découverte</strong> est :</div>
+      <div class="quiz-opts">
+        <button>Une liste organisée et priorisée des processus</button>
+        <button>Les modèles des processus actuels (« as-is »)</button>
+        <button>Les modèles des processus améliorés (« to-be »)</button>
+        <button>Des insights sur la performance des processus</button>
+      </div>
+      <div class="quiz-fb"></div>
+      <div class="quiz-exp" hidden><b>Oui.</b> Identification → liste priorisée ; <b>découverte → as-is</b> ; analyse → insights problèmes ; re-design → to-be ; implémentation → exécutables ; suivi → insights performance/conformité.</div>
+    </div>
+  </div>
+
+  <div class="quiz" data-answer="0">
+    <div class="quiz-head"><svg width="16" height="16" viewBox="0 0 16 16"><path d="M8 1 L15 8 L8 15 L1 8 Z" fill="#D9930D"/></svg>Checkpoint 1.3 — mise en situation</div>
+    <div class="quiz-body">
+      <div class="quiz-q">« L'établissement du budget annuel de transformation numérique de la commune » est un processus…</div>
+      <div class="quiz-opts">
+        <button>Stratégique</button>
+        <button>Opérationnel</button>
+        <button>De support</button>
+      </div>
+      <div class="quiz-fb"></div>
+      <div class="quiz-exp" hidden><b>Stratégique</b> : il oriente l'organisation (priorités, budgets, gestion du changement — exemples du slide 32). « Traiter une demande de subvention » serait opérationnel ; « gérer la paie » serait un support.</div>
+    </div>
+  </div>
+
+  <div class="prio">
+    <h3>⭐ Priorités de la partie 1</h3>
+    <table>
+      <tr><th>À maîtriser</th><th>Importance</th></tr>
+      <tr><td>Définition du processus métier (5 composants) & définition du BPM (3 ingrédients, 4 verbes, 1 but)</td><td class="stars">★★★</td></tr>
+      <tr><td>Cycle de vie BPM : les 6 phases <em>dans l'ordre</em> + le livrable de chacune (as-is vs to-be !)</td><td class="stars">★★★</td></tr>
+      <tr><td>Citation de Bill Gates / « automatiser le chaos » — à replacer en mise en situation</td><td class="stars">★★</td></tr>
+      <tr><td>Les 5 apports du BPM à la digitalisation (S-M-C-I-P)</td><td class="stars">★★</td></tr>
+      <tr><td>Types de processus (stratégiques / opérationnels / support) et objectifs de l'identification</td><td class="stars">★★</td></tr>
+    </table>
+  </div>
+
+  <button class="nextbtn" data-goto="p2">Partie 2 : Modélisation & BPMN →</button>
+</section>
+
+<!-- ============================================================ PAGE 2 -->
+<section class="page" id="p2">
+  <div class="eyebrow">Partie 2 · Slides 33–72</div>
+  <h1>Modélisation des processus & BPMN</h1>
+  <p class="lead">Nous sommes dans la phase <strong>découverte</strong> du cycle de vie : produire les modèles « as-is ». Cette partie est la plus importante du chapitre pour les <strong>exercices de modélisation de l'examen</strong>.</p>
+
+  <h2><svg class="glyph" width="26" height="26" viewBox="0 0 26 26"><circle cx="8" cy="13" r="5" fill="#E9F1FA" stroke="#2F6DB5" stroke-width="2"/><circle cx="18" cy="13" r="5" fill="#FCF3E0" stroke="#D9930D" stroke-width="2"/></svg>2.1 · Trois perspectives de modélisation <span class="slideref">S. 35–40</span></h2>
+  <p>Un même processus peut être modélisé selon trois points de vue, du <strong>moins détaillé au plus détaillé</strong> :</p>
+  <table>
+    <tr><th>Perspective</th><th>Point de vue</th><th>Niveau de détail</th></tr>
+    <tr><td><strong>Externe</strong></td><td>Le processus tel que vu par des parties <em>externes</em> à l'organisation (ex. les citoyens) — la chaîne de valeur de bout en bout</td><td>Peu de détails</td></tr>
+    <tr><td><strong>Interne</strong></td><td>Le processus tel que vu <em>en interne</em>, avec départements, rôles, responsabilités</td><td>Intermédiaire</td></tr>
+    <tr><td><strong>Systèmes d'information</strong></td><td>Le processus du point de vue des <em>SI utilisés</em> dans son cadre</td><td>Très détaillé</td></tr>
+  </table>
+
+  <div class="grid2">
+    <div class="card">
+      <h3 style="margin-top:0">Perspective interne <span class="slideref">S. 38</span></h3>
+      <p style="font-size:.88rem"><strong style="color:var(--start)">Avantages :</strong> reflète la structure réelle de l'organisation · facile à comprendre pour les managers · permet d'optimiser localement · utile pour identifier compétences, ressources et charge de travail de chaque service.</p>
+      <p style="font-size:.88rem;margin-bottom:0"><strong style="color:var(--end)">Inconvénients :</strong> vision <em>fragmentée</em> · masque les problèmes aux <em>interfaces</em> (« optimisé ici, mais pas globalement ») · renforce les <em>silos</em> · peut ignorer la perspective du citoyen qui traverse plusieurs services · conduit à des <em>sous-optimisations locales</em>.</p>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0">Perspective externe <span class="slideref">S. 39</span></h3>
+      <p style="font-size:.88rem"><strong style="color:var(--start)">Avantages :</strong> vision <em>complète et transversale</em> · identifie bottlenecks, transferts inutiles, doublons · orientation <em>valeur pour le citoyen</em> · facilite digitalisation/automatisation/simplification · priorisation alignée sur la stratégie.</p>
+      <p style="font-size:.88rem;margin-bottom:0"><strong style="color:var(--end)">Inconvénients :</strong> managers perdent leurs « repères fonctionnels » · plus de coordination inter-services · nécessite un <em>sponsor fort</em> et une culture moins « silos » · frontières entre processus difficiles à définir.</p>
+    </div>
+  </div>
+  <div class="callout co-def"><span class="co-tag">Laquelle choisir ?</span>
+    <p><strong>Les deux !</strong> <span class="slideref">S. 40</span> L'interne pour <em>comprendre l'organisation et gérer</em> (responsabilités, optimiser un service) ; l'externe pour <em>transformer et digitaliser</em> (chaîne de valeur complète, souvent transversale). Question de mise en situation typique : « quelle perspective conseillez-vous pour un projet de digitalisation transversal ? » → externe, en la justifiant, tout en gardant l'interne pour gérer l'organisation.</p>
+  </div>
+
+  <div class="quiz" data-answer="1">
+    <div class="quiz-head"><svg width="16" height="16" viewBox="0 0 16 16"><path d="M8 1 L15 8 L8 15 L1 8 Z" fill="#D9930D"/></svg>Checkpoint 2.1</div>
+    <div class="quiz-body">
+      <div class="quiz-q">« Optimisé ici, mais pas globalement » : ce risque est typique de la perspective…</div>
+      <div class="quiz-opts">
+        <button>Externe, car elle simplifie trop le processus</button>
+        <button>Interne, car chaque service optimise sa partie sans voir les problèmes aux interfaces</button>
+        <button>Systèmes d'information, car elle est trop détaillée</button>
+      </div>
+      <div class="quiz-fb"></div>
+      <div class="quiz-exp" hidden><b>Interne.</b> Chaque silo optimise localement, mais les problèmes se cachent aux <em>interfaces</em> entre services — c'est la sous-optimisation locale (S. 38).</div>
+    </div>
+  </div>
+
+  <h2><svg class="glyph" width="26" height="26" viewBox="0 0 26 26"><rect x="2" y="7" width="22" height="12" rx="4" fill="#E9F1FA" stroke="#2F6DB5" stroke-width="2"/></svg>2.2 · BPMN : le langage commun <span class="slideref">S. 41–42</span></h2>
+  <p><strong>BPMN = Business Process Model and Notation</strong>, un <em>langage de modélisation</em> standard. Ses <strong>trois objectifs</strong> :</p>
+  <ul class="clean">
+    <li>Notation <strong>standard compréhensible par tous les stakeholders</strong> ;</li>
+    <li>Servir de <strong>langage commun</strong> (business ↔ IT — souvenez-vous du problème n°2 des projets SI) ;</li>
+    <li>Faire le <strong>pont entre la conception</strong> d'un processus <strong>et son implémentation</strong>.</li>
+  </ul>
+  <p>Ses <strong>trois caractéristiques</strong> : notation <strong>graphique</strong> (symboles avec définitions <em>formelles</em>), notation <strong>exécutable</strong> (avec assez de détails, on peut générer des SI à partir des modèles), <strong>supporte la complexité</strong> (exceptions, sous-processus, rôles, données…). Outil vu au cours : <code>bpmn.io</code> <span class="slideref">S. 67</span>.</p>
+
+  <h2><svg class="glyph" width="26" height="26" viewBox="0 0 26 26"><circle cx="13" cy="13" r="9" fill="#E7F5EE" stroke="#1E8E5A" stroke-width="2.5"/></svg>2.3 · Les symboles de base — événements & activités <span class="slideref">S. 44–47</span></h2>
+
+  <figure>
+    <svg viewBox="0 0 740 240" role="img" aria-label="Symboles BPMN : événements et activité">
+      <g font-family="Inter,sans-serif" font-size="12" fill="#1C2534">
+        <!-- start none -->
+        <circle cx="70" cy="55" r="22" fill="#E7F5EE" stroke="#1E8E5A" stroke-width="2.5"/>
+        <text x="70" y="102" text-anchor="middle" font-weight="600">Start event</text>
+        <text x="70" y="118" text-anchor="middle" fill="#59647A" font-size="10.5">démarrage simple</text>
+        <!-- start timer -->
+        <circle cx="200" cy="55" r="22" fill="#E7F5EE" stroke="#1E8E5A" stroke-width="2.5"/>
+        <circle cx="200" cy="55" r="13" fill="none" stroke="#1E8E5A" stroke-width="1.6"/>
+        <line x1="200" y1="55" x2="200" y2="46" stroke="#1E8E5A" stroke-width="1.6"/>
+        <line x1="200" y1="55" x2="207" y2="58" stroke="#1E8E5A" stroke-width="1.6"/>
+        <text x="200" y="102" text-anchor="middle" font-weight="600">Start timer</text>
+        <text x="200" y="118" text-anchor="middle" fill="#59647A" font-size="10.5">à un moment donné</text>
+        <!-- start message -->
+        <circle cx="330" cy="55" r="22" fill="#E7F5EE" stroke="#1E8E5A" stroke-width="2.5"/>
+        <rect x="319" y="47" width="22" height="15" fill="none" stroke="#1E8E5A" stroke-width="1.6"/>
+        <path d="M319 47 L330 56 L341 47" fill="none" stroke="#1E8E5A" stroke-width="1.6"/>
+        <text x="330" y="102" text-anchor="middle" font-weight="600">Start message</text>
+        <text x="330" y="118" text-anchor="middle" fill="#59647A" font-size="10.5">à la réception d'une demande</text>
+        <!-- end -->
+        <circle cx="460" cy="55" r="22" fill="#FBECEA" stroke="#C6423C" stroke-width="5"/>
+        <text x="460" y="102" text-anchor="middle" font-weight="600">End event</text>
+        <text x="460" y="118" text-anchor="middle" fill="#59647A" font-size="10.5">fin (trait épais)</text>
+        <!-- activity -->
+        <rect x="545" y="33" width="150" height="46" rx="10" fill="#FFFFFF" stroke="#2F6DB5" stroke-width="2.2"/>
+        <text x="620" y="61" text-anchor="middle" font-weight="600" fill="#2F6DB5">Évaluer la demande</text>
+        <text x="620" y="102" text-anchor="middle" font-weight="600">Activité</text>
+        <text x="620" y="118" text-anchor="middle" fill="#59647A" font-size="10.5">travail = verbe + complément</text>
+        <!-- sequence flow -->
+        <line x1="80" y1="185" x2="300" y2="185" stroke="#1C2534" stroke-width="2.4" marker-end="url(#arr)"/>
+        <text x="190" y="172" text-anchor="middle" font-weight="600">Sequence flow</text>
+        <text x="190" y="207" text-anchor="middle" fill="#59647A" font-size="10.5">ordre d'exécution — trait plein, DANS un même pool</text>
+        <!-- message flow -->
+        <line x1="420" y1="185" x2="660" y2="185" stroke="#59647A" stroke-width="2.2" stroke-dasharray="7 5" marker-end="url(#arr2)"/>
+        <circle cx="420" cy="185" r="4.5" fill="#fff" stroke="#59647A" stroke-width="2"/>
+        <text x="540" y="172" text-anchor="middle" font-weight="600">Message flow</text>
+        <text x="540" y="207" text-anchor="middle" fill="#59647A" font-size="10.5">échange d'information — pointillés, ENTRE deux pools</text>
+      </g>
+    </svg>
+    <figcaption>Les symboles de base — S. 44 à 52</figcaption>
+  </figure>
+
+  <p>Règles à connaître par cœur :</p>
+  <ul class="clean">
+    <li>Tout modèle BPMN doit inclure <strong>au moins un start event</strong> — il peut en inclure <strong>plusieurs</strong> (plusieurs sources de démarrage possibles) <span class="slideref">S. 44</span>.</li>
+    <li>Tout modèle doit inclure <strong>au moins un end event</strong> — il peut en inclure <strong>plusieurs pour distinguer les différentes façons dont un processus se termine</strong> (ex. demande acceptée / demande refusée) <span class="slideref">S. 45</span>. À l'examen : <em>un end event distinct par état final distinct</em>, et on le nomme (« Demande refusée »).</li>
+    <li>Une <strong>activité</strong> = une unité de <em>travail</em>, réalisée par une personne, un système, ou les deux <span class="slideref">S. 46</span>. Convention de nommage : <strong>verbe + complément</strong> (« Vérifier la complétude », pas « Vérification »).</li>
+  </ul>
+
+  <h2><svg class="glyph" width="26" height="26" viewBox="0 0 26 26"><rect x="2" y="4" width="22" height="18" rx="2" fill="#fff" stroke="#1C2534" stroke-width="2"/><line x1="8" y1="4" x2="8" y2="22" stroke="#1C2534" stroke-width="2"/></svg>2.4 · Pools, lanes, black box & la règle d'or <span class="slideref">S. 48–54</span></h2>
+  <ul class="clean">
+    <li><strong>Pool</strong> : représente un <strong>acteur ou un processus</strong> (ex. « Citoyen », « Administration communale », « Police locale »).</li>
+    <li><strong>Swimlane (corridor)</strong> : une <strong>sous-division au sein d'un pool</strong> (ex. dans le pool « SPW » : lanes « Employé » et « Chef de service »).</li>
+    <li><strong>Black box</strong> : un pool dont on <strong>ne détaille pas les activités</strong> — on ne montre que ses <em>interactions</em> (message flows) avec les autres pools <span class="slideref">S. 50</span>. Typiquement le pool « Citoyen » quand l'énoncé dit qu'on se concentre sur l'administration.</li>
+  </ul>
+
+  <div class="callout co-trap"><span class="co-tag">La règle d'or — piège n°1 de l'examen</span>
+    <p><span class="slideref">S. 53</span> Le <strong>sequence flow</strong> (trait plein) connecte des éléments <strong>au sein d'un même pool</strong> — y compris <em>à travers plusieurs swimlanes de ce pool</em>. Il est <strong>interdit</strong> de connecter deux pools distincts par un sequence flow. Le <strong>message flow</strong> (pointillés) connecte des éléments <strong>entre pools distincts</strong> — et jamais deux éléments du même pool. Les deux coexistent dans un même modèle.</p>
+    <p><strong>Réflexe examen :</strong> à chaque flèche que vous tracez, demandez-vous « est-ce que je franchis une frontière de pool ? » Oui → pointillés (message). Non → trait plein (séquence). Une lane n'est <em>pas</em> une frontière de pool !</p>
+  </div>
+
+  <div class="quiz" data-answer="2">
+    <div class="quiz-head"><svg width="16" height="16" viewBox="0 0 16 16"><path d="M8 1 L15 8 L8 15 L1 8 Z" fill="#D9930D"/></svg>Checkpoint 2.2 — le piège classique</div>
+    <div class="quiz-body">
+      <div class="quiz-q">Dans le pool « SPW », l'activité « Évaluer l'éligibilité » (lane <em>Employé</em>) est suivie de « Vérifier le dossier » (lane <em>Chef de service</em>). Quel connecteur ?</div>
+      <div class="quiz-opts">
+        <button>Un message flow, car ce sont deux personnes différentes</button>
+        <button>Un message flow, car le dossier est transféré</button>
+        <button>Un sequence flow, car les deux lanes appartiennent au même pool</button>
+        <button>Les deux à la fois</button>
+      </div>
+      <div class="quiz-fb"></div>
+      <div class="quiz-exp" hidden><b>Sequence flow.</b> Les lanes sont des subdivisions <em>internes</em> d'un pool : le flux de séquence peut les traverser. Le message flow est réservé aux échanges <em>entre pools distincts</em> (S. 53). C'est LE piège récurrent des exercices de modélisation.</div>
+    </div>
+  </div>
+
+  <h2><svg class="glyph" width="26" height="26" viewBox="0 0 26 26"><circle cx="13" cy="13" r="9" fill="#fff" stroke="#D9930D" stroke-width="2"/><circle cx="13" cy="13" r="6" fill="none" stroke="#D9930D" stroke-width="1.5"/></svg>2.5 · Événements intermédiaires <span class="slideref">S. 55–61</span></h2>
+  <p>Un événement intermédiaire représente quelque chose qui <strong>« arrive » pendant le processus</strong> mais qui n'est <strong>pas du travail</strong> (contrairement à une activité). Il peut <strong>interrompre, déclencher ou rediriger</strong> le flux, et se produit <strong>« à un instant T », instantanément</strong> — pas de durée d'exécution. Graphiquement : un <strong>double cercle</strong>.</p>
+
+  <div class="callout co-def"><span class="co-tag">Throw vs Catch — distinction clé</span>
+    <p><strong>Throw</strong> (lancer) = le processus <em>signale</em> qu'un événement s'est produit (ex. « j'envoie un message »). <strong>Catch</strong> (attraper) = le processus <em>attend</em> qu'un événement se produise (ex. « j'attends la réception d'un message »). Convention graphique : le symbole intérieur est <strong>rempli/noirci pour throw</strong>, <strong>vide pour catch</strong>.</p>
+  </div>
+
+  <figure>
+    <svg viewBox="0 0 740 190" role="img" aria-label="Événements intermédiaires timer et message, send et receive tasks">
+      <g font-family="Inter,sans-serif" font-size="12" fill="#1C2534">
+        <!-- timer catch -->
+        <circle cx="75" cy="55" r="22" fill="#fff" stroke="#D9930D" stroke-width="2"/>
+        <circle cx="75" cy="55" r="17" fill="none" stroke="#D9930D" stroke-width="1.5"/>
+        <circle cx="75" cy="55" r="11" fill="none" stroke="#1C2534" stroke-width="1.5"/>
+        <line x1="75" y1="55" x2="75" y2="47" stroke="#1C2534" stroke-width="1.5"/><line x1="75" y1="55" x2="81" y2="58" stroke="#1C2534" stroke-width="1.5"/>
+        <text x="75" y="102" text-anchor="middle" font-weight="600">Timer (catch only)</text>
+        <text x="75" y="118" text-anchor="middle" fill="#59647A" font-size="10.5">« 1 semaine », « 8h00 »,</text>
+        <text x="75" y="132" text-anchor="middle" fill="#59647A" font-size="10.5">« 1er lundi du mois »</text>
+        <!-- message catch -->
+        <circle cx="235" cy="55" r="22" fill="#fff" stroke="#D9930D" stroke-width="2"/>
+        <circle cx="235" cy="55" r="17" fill="none" stroke="#D9930D" stroke-width="1.5"/>
+        <rect x="225" y="48" width="20" height="14" fill="#fff" stroke="#1C2534" stroke-width="1.5"/>
+        <path d="M225 48 L235 56 L245 48" fill="none" stroke="#1C2534" stroke-width="1.5"/>
+        <text x="235" y="102" text-anchor="middle" font-weight="600">Message CATCH</text>
+        <text x="235" y="118" text-anchor="middle" fill="#59647A" font-size="10.5">enveloppe vide :</text>
+        <text x="235" y="132" text-anchor="middle" fill="#59647A" font-size="10.5">attendre la réception</text>
+        <!-- message throw -->
+        <circle cx="395" cy="55" r="22" fill="#fff" stroke="#D9930D" stroke-width="2"/>
+        <circle cx="395" cy="55" r="17" fill="none" stroke="#D9930D" stroke-width="1.5"/>
+        <rect x="385" y="48" width="20" height="14" fill="#1C2534" stroke="#1C2534" stroke-width="1.5"/>
+        <path d="M385 48 L395 56 L405 48" fill="none" stroke="#fff" stroke-width="1.5"/>
+        <text x="395" y="102" text-anchor="middle" font-weight="600">Message THROW</text>
+        <text x="395" y="118" text-anchor="middle" fill="#59647A" font-size="10.5">enveloppe noircie :</text>
+        <text x="395" y="132" text-anchor="middle" fill="#59647A" font-size="10.5">signaler un envoi</text>
+        <!-- send/receive task -->
+        <rect x="500" y="30" width="105" height="44" rx="9" fill="#fff" stroke="#2F6DB5" stroke-width="2"/>
+        <rect x="508" y="38" width="16" height="11" fill="#1C2534"/><path d="M508 38 L516 45 L524 38" fill="none" stroke="#fff" stroke-width="1.4"/>
+        <text x="562" y="58" text-anchor="middle" font-size="11" font-weight="600" fill="#2F6DB5">Send task</text>
+        <rect x="620" y="30" width="105" height="44" rx="9" fill="#fff" stroke="#2F6DB5" stroke-width="2"/>
+        <rect x="628" y="38" width="16" height="11" fill="#fff" stroke="#1C2534" stroke-width="1.4"/><path d="M628 38 L636 45 L644 38" fill="none" stroke="#1C2534" stroke-width="1.4"/>
+        <text x="683" y="58" text-anchor="middle" font-size="11" font-weight="600" fill="#2F6DB5">Receive task</text>
+        <text x="612" y="102" text-anchor="middle" font-weight="600">Alternative : tâches d'envoi / réception</text>
+        <text x="612" y="118" text-anchor="middle" fill="#59647A" font-size="10.5">Send = envoie un message (throw) après complétion ·</text>
+        <text x="612" y="132" text-anchor="middle" fill="#59647A" font-size="10.5">Receive = attend un message (catch) avant de commencer</text>
+      </g>
+    </svg>
+    <figcaption>Événements intermédiaires (S. 57–61) — throw = rempli, catch = vide</figcaption>
+  </figure>
+
+  <div class="callout co-trap"><span class="co-tag">Piège</span>
+    <p>Le <strong>timer</strong> peut <strong>seulement être « catch »</strong> — jamais « throw » <span class="slideref">S. 57</span>. Logique : on peut <em>attendre</em> qu'un moment arrive, mais un processus ne « lance » pas le temps. Si un QCM propose un « timer throw », c'est faux par définition.</p>
+  </div>
+
+  <h2><svg class="glyph" width="26" height="26" viewBox="0 0 26 26"><path d="M13 2 L24 13 L13 24 L2 13 Z" fill="#FCF3E0" stroke="#D9930D" stroke-width="2"/></svg>2.6 · Les gateways <span class="slideref">S. 62–65</span></h2>
+  <p>Les gateways <strong>contrôlent la divergence ou la convergence du flux</strong>. Ils ne représentent <strong>pas du travail</strong> mais la <strong>« logique » du processus</strong>. Trois usages <span class="slideref">S. 62</span> : <em>choisir un chemin</em>, <em>attendre plusieurs flux</em>, <em>déclencher des branches en parallèle</em>.</p>
+
+  <figure>
+    <svg viewBox="0 0 760 330" role="img" aria-label="Les trois gateways : XOR, AND, event-based">
+      <g font-family="Inter,sans-serif" font-size="11.5" fill="#1C2534">
+        <!-- XOR -->
+        <path d="M85 60 L120 95 L85 130 L50 95 Z" fill="#FCF3E0" stroke="#D9930D" stroke-width="2.2"/>
+        <path d="M74 84 L96 106 M96 84 L74 106" stroke="#D9930D" stroke-width="3" stroke-linecap="round"/>
+        <line x1="120" y1="95" x2="175" y2="60" stroke="#1C2534" stroke-width="2" marker-end="url(#arr)"/>
+        <line x1="120" y1="95" x2="175" y2="130" stroke="#1C2534" stroke-width="2" marker-end="url(#arr)"/>
+        <rect x="178" y="44" width="88" height="32" rx="8" fill="#fff" stroke="#2F6DB5" stroke-width="1.8"/><text x="222" y="64" text-anchor="middle" font-size="10.5">Accepter</text>
+        <rect x="178" y="114" width="88" height="32" rx="8" fill="#fff" stroke="#2F6DB5" stroke-width="1.8"/><text x="222" y="134" text-anchor="middle" font-size="10.5">Refuser</text>
+        <text x="132" y="52" font-size="10" fill="#59647A" font-style="italic">oui</text>
+        <text x="132" y="146" font-size="10" fill="#59647A" font-style="italic">non</text>
+        <text x="155" y="185" text-anchor="middle" font-weight="700" font-size="13">XOR — « Ou exclusif »</text>
+        <text x="155" y="203" text-anchor="middle" fill="#59647A" font-size="10.5">Plusieurs branches possibles,</text>
+        <text x="155" y="217" text-anchor="middle" fill="#59647A" font-size="10.5">UNE SEULE suivie par instance.</text>
+        <text x="155" y="231" text-anchor="middle" fill="#59647A" font-size="10.5">Conditions sur les branches.</text>
+        <!-- AND -->
+        <path d="M400 60 L435 95 L400 130 L365 95 Z" fill="#FCF3E0" stroke="#D9930D" stroke-width="2.2"/>
+        <path d="M400 78 L400 112 M383 95 L417 95" stroke="#D9930D" stroke-width="3" stroke-linecap="round"/>
+        <line x1="435" y1="95" x2="488" y2="60" stroke="#1C2534" stroke-width="2" marker-end="url(#arr)"/>
+        <line x1="435" y1="95" x2="488" y2="130" stroke="#1C2534" stroke-width="2" marker-end="url(#arr)"/>
+        <rect x="491" y="44" width="110" height="32" rx="8" fill="#fff" stroke="#2F6DB5" stroke-width="1.8"/><text x="546" y="64" text-anchor="middle" font-size="10">Vérifier cadastre</text>
+        <rect x="491" y="114" width="110" height="32" rx="8" fill="#fff" stroke="#2F6DB5" stroke-width="1.8"/><text x="546" y="64" text-anchor="middle" font-size="10"></text><text x="546" y="134" text-anchor="middle" font-size="10">Vérifier registre nat.</text>
+        <text x="480" y="185" text-anchor="middle" font-weight="700" font-size="13">AND — « Parallel »</text>
+        <text x="480" y="203" text-anchor="middle" fill="#59647A" font-size="10.5">TOUTES les branches doivent être</text>
+        <text x="480" y="217" text-anchor="middle" fill="#59647A" font-size="10.5">complétées (parallélisation autorisée)</text>
+        <text x="480" y="231" text-anchor="middle" fill="#59647A" font-size="10.5">avant d'avancer. Pas de conditions.</text>
+        <!-- Event based -->
+        <path d="M240 250 L272 282 L240 314 L208 282 Z" fill="#FCF3E0" stroke="#D9930D" stroke-width="2.2"/>
+        <circle cx="240" cy="282" r="13" fill="none" stroke="#D9930D" stroke-width="1.6"/>
+        <path d="M240 273 L248 279 L245 289 L235 289 L232 279 Z" fill="none" stroke="#D9930D" stroke-width="1.6"/>
+        <line x1="272" y1="282" x2="330" y2="258" stroke="#1C2534" stroke-width="2" marker-end="url(#arr)"/>
+        <line x1="272" y1="282" x2="330" y2="308" stroke="#1C2534" stroke-width="2" marker-end="url(#arr)"/>
+        <circle cx="352" cy="253" r="16" fill="#fff" stroke="#D9930D" stroke-width="1.8"/><circle cx="352" cy="253" r="12" fill="none" stroke="#D9930D" stroke-width="1.2"/><rect x="345" y="248" width="14" height="10" fill="#fff" stroke="#1C2534" stroke-width="1.2"/><path d="M345 248 L352 254 L359 248" fill="none" stroke="#1C2534" stroke-width="1.2"/>
+        <circle cx="352" cy="310" r="16" fill="#fff" stroke="#D9930D" stroke-width="1.8"/><circle cx="352" cy="310" r="12" fill="none" stroke="#D9930D" stroke-width="1.2"/><circle cx="352" cy="310" r="7" fill="none" stroke="#1C2534" stroke-width="1.2"/><line x1="352" y1="310" x2="352" y2="305" stroke="#1C2534" stroke-width="1.2"/><line x1="352" y1="310" x2="356" y2="312" stroke="#1C2534" stroke-width="1.2"/>
+        <text x="415" y="257" font-size="10.5" fill="#59647A">réponse reçue → chemin A</text>
+        <text x="415" y="314" font-size="10.5" fill="#59647A">délai écoulé → chemin B (relance)</text>
+        <text x="240" y="338" text-anchor="middle" font-weight="700" font-size="13">Event-based gateway</text>
+        <text x="470" y="338" text-anchor="middle" fill="#59647A" font-size="10.5">Attente de plusieurs événements : on suit le chemin du PREMIER événement attrapé (catch).</text>
+      </g>
+    </svg>
+    <figcaption>Les 3 gateways du cours (S. 63–65) — XOR = décision, AND = parallélisme, event-based = course entre événements</figcaption>
+  </figure>
+
+  <table>
+    <tr><th>Gateway</th><th>Symbole</th><th>Logique</th><th>Quand l'utiliser (mots-clés dans l'énoncé)</th></tr>
+    <tr><td><strong>XOR</strong> (ou exclusif)</td><td>Losange avec ✕</td><td>Plusieurs branches, <strong>une seule</strong> est suivie, selon une condition</td><td>« si… alors… sinon », « accepte ou refuse », « décide si »</td></tr>
+    <tr><td><strong>AND</strong> (parallel)</td><td>Losange avec +</td><td><strong>Toutes</strong> les branches sont suivies / doivent être complétées avant d'avancer</td><td>« en parallèle », « en même temps », « les deux vérifications »</td></tr>
+    <tr><td><strong>Event-based</strong></td><td>Losange avec pentagone cerclé</td><td>Attend plusieurs événements ; suit <strong>le premier qui survient</strong></td><td>« attend la réponse ; si pas de réponse après X jours… »</td></tr>
+  </table>
+
+  <div class="callout co-exam"><span class="co-tag">À l'examen — réflexes de modélisation</span>
+    <p>① Un XOR de <em>séparation</em> (split) pose une question → nommez le gateway avec la question (« Données conformes ? ») et les branches avec les réponses (« oui »/« non »). ② Ce qu'un AND ouvre, un AND referme (synchronisation) avant de continuer. ③ Un gateway ne fait <em>pas</em> de travail : « vérifier le dossier » est une activité <em>avant</em> le gateway, pas le gateway lui-même.</p>
+  </div>
+
+  <div class="quiz" data-answer="1">
+    <div class="quiz-head"><svg width="16" height="16" viewBox="0 0 16 16"><path d="M8 1 L15 8 L8 15 L1 8 Z" fill="#D9930D"/></svg>Checkpoint 2.3</div>
+    <div class="quiz-body">
+      <div class="quiz-q">« L'employé consulte les données du cadastre <em>et</em> celles du registre de population, les deux vérifications pouvant se faire en même temps. Une fois les deux terminées, il statue. » Quels gateways ?</div>
+      <div class="quiz-opts">
+        <button>XOR split puis XOR join</button>
+        <button>AND split puis AND join</button>
+        <button>Event-based gateway</button>
+        <button>Aucun gateway : deux activités en séquence</button>
+      </div>
+      <div class="quiz-fb"></div>
+      <div class="quiz-exp" hidden><b>AND split + AND join.</b> « En même temps » = parallélisme (AND split) ; « une fois les deux terminées » = synchronisation (AND join). L'AND join force l'attente de toutes les branches (S. 64).</div>
+    </div>
+  </div>
+
+  <div class="quiz" data-answer="2">
+    <div class="quiz-head"><svg width="16" height="16" viewBox="0 0 16 16"><path d="M8 1 L15 8 L8 15 L1 8 Z" fill="#D9930D"/></svg>Checkpoint 2.4</div>
+    <div class="quiz-body">
+      <div class="quiz-q">« Après l'envoi du rappel, l'administration attend la réponse du citoyen. Si aucune réponse n'arrive dans les 30 jours, le dossier est classé sans suite. » Quel élément modélise le mieux cette attente ?</div>
+      <div class="quiz-opts">
+        <button>Un XOR gateway avec conditions « réponse » / « pas de réponse »</button>
+        <button>Un AND gateway suivi d'un timer</button>
+        <button>Un event-based gateway suivi d'un message catch (réponse) et d'un timer catch (30 jours)</button>
+      </div>
+      <div class="quiz-fb"></div>
+      <div class="quiz-exp" hidden><b>Event-based gateway.</b> On attend <em>deux événements</em> en course : le message (réponse) ou le timer (30 jours). Le premier attrapé détermine le chemin (S. 65). Un XOR classique choisit sur base de <em>données connues</em>, pas d'événements à venir.</div>
+    </div>
+  </div>
+
+  <h2><svg class="glyph" width="26" height="26" viewBox="0 0 26 26"><rect x="2" y="3" width="22" height="9" rx="2" fill="#E9F1FA" stroke="#2F6DB5" stroke-width="1.6"/><rect x="2" y="14" width="22" height="9" rx="2" fill="#FCF3E0" stroke="#D9930D" stroke-width="1.6"/></svg>2.7 · Un modèle complet : le changement de domicile <span class="slideref">S. 69, 119</span></h2>
+  <p>L'exercice fil rouge du cours. Relisez l'énoncé <span class="slideref">S. 69</span>, puis étudiez le modèle : trois pools (Citoyen en black box, Administration communale, Police locale), des message flows entre pools, un XOR pour la décision.</p>
+
+  <figure>
+    <svg viewBox="0 0 780 430" role="img" aria-label="Modèle BPMN du changement de domicile">
+      <g font-family="Inter,sans-serif" font-size="10.5" fill="#1C2534">
+        <!-- Pool citoyen (black box) -->
+        <rect x="30" y="15" width="720" height="52" fill="#fff" stroke="#1C2534" stroke-width="2"/>
+        <rect x="30" y="15" width="26" height="52" fill="#1C2534"/>
+        <text x="43" y="41" transform="rotate(-90 43 41)" text-anchor="middle" fill="#fff" font-size="9" font-weight="600" letter-spacing="1">CITOYEN</text>
+        <text x="400" y="45" text-anchor="middle" fill="#59647A" font-style="italic">black box — activités non détaillées, uniquement les interactions</text>
+        <!-- Pool administration -->
+        <rect x="30" y="95" width="720" height="180" fill="#fff" stroke="#1C2534" stroke-width="2"/>
+        <rect x="30" y="95" width="26" height="180" fill="#1C2534"/>
+        <text x="43" y="185" transform="rotate(-90 43 185)" text-anchor="middle" fill="#fff" font-size="9" font-weight="600" letter-spacing="1">ADMIN. COMMUNALE</text>
+        <!-- start message -->
+        <circle cx="95" cy="150" r="15" fill="#E7F5EE" stroke="#1E8E5A" stroke-width="2"/>
+        <rect x="88" y="145" width="14" height="10" fill="#fff" stroke="#1E8E5A" stroke-width="1.2"/><path d="M88 145 L95 151 L102 145" fill="none" stroke="#1E8E5A" stroke-width="1.2"/>
+        <text x="95" y="182" text-anchor="middle" font-size="9">Demande reçue</text>
+        <rect x="130" y="128" width="105" height="42" rx="8" fill="#fff" stroke="#2F6DB5" stroke-width="1.8"/>
+        <text x="182" y="146" text-anchor="middle">Transférer demande</text><text x="182" y="159" text-anchor="middle">à la police locale</text>
+        <!-- catch rapport -->
+        <circle cx="290" cy="150" r="15" fill="#fff" stroke="#D9930D" stroke-width="1.8"/><circle cx="290" cy="150" r="11" fill="none" stroke="#D9930D" stroke-width="1.2"/>
+        <rect x="284" y="146" width="12" height="8" fill="#fff" stroke="#1C2534" stroke-width="1"/><path d="M284 146 L290 151 L296 146" fill="none" stroke="#1C2534" stroke-width="1"/>
+        <text x="290" y="182" text-anchor="middle" font-size="9">Réception rapport</text>
+        <!-- XOR -->
+        <path d="M355 132 L373 150 L355 168 L337 150 Z" fill="#FCF3E0" stroke="#D9930D" stroke-width="1.8"/>
+        <path d="M349 144 L361 156 M361 144 L349 156" stroke="#D9930D" stroke-width="2" stroke-linecap="round"/>
+        <text x="355" y="123" text-anchor="middle" font-size="9" font-style="italic">Domicile validé ?</text>
+        <!-- oui branch -->
+        <rect x="410" y="110" width="100" height="40" rx="8" fill="#fff" stroke="#2F6DB5" stroke-width="1.8"/>
+        <text x="460" y="127" text-anchor="middle">Mettre à jour</text><text x="460" y="140" text-anchor="middle">registre national</text>
+        <rect x="545" y="110" width="100" height="40" rx="8" fill="#fff" stroke="#2F6DB5" stroke-width="1.8"/>
+        <text x="595" y="127" text-anchor="middle">Notifier</text><text x="595" y="140" text-anchor="middle">l'acceptation</text>
+        <circle cx="690" cy="130" r="13" fill="#FBECEA" stroke="#C6423C" stroke-width="3.5"/>
+        <text x="690" y="158" text-anchor="middle" font-size="9">Demande acceptée</text>
+        <!-- non branch -->
+        <rect x="410" y="205" width="100" height="40" rx="8" fill="#fff" stroke="#2F6DB5" stroke-width="1.8"/>
+        <text x="460" y="222" text-anchor="middle">Notifier</text><text x="460" y="235" text-anchor="middle">le refus</text>
+        <circle cx="565" cy="225" r="13" fill="#FBECEA" stroke="#C6423C" stroke-width="3.5"/>
+        <text x="565" y="253" text-anchor="middle" font-size="9">Demande refusée</text>
+        <!-- flows admin -->
+        <line x1="110" y1="150" x2="127" y2="150" stroke="#1C2534" stroke-width="1.8" marker-end="url(#arr)"/>
+        <line x1="235" y1="150" x2="272" y2="150" stroke="#1C2534" stroke-width="1.8" marker-end="url(#arr)"/>
+        <line x1="305" y1="150" x2="334" y2="150" stroke="#1C2534" stroke-width="1.8" marker-end="url(#arr)"/>
+        <path d="M355 132 L355 130 Q355 130 360 130 L406 130" fill="none" stroke="#1C2534" stroke-width="1.8" marker-end="url(#arr)"/>
+        <text x="385" y="124" font-size="9" font-style="italic" fill="#59647A">oui</text>
+        <path d="M355 168 L355 225 L406 225" fill="none" stroke="#1C2534" stroke-width="1.8" marker-end="url(#arr)"/>
+        <text x="360" y="196" font-size="9" font-style="italic" fill="#59647A">non</text>
+        <line x1="510" y1="130" x2="541" y2="130" stroke="#1C2534" stroke-width="1.8" marker-end="url(#arr)"/>
+        <line x1="645" y1="130" x2="674" y2="130" stroke="#1C2534" stroke-width="1.8" marker-end="url(#arr)"/>
+        <line x1="510" y1="225" x2="549" y2="225" stroke="#1C2534" stroke-width="1.8" marker-end="url(#arr)"/>
+        <!-- Pool police -->
+        <rect x="30" y="300" width="720" height="115" fill="#fff" stroke="#1C2534" stroke-width="2"/>
+        <rect x="30" y="300" width="26" height="115" fill="#1C2534"/>
+        <text x="43" y="357" transform="rotate(-90 43 357)" text-anchor="middle" fill="#fff" font-size="9" font-weight="600" letter-spacing="1">POLICE LOCALE</text>
+        <circle cx="120" cy="355" r="15" fill="#E7F5EE" stroke="#1E8E5A" stroke-width="2"/>
+        <rect x="113" y="350" width="14" height="10" fill="#fff" stroke="#1E8E5A" stroke-width="1.2"/><path d="M113 350 L120 356 L127 350" fill="none" stroke="#1E8E5A" stroke-width="1.2"/>
+        <text x="120" y="387" text-anchor="middle" font-size="9">Demande d'enquête reçue</text>
+        <rect x="175" y="334" width="110" height="42" rx="8" fill="#fff" stroke="#2F6DB5" stroke-width="1.8"/>
+        <text x="230" y="352" text-anchor="middle">Visiter le nouveau</text><text x="230" y="365" text-anchor="middle">domicile</text>
+        <rect x="320" y="334" width="120" height="42" rx="8" fill="#fff" stroke="#2F6DB5" stroke-width="1.8"/>
+        <text x="380" y="352" text-anchor="middle">Encoder & transférer</text><text x="380" y="365" text-anchor="middle">le rapport</text>
+        <circle cx="490" cy="355" r="13" fill="#FBECEA" stroke="#C6423C" stroke-width="3.5"/>
+        <text x="490" y="386" text-anchor="middle" font-size="9">Enquête clôturée</text>
+        <line x1="135" y1="355" x2="172" y2="355" stroke="#1C2534" stroke-width="1.8" marker-end="url(#arr)"/>
+        <line x1="285" y1="355" x2="317" y2="355" stroke="#1C2534" stroke-width="1.8" marker-end="url(#arr)"/>
+        <line x1="440" y1="355" x2="474" y2="355" stroke="#1C2534" stroke-width="1.8" marker-end="url(#arr)"/>
+        <!-- message flows -->
+        <line x1="95" y1="67" x2="95" y2="133" stroke="#59647A" stroke-width="1.8" stroke-dasharray="6 4" marker-end="url(#arr2)"/>
+        <text x="100" y="86" font-size="9" fill="#59647A">demande</text>
+        <line x1="182" y1="170" x2="120" y2="338" stroke="#59647A" stroke-width="1.8" stroke-dasharray="6 4" marker-end="url(#arr2)"/>
+        <text x="120" y="255" font-size="9" fill="#59647A">demande d'enquête</text>
+        <line x1="380" y1="334" x2="292" y2="167" stroke="#59647A" stroke-width="1.8" stroke-dasharray="6 4" marker-end="url(#arr2)"/>
+        <text x="345" y="255" font-size="9" fill="#59647A">rapport</text>
+        <line x1="595" y1="110" x2="595" y2="69" stroke="#59647A" stroke-width="1.8" stroke-dasharray="6 4" marker-end="url(#arr2)"/>
+        <text x="600" y="92" font-size="9" fill="#59647A">acceptation</text>
+        <line x1="460" y1="205" x2="460" y2="69" stroke="#59647A" stroke-width="1.8" stroke-dasharray="6 4" marker-end="url(#arr2)"/>
+        <text x="465" y="92" font-size="9" fill="#59647A">refus</text>
+      </g>
+    </svg>
+    <figcaption>Changement de domicile (as-is, d'après S. 69/119) — observez : sequence flows DANS les pools, message flows ENTRE pools, 1 end event par état final</figcaption>
+  </figure>
+
+  <h3>Méthode de construction (à réutiliser à l'examen)</h3>
+  <ol class="clean">
+    <li><strong>Délimiter la portée</strong> : qui sont les pools ? Lesquels sont des black boxes (l'énoncé dit « les détails peuvent être omis ») ? Quel événement démarre ? Quels états finaux ?</li>
+    <li><strong>Tracer le chemin idéal</strong> (happy path) : la séquence d'activités si tout se passe bien, en nommant chaque activité <em>verbe + complément</em>.</li>
+    <li><strong>Ajouter les décisions et exceptions</strong> : chaque « si » de l'énoncé devient un XOR ; chaque « en parallèle » un AND ; chaque « attend X ou Y » un event-based gateway. Un end event <em>nommé</em> par état final.</li>
+    <li><strong>Ajouter les échanges entre pools</strong> : les message flows en pointillés (et vérifier qu'aucun sequence flow ne franchit un pool !).</li>
+  </ol>
+
+  <details class="reveal">
+    <summary>✎ Exercice complet — Réduction du précompte immobilier <span class="slideref" style="background:#fff">S. 71–72</span></summary>
+    <div class="rv-q">Modélisez le processus sur papier (pools : Citoyen, SPW avec lanes Employé / Chef de service, SPF Finances ; Citoyen et SPF Finances en black box). Comparez ensuite avec la démarche ci-dessous.</div>
+    <div class="rv-a">
+      <p><strong>1. Portée.</strong> Start : message catch « Demande de réduction reçue » (pool SPW, lane Employé). Trois états finaux côté SPW : <em>Demande refusée</em> (données incorrectes), <em>Demande refusée</em> (non éligible / non confirmé), <em>Demande acceptée</em>. Pools Citoyen et SPF Finances = black boxes (l'énoncé le dit explicitement).</p>
+      <p><strong>2. Lane Employé.</strong> « Vérifier la véracité des données » : consulter le cadastre <em>et</em> le registre de population → deux vérifications que l'on peut modéliser en <strong>AND split/join</strong> (ou une activité globale si on reste simple). Puis <strong>XOR « Données conformes ? »</strong> → <em>non</em> : « Notifier le refus et fermer le dossier » → end « Demande refusée » (+ message flow de refus vers le pool Citoyen). → <em>oui</em> : « Évaluer l'éligibilité » (revenu cadastral < 745 €, un seul bien, domicilié au 1er janvier). <strong>XOR « Éligible ? »</strong> → <em>non</em> : notifier refus → end. → <em>oui</em> : transférer le dossier au chef de service (sequence flow vers la lane Chef de service — même pool !).</p>
+      <p><strong>3. Lane Chef de service.</strong> « Revérifier le dossier complet ». <strong>XOR « Éligibilité confirmée ? »</strong> → <em>non</em> : retour vers la lane Employé, « Notifier le refus », end « Demande refusée ». → <em>oui</em> : <strong>AND split</strong> car l'énoncé dit « en parallèle » : (a) le chef de service « Transfère le dossier au SPF Finances » (message flow pointillé vers le pool SPF Finances) ; (b) l'employé « Notifie le citoyen de l'acceptation » (message flow vers Citoyen) et ferme le dossier → end « Demande acceptée ».</p>
+      <p><strong>4. Auto-contrôle</strong> : ✔ aucun sequence flow ne franchit un pool ✔ chaque XOR porte une question et des branches nommées ✔ le « en parallèle » de l'énoncé est bien un AND ✔ un end event nommé par état final ✔ chaque activité = verbe + complément.</p>
+    </div>
+  </details>
+
+  <div class="prio">
+    <h3>⭐ Priorités de la partie 2</h3>
+    <table>
+      <tr><th>À maîtriser</th><th>Importance</th></tr>
+      <tr><td>Règle d'or sequence flow (même pool, lanes traversables) vs message flow (pools distincts)</td><td class="stars">★★★</td></tr>
+      <tr><td>Les 3 gateways (XOR / AND / event-based) : logique + mots-clés de l'énoncé qui les déclenchent</td><td class="stars">★★★</td></tr>
+      <tr><td>Savoir modéliser un processus complet type « changement de domicile » ou « précompte » (pools, black box, lanes, ends nommés)</td><td class="stars">★★★</td></tr>
+      <tr><td>Événements : start (simple/timer/message), end multiples, intermédiaires throw vs catch, timer = catch only</td><td class="stars">★★★</td></tr>
+      <tr><td>Perspectives externe / interne / SI + avantages-inconvénients + « les deux »</td><td class="stars">★★</td></tr>
+      <tr><td>Send task / receive task comme alternative aux événements message</td><td class="stars">★</td></tr>
+    </table>
+  </div>
+
+  <button class="nextbtn" data-goto="p3">Partie 3 : Analyse & amélioration →</button>
+</section>
+
+<!-- ============================================================ PAGE 3 -->
+<section class="page" id="p3">
+  <div class="eyebrow">Partie 3 · Slides 73–124</div>
+  <h1>Analyse et amélioration des processus</h1>
+  <p class="lead">Phases <strong>analyse</strong> et <strong>re-design</strong> du cycle de vie. On dispose du modèle as-is : où sont les problèmes (analyse), et comment obtenir le to-be (amélioration incrémentale ou redesign) ?</p>
+
+  <h2><svg class="glyph" width="26" height="26" viewBox="0 0 26 26"><line x1="2" y1="13" x2="24" y2="13" stroke="#2F6DB5" stroke-width="2.5"/><line x1="8" y1="5" x2="13" y2="13" stroke="#2F6DB5" stroke-width="2"/><line x1="8" y1="21" x2="13" y2="13" stroke="#2F6DB5" stroke-width="2"/><line x1="16" y1="5" x2="21" y2="13" stroke="#2F6DB5" stroke-width="2"/></svg>3.1 · Analyse des causes : le diagramme « Fishbone » <span class="slideref">S. 76</span></h2>
+  <p>Le diagramme <strong>en arêtes de poisson</strong> (Ishikawa) est une technique de <strong>« root-cause analysis »</strong> : partir d'un problème (la tête du poisson) et remonter systématiquement à ses causes profondes, classées par familles — les <strong>6M</strong>.</p>
+
+  <figure>
+    <svg viewBox="0 0 740 250" role="img" aria-label="Diagramme fishbone">
+      <g font-family="Inter,sans-serif" font-size="12" fill="#1C2534">
+        <line x1="60" y1="130" x2="600" y2="130" stroke="#1C2534" stroke-width="3"/>
+        <path d="M600 130 L640 105 L700 105 L700 155 L640 155 Z" fill="#FBECEA" stroke="#C6423C" stroke-width="2"/>
+        <text x="655" y="127" text-anchor="middle" font-size="11" font-weight="700">Problème</text>
+        <text x="655" y="142" text-anchor="middle" font-size="9.5">délais trop longs</text>
+        <g stroke="#2F6DB5" stroke-width="2">
+          <line x1="180" y1="40" x2="240" y2="130"/><line x1="360" y1="40" x2="420" y2="130"/><line x1="500" y1="40" x2="560" y2="130"/>
+          <line x1="180" y1="220" x2="240" y2="130"/><line x1="360" y1="220" x2="420" y2="130"/><line x1="500" y1="220" x2="560" y2="130"/>
+        </g>
+        <g font-weight="700" font-size="12.5" text-anchor="middle">
+          <text x="172" y="30">Main-d'œuvre</text><text x="356" y="30">Méthodes</text><text x="498" y="30">Machines / SI</text>
+          <text x="172" y="238">Matériaux</text><text x="356" y="238">Mesure</text><text x="498" y="238">Milieu</text>
+        </g>
+        <g font-size="10" fill="#59647A" text-anchor="end">
+          <text x="222" y="72">manque de formation</text>
+          <text x="404" y="72">double encodage</text>
+          <text x="546" y="72">systèmes non intégrés</text>
+          <text x="222" y="192">dossiers incomplets</text>
+          <text x="404" y="192">pas de KPI suivi</text>
+          <text x="546" y="192">silos entre services</text>
+        </g>
+      </g>
+    </svg>
+    <figcaption>Fishbone / Ishikawa (S. 76) — le problème à droite, les familles de causes en arêtes</figcaption>
+  </figure>
+
+  <h2><svg class="glyph" width="26" height="26" viewBox="0 0 26 26"><path d="M4 20 L10 12 L15 16 L22 5" fill="none" stroke="#1E8E5A" stroke-width="2.5" stroke-linecap="round"/></svg>3.2 · L'approche Lean <span class="slideref">S. 77–83</span></h2>
+  <blockquote>« Tout ce que nous faisons, c'est examiner le délai entre le moment où le client passe sa commande et celui où nous encaissons l'argent. Et nous réduisons ce délai en éliminant les gaspillages qui n'apportent aucune valeur ajoutée. »<cite>Taiichi Ohno (Toyota) — <span class="slideref">S. 78</span></cite></blockquote>
+  <p>Les <strong>5 étapes Lean</strong> <span class="slideref">S. 79</span> : ① analyser quel processus génère de la <strong>valeur pour le client</strong> → ② examiner <strong>comment</strong> cette valeur est créée (quelles étapes en ajoutent, lesquelles non) → ③ <strong>éliminer le gaspillage</strong> (principe de flux) → ④ <strong>réorganiser le flux</strong> pour ne garder que les étapes à valeur → ⑤ <strong>remettre en question en continu</strong>.</p>
+
+  <h3>L'analyse de valeur ajoutée : VA / BVA / NVA <span class="slideref">S. 80–83</span></h3>
+  <p>On <strong>décompose le processus en étapes</strong> (avant la tâche, la tâche, après la tâche) puis on <strong>classe chaque étape</strong> :</p>
+  <table>
+    <tr><th>Catégorie</th><th>Définition & test</th><th>Exemples du cours</th><th>Que faire ?</th></tr>
+    <tr><td><span class="pill va">VA</span><strong>Value Adding</strong></td><td>Apporte de la valeur <em>au client</em>. Tests : le client paierait-il pour cette étape ? La reconnaîtrait-il comme nécessaire ? Percevrait-il moins de valeur sans elle ?</td><td>Usinage des matériaux d'une voiture ; traitement d'une demande de permis de construire par l'agent d'urbanisme</td><td>Maximiser, fluidifier</td></tr>
+    <tr><td><span class="pill bva">BVA</span><strong>Business Value Adding</strong></td><td>Nécessaire ou utile <em>au fonctionnement de l'entreprise</em> : revenus, réduction de risques, <strong>conformité réglementaire</strong></td><td>Admission à l'université : vérifier la complétude du dossier, la validité des diplômes et des tests linguistiques</td><td>Réduire au strict nécessaire (mais ne pas supprimer)</td></tr>
+    <tr><td><span class="pill nva">NVA</span><strong>Non Value Adding</strong></td><td>Tout le reste : <strong>transferts</strong>, changements de contexte, <strong>temps d'attente</strong>, retards, <strong>retouches/corrections</strong></td><td>Matériaux qui attendent en entrepôt ; demande de permis dans une pile sur un bureau ; patient qui attend 2 semaines un rendez-vous</td><td>Éliminer</td></tr>
+  </table>
+
+  <div class="callout co-simple"><span class="co-tag">En clair</span>
+    <p>Pour classer une étape, posez deux questions dans l'ordre : ① <em>« Le client la paierait-il ? »</em> → oui = <strong>VA</strong>. ② Sinon : <em>« L'entreprise en a-t-elle besoin (loi, risque, revenus) ? »</em> → oui = <strong>BVA</strong>, non = <strong>NVA</strong>. Les attentes et transferts sont <em>presque toujours</em> NVA.</p>
+  </div>
+
+  <div class="classify" id="clf-vbn">
+    <div class="quiz-head"><svg width="16" height="16" viewBox="0 0 16 16"><path d="M8 1 L15 8 L8 15 L1 8 Z" fill="#D9930D"/></svg>Exercice — classez VA / BVA / NVA <span style="opacity:.7;letter-spacing:.05em;text-transform:none">(inspiré de l'exercice « location de matériel », S. 84)</span></div>
+    <div class="cl-body">
+      <div class="cl-item" data-ans="NVA" data-exp="Un transfert de formulaire entre deux bureaux = transfert pur, classique NVA.">
+        <div class="cl-txt">1. Le formulaire de location rempli est déposé dans la bannette et attend d'être porté au bureau du dépôt.</div>
+        <div class="cl-btns"><button>VA</button><button>BVA</button><button>NVA</button></div>
+        <div class="cl-exp"></div>
+      </div>
+      <div class="cl-item" data-ans="VA" data-exp="C'est le cœur du service demandé : le client (le chantier) paie précisément pour obtenir la machine opérationnelle.">
+        <div class="cl-txt">2. Le technicien prépare et livre la machine demandée sur le chantier.</div>
+        <div class="cl-btns"><button>VA</button><button>BVA</button><button>NVA</button></div>
+        <div class="cl-exp"></div>
+      </div>
+      <div class="cl-item" data-ans="BVA" data-exp="Le client ne paierait pas pour ce contrôle, mais l'entreprise en a besoin (réduction de risque, conformité) : BVA.">
+        <div class="cl-txt">3. Le service financier vérifie la solvabilité du client avant de valider la location.</div>
+        <div class="cl-btns"><button>VA</button><button>BVA</button><button>NVA</button></div>
+        <div class="cl-exp"></div>
+      </div>
+      <div class="cl-item" data-ans="NVA" data-exp="Retouche / correction d'un défaut (rework) : catégorie NVA par excellence (S. 83).">
+        <div class="cl-txt">4. La demande contenait une erreur de référence : l'employé doit ré-encoder le bon de commande.</div>
+        <div class="cl-btns"><button>VA</button><button>BVA</button><button>NVA</button></div>
+        <div class="cl-exp"></div>
+      </div>
+    </div>
+  </div>
+
+  <h2><svg class="glyph" width="26" height="26" viewBox="0 0 26 26"><path d="M13 2 L23 9 L19 22 L7 22 L3 9 Z" fill="#FCF3E0" stroke="#D9930D" stroke-width="2"/></svg>3.3 · Sur quoi améliorer ? Les 5 dimensions <span class="slideref">S. 90–92</span></h2>
+  <p>Avant d'améliorer, il faut savoir <em>sur quels critères</em> évaluer un processus. Le cours en donne <strong>cinq</strong> — les quatre du « Devil's Quadrangle » classique, plus la <strong>durabilité</strong> (Seidel, Recker & vom Brocke, 2012). L'idée du « pentagone du diable » : ces dimensions sont <strong>en tension</strong> — améliorer l'une dégrade souvent les autres.</p>
+
+  <figure>
+    <svg viewBox="0 0 560 330" role="img" aria-label="Pentagone des dimensions de performance">
+      <g font-family="Inter,sans-serif" fill="#1C2534">
+        <polygon points="280,40 452,165 386,290 174,290 108,165" fill="#E9F1FA" stroke="#2F6DB5" stroke-width="2.5"/>
+        <polygon points="280,110 375,180 339,250 221,250 185,180" fill="#FCF3E0" stroke="#D9930D" stroke-width="1.6" stroke-dasharray="5 4"/>
+        <g font-weight="700" font-size="14" text-anchor="middle">
+          <text x="280" y="28">Temps</text>
+          <text x="490" y="168">Coût</text>
+          <text x="400" y="315">Qualité</text>
+          <text x="160" y="315">Flexibilité</text>
+          <text x="66" y="168">Durabilité</text>
+        </g>
+        <g font-size="10.5" fill="#59647A" text-anchor="middle">
+          <text x="280" y="150">Tirer sur une dimension</text>
+          <text x="280" y="165">déforme les autres :</text>
+          <text x="280" y="180" font-style="italic">réduire le temps peut</text>
+          <text x="280" y="195" font-style="italic">augmenter le coût ou</text>
+          <text x="280" y="210" font-style="italic">dégrader la qualité</text>
+        </g>
+      </g>
+    </svg>
+    <figcaption>Les 5 dimensions en tension (S. 90–92) — le « pentagone du diable »</figcaption>
+  </figure>
+
+  <table>
+    <tr><th>Dimension</th><th>Définition</th><th>Objectif</th></tr>
+    <tr><td><strong>Coût</strong> (Cost)</td><td>Ressources consommées : main-d'œuvre, outils, énergie, achats…</td><td>Faire mieux à budget maîtrisé</td></tr>
+    <tr><td><strong>Temps</strong> (Time)</td><td>Durée d'exécution et délais : cycle time, temps d'attente, time-to-deliver</td><td>Réduire les délais</td></tr>
+    <tr><td><strong>Qualité</strong> (Quality)</td><td>Conformité et fiabilité des résultats : erreurs, défauts, satisfaction client, respect des règles</td><td>Zéro défaut / meilleure valeur perçue</td></tr>
+    <tr><td><strong>Flexibilité</strong> (Flexibility)</td><td>Capacité à gérer la variété et le changement : exceptions, personnalisation, pics de demande, changements réglementaires</td><td>S'adapter sans exploser coût/temps/qualité</td></tr>
+    <tr><td><strong>Durabilité</strong> (Sustainability)</td><td>Impact environnemental, social et de gouvernance (<strong>ESG</strong>) : empreinte carbone, déchets, conditions de travail</td><td>Réduire les impacts négatifs sans dégrader excessivement les 4 autres</td></tr>
+  </table>
+
+  <div class="quiz" data-answer="3">
+    <div class="quiz-head"><svg width="16" height="16" viewBox="0 0 16 16"><path d="M8 1 L15 8 L8 15 L1 8 Z" fill="#D9930D"/></svg>Checkpoint 3.1</div>
+    <div class="quiz-body">
+      <div class="quiz-q">Une administration automatise le contrôle des demandes : plus rapide et moins cher, mais le système ne sait traiter que les cas standards et rejette tout dossier atypique vers une file manuelle engorgée. Quelle dimension a-t-elle sacrifiée ?</div>
+      <div class="quiz-opts">
+        <button>Le coût</button>
+        <button>Le temps</button>
+        <button>La durabilité</button>
+        <button>La flexibilité</button>
+      </div>
+      <div class="quiz-fb"></div>
+      <div class="quiz-exp" hidden><b>La flexibilité</b> : la capacité à gérer la <em>variété</em> (exceptions, cas atypiques). Illustration parfaite du pentagone du diable : gains en temps/coût, perte en flexibilité.</div>
+    </div>
+  </div>
+
+  <h2><svg class="glyph" width="26" height="26" viewBox="0 0 26 26"><path d="M4 22 L4 12 M10 22 L10 8 M16 22 L16 14 M22 22 L22 4" stroke="#1E8E5A" stroke-width="3" stroke-linecap="round"/></svg>3.4 · Deux voies d'amélioration <span class="slideref">S. 93–94</span></h2>
+  <div class="grid2">
+    <div class="card">
+      <h3 style="margin-top:0;color:var(--start)">Amélioration incrémentale</h3>
+      <p style="font-size:.9rem">Optimiser le processus <strong>tel qu'il existe</strong> · ajustements <strong>incrémentaux et progressifs</strong> · <strong>faibles risques</strong>, changements ciblés.</p>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0;color:var(--end)">Process Redesign</h3>
+      <p style="font-size:.9rem">Repenser les processus <strong>en profondeur, parfois en repartant de 0</strong> · changements majeurs : nouveaux rôles, nouvelles technologies · <strong>plus risqué, mais gains potentiels plus importants</strong>.</p>
+    </div>
+  </div>
+
+  <h3>Les 6 heuristiques d'amélioration incrémentale <span class="slideref">S. 94</span></h3>
+  <ol class="clean">
+    <li><strong>Parallélisme</strong> : activités en parallèle plutôt qu'en séquence ;</li>
+    <li><strong>Composition d'activités</strong> : éviter la décomposition extrême (réduire le context-switching) ;</li>
+    <li><strong>Élimination d'activités</strong> : supprimer les activités inutiles ;</li>
+    <li><strong>Empower</strong> : donner du pouvoir de décision aux travailleurs ;</li>
+    <li><strong>Assignation flexible</strong> : si plusieurs ressources sont disponibles, choisir la plus <em>spécialisée</em> pour garder les ressources « génériques » libres ;</li>
+    <li><strong>Automatisation</strong> des activités opérationnelles.</li>
+  </ol>
+
+  <h2><svg class="glyph" width="26" height="26" viewBox="0 0 26 26"><path d="M5 21 Q13 3 21 21" fill="none" stroke="#C6423C" stroke-width="2.5"/><circle cx="13" cy="8" r="3" fill="#C6423C"/></svg>3.5 · Les 7 principes de redesign de Hammer <span class="slideref">S. 95–118</span></h2>
+  <p>Le cours consacre <strong>24 slides</strong> à ces principes, chacun illustré par un cas belge du secteur public — c'est un signal fort d'importance pour l'examen. Pour chaque principe, mémorisez : <strong>l'idée + l'exemple + ce qui se passe si on ne l'applique pas</strong>.</p>
+
+  <table>
+    <tr><th style="width:42%">Principe</th><th>Idée clé</th><th>Exemple du cours</th></tr>
+    <tr><td><strong>1. Organisation autour des résultats, pas des tâches</strong></td><td>Concevoir autour du résultat final, pas d'une succession de tâches fragmentées. Solution générique : le <strong>gestionnaire de cas</strong> unique qui coordonne de bout en bout.</td><td>Changement de statut professionnel : le citoyen doit coordonner lui-même caisse d'assurances sociales, organisme de paiement, employeur, ONEM, FOREM → processus bloqué, personne responsable du suivi global.</td></tr>
+    <tr><td><strong>2. Faire exécuter le processus par ceux qui utilisent les résultats</strong></td><td>La collecte des informations doit être réalisée par celui qui <em>utilise</em> le résultat, pas par un intermédiaire.</td><td>Le C4 : produit par l'employeur, utilisé par l'organisme de paiement/ONEM — mais c'est le <em>citoyen</em> qui court après. → C'est l'ONEM qui devrait collecter le C4 ; le citoyen signale juste la fin de contrat.</td></tr>
+    <tr><td><strong>3. Intégrer le traitement de l'information au travail de sa production</strong></td><td>L'information doit être encodée, vérifiée et traitée <em>au moment où elle est produite</em>.</td><td>Changement de domicile : la demande arrive directement à la police qui, si elle est valide, met <em>directement</em> à jour le registre et la carte d'identité (au lieu des allers-retours commune ↔ police).</td></tr>
+    <tr><td><strong>4. Traiter les ressources distribuées géographiquement comme si elles étaient centralisées</strong></td><td>Mutualiser des ressources dispersées via la technologie.</td><td>Appels d'urgence 112 : un centre par province = files séparées, surcharge locale sans solution → numéro unique + centres interconnectés via ASTRID + charge mutualisée.</td></tr>
+    <tr><td><strong>5. Lier les activités parallèles au lieu d'intégrer leurs résultats</strong></td><td>Faire travailler ensemble les acteurs parallèles <em>pendant</em> l'analyse (temps réel), pas intégrer des avis contradictoires à la fin.</td><td>Permis d'environnement : chaque service analyse en silo, avis contradictoires/incomplets à intégrer → plateforme numérique commune, analyses visibles en temps réel, incohérences résolues <em>avant</em> la décision.</td></tr>
+    <tr><td><strong>6. Mettre les points de décision là où le travail est effectué, et intégrer le contrôle dans le processus</strong></td><td>Décisions courantes prises là où l'information est produite ; contrôles intégrés au flux, pas a posteriori. Éviter les chaînes hiérarchiques inutiles.</td><td>Aide sociale au CPAS : rapport → chef de service → Comité Spécial → retour = lent. Amélioré : le travailleur social octroie directement (délégation), contrôles automatisés intégrés à l'outil, le CSSS n'intervient que pour les cas exceptionnels.</td></tr>
+    <tr><td><strong>7. Capturer l'information une seule fois et à la source</strong></td><td>Toute information collectée <strong>une seule fois</strong>, au moment de sa première apparition, dans le <strong>système source légitime</strong>. Évite ressaisie, incohérences, erreurs, charge inutile.</td><td>Précompte immobilier : toutes les données demandées au citoyen (revenu cadastral, adresse, identité, composition de ménage, domiciliation, autres biens) sont <em>déjà connues</em> de l'administration (cadastre, registre national, registre de population).</td></tr>
+  </table>
+
+  <div class="callout co-exam"><span class="co-tag">À l'examen</span>
+    <p>Format très probable : <em>une situation → identifier le(s) principe(s) de Hammer violé(s) ou applicable(s), et proposer le redesign</em>. Indices de reconnaissance rapides : « le citoyen doit coordonner » → P1 · « X court après un document produit par Y » → P2 · « l'info est encodée puis re-traitée ailleurs » → P3 · « ressources locales séparées / files distinctes » → P4 · « avis contradictoires intégrés à la fin » → P5 · « validation hiérarchique systématique / contrôle a posteriori » → P6 · « le citoyen fournit des infos déjà connues » → P7.</p>
+  </div>
+
+  <div class="quiz" data-answer="0">
+    <div class="quiz-head"><svg width="16" height="16" viewBox="0 0 16 16"><path d="M8 1 L15 8 L8 15 L1 8 Z" fill="#D9930D"/></svg>Checkpoint 3.2 — reconnaître le principe</div>
+    <div class="quiz-body">
+      <div class="quiz-q">Pour obtenir une prime de rénovation, un ménage doit contacter séparément la Région, la commune et le gestionnaire de réseau, et relancer chacun pour connaître l'avancement. Quel principe de Hammer appliquer en priorité ?</div>
+      <div class="quiz-opts">
+        <button>P1 — Organisation autour des résultats : désigner un gestionnaire de cas unique</button>
+        <button>P4 — Centraliser les ressources géographiquement distribuées</button>
+        <button>P7 — Capturer l'information une seule fois à la source</button>
+        <button>P3 — Intégrer le traitement de l'information à sa production</button>
+      </div>
+      <div class="quiz-fb"></div>
+      <div class="quiz-exp" hidden><b>P1.</b> Le symptôme « le demandeur coordonne lui-même plusieurs entités et personne n'a la vue globale » = exactement le cas « changement de statut professionnel » → gestionnaire de cas (S. 96–100).</div>
+    </div>
+  </div>
+
+  <div class="quiz" data-answer="2">
+    <div class="quiz-head"><svg width="16" height="16" viewBox="0 0 16 16"><path d="M8 1 L15 8 L8 15 L1 8 Z" fill="#D9930D"/></svg>Checkpoint 3.3</div>
+    <div class="quiz-body">
+      <div class="quiz-q">Un formulaire d'inscription demande au citoyen sa composition de ménage, pourtant disponible dans le registre national. Quel principe est violé ?</div>
+      <div class="quiz-opts">
+        <button>P2 — Faire exécuter par ceux qui utilisent les résultats</button>
+        <button>P5 — Lier les activités parallèles</button>
+        <button>P7 — Capturer l'information une seule fois et à la source</button>
+        <button>P6 — Points de décision là où le travail est effectué</button>
+      </div>
+      <div class="quiz-fb"></div>
+      <div class="quiz-exp" hidden><b>P7.</b> L'information existe déjà dans son système source légitime (registre national) : la redemander = ressaisie, risque d'incohérences et charge inutile (S. 116–118, cas du précompte immobilier).</div>
+    </div>
+  </div>
+
+  <h2><svg class="glyph" width="26" height="26" viewBox="0 0 26 26"><rect x="3" y="3" width="9" height="9" fill="#E7F5EE" stroke="#1E8E5A" stroke-width="1.6"/><rect x="14" y="3" width="9" height="9" fill="#FCF3E0" stroke="#D9930D" stroke-width="1.6"/><rect x="3" y="14" width="9" height="9" fill="#E9F1FA" stroke="#2F6DB5" stroke-width="1.6"/><rect x="14" y="14" width="9" height="9" fill="#FBECEA" stroke="#C6423C" stroke-width="1.6"/></svg>3.6 · Prioriser les idées : le tableau PICK <span class="slideref">S. 124</span></h2>
+  <p>Une fois les idées d'amélioration générées, le tableau <strong>PICK</strong> les positionne selon deux axes : le <strong>bénéfice</strong> (payoff, vertical) et la <strong>difficulté</strong> de mise en œuvre (horizontal).</p>
+
+  <figure>
+    <svg viewBox="0 0 560 330" role="img" aria-label="Matrice PICK">
+      <g font-family="Inter,sans-serif" font-size="13" fill="#1C2534">
+        <rect x="90" y="40" width="200" height="115" fill="#E7F5EE" stroke="#1E8E5A" stroke-width="2"/>
+        <rect x="290" y="40" width="200" height="115" fill="#FCF3E0" stroke="#D9930D" stroke-width="2"/>
+        <rect x="90" y="155" width="200" height="115" fill="#E9F1FA" stroke="#2F6DB5" stroke-width="2"/>
+        <rect x="290" y="155" width="200" height="115" fill="#FBECEA" stroke="#C6423C" stroke-width="2"/>
+        <g font-weight="700" font-size="16" text-anchor="middle">
+          <text x="190" y="92" fill="#1E8E5A">Implement</text>
+          <text x="390" y="92" fill="#B07508">Challenge</text>
+          <text x="190" y="207" fill="#2F6DB5">Possible</text>
+          <text x="390" y="207" fill="#C6423C">Kill</text>
+        </g>
+        <g font-size="10.5" fill="#59647A" text-anchor="middle">
+          <text x="190" y="112">gain élevé, facile</text><text x="190" y="126">→ faire tout de suite</text>
+          <text x="390" y="112">gain élevé, difficile</text><text x="390" y="126">→ à challenger, projet</text>
+          <text x="190" y="227">gain faible, facile</text><text x="190" y="241">→ si temps disponible</text>
+          <text x="390" y="227">gain faible, difficile</text><text x="390" y="241">→ abandonner</text>
+        </g>
+        <text x="290" y="300" text-anchor="middle" font-weight="600" font-size="12">Difficulté →  (Easy … Hard)</text>
+        <text x="48" y="160" text-anchor="middle" font-weight="600" font-size="12" transform="rotate(-90 48 160)">Payoff →  (Low … High)</text>
+      </g>
+    </svg>
+    <figcaption>Matrice PICK (S. 124) — P·I·C·K = Possible · Implement · Challenge · Kill</figcaption>
+  </figure>
+
+  <div class="callout co-trap"><span class="co-tag">Piège</span>
+    <p>L'acronyme PICK se lit dans l'ordre <strong>Possible (bas-gauche) · Implement (haut-gauche) · Challenge (haut-droite) · Kill (bas-droite)</strong>. Erreur fréquente : placer « Implement » en bas ou inverser Challenge/Possible. Retenez : <em>Implement = le meilleur coin (gain fort, facile)</em>, <em>Kill = le pire (gain faible, difficile)</em>.</p>
+  </div>
+
+  <div class="quiz" data-answer="1">
+    <div class="quiz-head"><svg width="16" height="16" viewBox="0 0 16 16"><path d="M8 1 L15 8 L8 15 L1 8 Z" fill="#D9930D"/></svg>Checkpoint 3.4</div>
+    <div class="quiz-body">
+      <div class="quiz-q">Une idée à très fort bénéfice mais nécessitant de refondre trois systèmes et de modifier un décret se place dans la case…</div>
+      <div class="quiz-opts">
+        <button>Implement</button>
+        <button>Challenge</button>
+        <button>Possible</button>
+        <button>Kill</button>
+      </div>
+      <div class="quiz-fb"></div>
+      <div class="quiz-exp" hidden><b>Challenge</b> : payoff élevé + difficulté élevée. On ne la fait pas tout de suite, on la « challenge » comme projet structurant.</div>
+    </div>
+  </div>
+
+  <div class="prio">
+    <h3>⭐ Priorités de la partie 3</h3>
+    <table>
+      <tr><th>À maîtriser</th><th>Importance</th></tr>
+      <tr><td>Les 7 principes de Hammer : idée + exemple + savoir les <em>reconnaître dans une situation</em></td><td class="stars">★★★</td></tr>
+      <tr><td>VA / BVA / NVA : définitions, critères de test, exemples — et savoir classer des étapes</td><td class="stars">★★★</td></tr>
+      <tr><td>Les 5 dimensions (coût, temps, qualité, flexibilité, durabilité) et leurs tensions (pentagone du diable)</td><td class="stars">★★★</td></tr>
+      <tr><td>Amélioration incrémentale vs redesign (risque/gain) + les 6 heuristiques</td><td class="stars">★★</td></tr>
+      <tr><td>Matrice PICK (les 4 cases au bon endroit) et fishbone (principe de la root-cause)</td><td class="stars">★★</td></tr>
+      <tr><td>Les 5 étapes Lean + citation d'Ohno</td><td class="stars">★</td></tr>
+    </table>
+  </div>
+
+  <button class="nextbtn" data-goto="p4">Partie 4 : Surveillance des processus →</button>
+</section>
+
+<!-- ============================================================ PAGE 4 -->
+<section class="page" id="p4">
+  <div class="eyebrow">Partie 4 · Slides 125–133</div>
+  <h1>Surveillance des processus</h1>
+  <p class="lead">Dernière phase du cycle de vie : le <strong>suivi (monitoring)</strong>. Le processus tourne — performe-t-il comme prévu ? Respecte-t-il les règles ? Les insights produits ici <strong>relancent le cycle</strong>.</p>
+
+  <div class="callout co-def"><span class="co-tag">Définition (Dumas et al., 2013)</span>
+    <p>« La surveillance des processus métier consiste à utiliser les <strong>données générées par l'exécution</strong> d'un processus métier afin d'extraire des informations sur les <strong>performances réelles</strong> du processus et de vérifier sa <strong>conformité</strong> aux normes, politiques ou réglementations. » <span class="slideref">S. 126</span></p>
+  </div>
+  <p>Deux idées dans cette définition : ① <strong>performance</strong> (le processus est-il rapide, efficace, de qualité ?) et ② <strong>conformité</strong> (respecte-t-il les règles attendues ?). Et une matière première : les <strong>données d'exécution</strong> — pas des impressions, pas des interviews, mais les traces réelles laissées dans les systèmes d'information.</p>
+
+  <h2><svg class="glyph" width="26" height="26" viewBox="0 0 26 26"><circle cx="13" cy="13" r="10" fill="none" stroke="#2F6DB5" stroke-width="2"/><circle cx="13" cy="13" r="3" fill="#2F6DB5"/><line x1="13" y1="13" x2="19" y2="7" stroke="#2F6DB5" stroke-width="2"/></svg>4.1 · Surveillance hors ligne vs en ligne <span class="slideref">S. 127</span></h2>
+  <div class="grid2">
+    <div class="card">
+      <h3 style="margin-top:0;color:var(--task)">Hors ligne (offline)</h3>
+      <p style="font-size:.9rem;margin-bottom:6px">Analyse des <strong>cas terminés</strong>, a posteriori :</p>
+      <ul class="clean" style="font-size:.88rem">
+        <li>Image des <strong>performances</strong> du processus ;</li>
+        <li><strong>Raisons</strong> des mauvaises performances ;</li>
+        <li><strong>Variations indésirables</strong> des performances ;</li>
+        <li><strong>Conformité</strong> par rapport à des règles ou comportements attendus.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0;color:var(--start)">En ligne (online)</h3>
+      <p style="font-size:.9rem;margin-bottom:6px">Suivi des <strong>cas en cours</strong>, en temps réel :</p>
+      <ul class="clean" style="font-size:.88rem">
+        <li>Images <strong>en temps réel</strong> des performances des cas en cours ;</li>
+        <li>Génération d'<strong>alarmes</strong> ou déclenchement de <strong>contre-mesures</strong> quand objectifs/règles ne sont pas respectés ;</li>
+        <li>Exemple du cours : <em>une demande client reste trop longtemps sans réponse</em> → alerte.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="callout co-simple"><span class="co-tag">En clair</span>
+    <p>Hors ligne = <em>l'autopsie</em> (on analyse ce qui est fini pour comprendre et améliorer). En ligne = <em>le monitoring cardiaque</em> (on surveille ce qui vit, pour réagir immédiatement). Le critère de distinction n'est pas l'outil, mais <strong>cas terminés vs cas en cours</strong>.</p>
+  </div>
+
+  <div class="quiz" data-answer="1">
+    <div class="quiz-head"><svg width="16" height="16" viewBox="0 0 16 16"><path d="M8 1 L15 8 L8 15 L1 8 Z" fill="#D9930D"/></svg>Checkpoint 4.1</div>
+    <div class="quiz-body">
+      <div class="quiz-q">Le système envoie automatiquement une alerte au chef de service lorsqu'un dossier de subvention dépasse 30 jours sans traitement. C'est de la surveillance…</div>
+      <div class="quiz-opts">
+        <button>Hors ligne, car on mesure un délai</button>
+        <button>En ligne, car on suit un cas en cours et on déclenche une contre-mesure</button>
+        <button>Ni l'un ni l'autre : c'est du re-design</button>
+      </div>
+      <div class="quiz-fb"></div>
+      <div class="quiz-exp" hidden><b>En ligne.</b> Cas <em>en cours</em> + alarme/contre-mesure en temps réel = exactement l'exemple du slide 127 (« demande client trop longtemps sans réponse »).</div>
+    </div>
+  </div>
+
+  <h2><svg class="glyph" width="26" height="26" viewBox="0 0 26 26"><rect x="3" y="14" width="4" height="8" fill="#2F6DB5"/><rect x="10" y="9" width="4" height="13" fill="#1E8E5A"/><rect x="17" y="4" width="4" height="18" fill="#D9930D"/></svg>4.2 · Les outils : dashboards & process mining <span class="slideref">S. 128–133</span></h2>
+  <p>Le pipeline du slide 128 est simple et à connaître : le <strong>système d'information</strong> qui exécute le processus alimente une <strong>base de données</strong> ; celle-ci produit un <strong>event log</strong> (journal d'événements) ; de là, deux exploitations :</p>
+
+  <figure>
+    <svg viewBox="0 0 740 200" role="img" aria-label="Pipeline de surveillance : SI, base de données, event log, dashboards et process mining">
+      <g font-family="Inter,sans-serif" font-size="12" font-weight="600" fill="#1C2534" text-anchor="middle">
+        <rect x="30" y="75" width="130" height="50" rx="10" fill="#E9F1FA" stroke="#2F6DB5" stroke-width="2"/>
+        <text x="95" y="97">Système</text><text x="95" y="113">d'information</text>
+        <rect x="210" y="75" width="115" height="50" rx="10" fill="#E9F1FA" stroke="#2F6DB5" stroke-width="2"/>
+        <text x="267" y="105">Base de données</text>
+        <rect x="375" y="75" width="105" height="50" rx="10" fill="#FCF3E0" stroke="#D9930D" stroke-width="2"/>
+        <text x="427" y="105">Event log</text>
+        <rect x="545" y="25" width="160" height="50" rx="10" fill="#E7F5EE" stroke="#1E8E5A" stroke-width="2"/>
+        <text x="625" y="55">Dashboards</text>
+        <rect x="545" y="125" width="160" height="50" rx="10" fill="#E7F5EE" stroke="#1E8E5A" stroke-width="2"/>
+        <text x="625" y="155">Process Mining</text>
+        <line x1="160" y1="100" x2="206" y2="100" stroke="#1C2534" stroke-width="2" marker-end="url(#arr)"/>
+        <line x1="325" y1="100" x2="371" y2="100" stroke="#1C2534" stroke-width="2" marker-end="url(#arr)"/>
+        <line x1="480" y1="88" x2="541" y2="55" stroke="#1C2534" stroke-width="2" marker-end="url(#arr)"/>
+        <line x1="480" y1="112" x2="541" y2="145" stroke="#1C2534" stroke-width="2" marker-end="url(#arr)"/>
+        <text x="95" y="150" font-weight="400" font-size="10.5" fill="#59647A">exécute le processus</text>
+        <text x="427" y="150" font-weight="400" font-size="10.5" fill="#59647A">traces d'exécution</text>
+      </g>
+    </svg>
+    <figcaption>Pipeline de surveillance (S. 128) — les données d'exécution alimentent dashboards et process mining</figcaption>
+  </figure>
+
+  <ul class="clean">
+    <li><strong>Dashboards</strong> <span class="slideref">S. 129</span> : tableaux de bord visuels des KPIs (délais moyens, volumes, taux d'erreur…) — la vue « performance » agrégée.</li>
+    <li><strong>Process mining</strong> <span class="slideref">S. 130–133</span> : à partir de l'<strong>event log</strong>, on <em>reconstruit automatiquement le processus tel qu'il s'exécute réellement</em> — et on le compare au modèle théorique.</li>
+  </ul>
+
+  <h3>Pourquoi le process mining ? Les défis de la modélisation <span class="slideref">S. 130</span></h3>
+  <p>Le process mining répond à quatre limites des modèles dessinés à la main — <strong>liste à connaître</strong> :</p>
+  <ol class="clean">
+    <li>Les modèles décrivent une <strong>version idéalisée de la réalité</strong> ;</li>
+    <li>Ils sont souvent <strong>trop détaillés</strong> ;</li>
+    <li>Ils sont <strong>incapables de saisir correctement le comportement humain</strong> ;</li>
+    <li>Leur <strong>niveau d'abstraction est inapproprié</strong>.</li>
+  </ol>
+  <p>En réalité <span class="slideref">S. 131</span>, les processus sont <strong>bien plus complexes</strong> que leurs modèles : le process mining révèle ce « spaghetti » réel (chemins alternatifs, boucles, contournements) que personne n'avait dessiné.</p>
+
+  <div class="callout co-link"><span class="co-tag">Lien avec le chapitre 1</span>
+    <p>Souvenez-vous des <strong>5 qualités d'un modèle</strong> : un modèle est <em>par nature</em> une abstraction — une simplification. Le process mining ne dit pas que modéliser est inutile : il confronte le modèle (l'intention, le « to-be ») à la réalité observée (les données, le « as-is réel »). C'est la boucle DIKW en action : des <strong>données</strong> brutes (event log) → de l'<strong>information</strong> (le processus reconstitué) → de la <strong>connaissance</strong> (écarts, causes) → de la <strong>sagesse</strong> (décisions d'amélioration qui relancent le cycle BPM).</p>
+  </div>
+
+  <div class="quiz" data-answer="2">
+    <div class="quiz-head"><svg width="16" height="16" viewBox="0 0 16 16"><path d="M8 1 L15 8 L8 15 L1 8 Z" fill="#D9930D"/></svg>Checkpoint 4.2</div>
+    <div class="quiz-body">
+      <div class="quiz-q">Quelle est la matière première du process mining ?</div>
+      <div class="quiz-opts">
+        <button>Les modèles BPMN dessinés lors de la découverte</button>
+        <button>Les interviews des employés</button>
+        <button>L'event log : les traces d'exécution enregistrées par les systèmes d'information</button>
+        <button>Les dashboards de KPIs</button>
+      </div>
+      <div class="quiz-fb"></div>
+      <div class="quiz-exp" hidden><b>L'event log.</b> C'est ce qui distingue le process mining de la découverte classique (interviews, ateliers) : il part des <em>données réelles d'exécution</em>, pas des perceptions. Les dashboards sont l'autre exploitation de ce même event log.</div>
+    </div>
+  </div>
+
+  <div class="quiz" data-answer="0">
+    <div class="quiz-head"><svg width="16" height="16" viewBox="0 0 16 16"><path d="M8 1 L15 8 L8 15 L1 8 Z" fill="#D9930D"/></svg>Checkpoint 4.3</div>
+    <div class="quiz-body">
+      <div class="quiz-q">Le process mining révèle que 40 % des dossiers suivent un chemin de contournement jamais dessiné dans le modèle officiel. Quel défi de la modélisation (S. 130) cela illustre-t-il le mieux ?</div>
+      <div class="quiz-opts">
+        <button>Les modèles décrivent une version idéalisée de la réalité</button>
+        <button>Les modèles sont trop détaillés</button>
+        <button>Le niveau d'abstraction est trop élevé</button>
+      </div>
+      <div class="quiz-fb"></div>
+      <div class="quiz-exp" hidden><b>Version idéalisée.</b> Le modèle officiel montre le processus « comme il devrait être » ; la réalité (comportement humain, contournements) est plus complexe — exactement ce que le process mining met en évidence (S. 130–131).</div>
+    </div>
+  </div>
+
+  <h2>Conclusion du chapitre <span class="slideref">S. 135</span></h2>
+  <p>Trois messages du slide de conclusion, à pouvoir restituer : ① pour comprendre et améliorer les processus, il faut une <strong>compréhension commune</strong> (as-is et to-be) par <strong>toutes les parties affectées</strong> ; ② une <strong>notation standard comme BPMN</strong> est un atout essentiel, malgré un coût d'apprentissage initial ; ③ des <strong>modèles simplifiés</strong> pour les travailleurs peuvent être nécessaires — mais une compréhension <strong>détaillée et non-ambiguë</strong> doit exister <em>d'abord</em>.</p>
+
+  <div class="prio">
+    <h3>⭐ Priorités de la partie 4</h3>
+    <table>
+      <tr><th>À maîtriser</th><th>Importance</th></tr>
+      <tr><td>Définition de la surveillance (données d'exécution → performance + conformité)</td><td class="stars">★★★</td></tr>
+      <tr><td>Hors ligne (cas terminés) vs en ligne (cas en cours + alarmes/contre-mesures) — avec l'exemple</td><td class="stars">★★★</td></tr>
+      <tr><td>Process mining : principe (event log → processus réel) + les 4 défis de la modélisation</td><td class="stars">★★</td></tr>
+      <tr><td>Pipeline SI → BD → event log → dashboards / process mining</td><td class="stars">★★</td></tr>
+      <tr><td>Les 3 messages de conclusion</td><td class="stars">★</td></tr>
+    </table>
+  </div>
+
+  <button class="nextbtn" data-goto="p5">Section finale : Examen & entraînement →</button>
+</section>
+
+<!-- ============================================================ PAGE 5 -->
+<section class="page" id="p5">
+  <div class="eyebrow">Synthèse finale · Tout le chapitre</div>
+  <h1>Examen & entraînement</h1>
+  <p class="lead">D'abord la <strong>hiérarchie globale</strong> des priorités du chapitre, puis une <strong>batterie d'exercices d'entraînement</strong> couvrant les formats probables : QCM, vrai/faux à justifier, mise en situation et modélisation.</p>
+
+  <div class="prio">
+    <h3>⭐ Top priorités du chapitre 3 (vue globale)</h3>
+    <table>
+      <tr><th>#</th><th>Sujet</th><th>Format probable</th><th></th></tr>
+      <tr><td>1</td><td><strong>Modéliser un processus complet en BPMN</strong> (pools/black box, lanes, 3 start events, ends nommés, XOR/AND/event-based, règle sequence vs message flow)</td><td>Exercice de modélisation (~40 % de l'examen)</td><td class="stars">★★★</td></tr>
+      <tr><td>2</td><td><strong>Les 7 principes de Hammer</strong> + reconnaître le principe dans une situation & proposer un redesign</td><td>Mise en situation</td><td class="stars">★★★</td></tr>
+      <tr><td>3</td><td><strong>Cycle de vie BPM</strong> : 6 phases dans l'ordre + livrables (as-is / to-be / exécutables)</td><td>Théorie + situationnel</td><td class="stars">★★★</td></tr>
+      <tr><td>4</td><td><strong>VA / BVA / NVA</strong> : critères + classification d'étapes concrètes</td><td>Mini-exercice</td><td class="stars">★★★</td></tr>
+      <tr><td>5</td><td><strong>5 dimensions</strong> de performance (pentagone du diable) + tensions entre elles</td><td>Théorie + situationnel</td><td class="stars">★★★</td></tr>
+      <tr><td>6</td><td>Définitions : processus métier, BPM, surveillance ; hors ligne vs en ligne ; process mining & les 4 défis</td><td>Théorie</td><td class="stars">★★</td></tr>
+      <tr><td>7</td><td>Perspectives interne/externe/SI ; incrémental vs redesign + 6 heuristiques ; PICK ; fishbone ; « automatiser le chaos »</td><td>Théorie + situationnel</td><td class="stars">★★</td></tr>
+    </table>
+  </div>
+
+  <h2>Exercices d'entraînement</h2>
+
+  <h3>Série A — QCM de synthèse</h3>
+
+  <div class="quiz" data-answer="2">
+    <div class="quiz-head"><svg width="16" height="16" viewBox="0 0 16 16"><path d="M8 1 L15 8 L8 15 L1 8 Z" fill="#D9930D"/></svg>A1 · Cycle de vie</div>
+    <div class="quiz-body">
+      <div class="quiz-q">Quel est l'ordre correct des phases du cycle de vie BPM ?</div>
+      <div class="quiz-opts">
+        <button>Découverte → Identification → Analyse → Implémentation → Re-design → Suivi</button>
+        <button>Identification → Analyse → Découverte → Re-design → Implémentation → Suivi</button>
+        <button>Identification → Découverte → Analyse → Re-design → Implémentation → Suivi</button>
+        <button>Analyse → Identification → Découverte → Implémentation → Re-design → Suivi</button>
+      </div>
+      <div class="quiz-fb"></div>
+      <div class="quiz-exp" hidden><b>I-D-A-R-I-S.</b> On identifie <em>quoi</em> traiter, on découvre <em>comment</em> ça marche (as-is), on analyse les problèmes, on redessine (to-be), on implémente (exécutable), on suit — et on recommence.</div>
+    </div>
+  </div>
+
+  <div class="quiz" data-answer="1">
+    <div class="quiz-head"><svg width="16" height="16" viewBox="0 0 16 16"><path d="M8 1 L15 8 L8 15 L1 8 Z" fill="#D9930D"/></svg>A2 · BPMN</div>
+    <div class="quiz-body">
+      <div class="quiz-q">Laquelle de ces affirmations est FAUSSE ?</div>
+      <div class="quiz-opts">
+        <button>Un modèle BPMN peut contenir plusieurs start events</button>
+        <button>Un événement timer peut être de type throw ou catch</button>
+        <button>Un end event distinct peut être utilisé pour chaque façon dont le processus se termine</button>
+        <button>Une black box est un pool dont on ne détaille pas les activités</button>
+      </div>
+      <div class="quiz-fb"></div>
+      <div class="quiz-exp" hidden><b>Le timer est catch only</b> (S. 57) : on peut attendre un moment, jamais le « lancer ». Les trois autres affirmations sont vraies (S. 44, 45, 50).</div>
+    </div>
+  </div>
+
+  <div class="quiz" data-answer="0">
+    <div class="quiz-head"><svg width="16" height="16" viewBox="0 0 16 16"><path d="M8 1 L15 8 L8 15 L1 8 Z" fill="#D9930D"/></svg>A3 · Gateways</div>
+    <div class="quiz-body">
+      <div class="quiz-q">Quelle différence essentielle entre un XOR split et un event-based gateway ?</div>
+      <div class="quiz-opts">
+        <button>Le XOR choisit sur base de données connues du processus ; l'event-based suit le premier événement qui survient</button>
+        <button>Le XOR permet plusieurs chemins simultanés ; l'event-based un seul</button>
+        <button>L'event-based exige des conditions sur chaque branche ; pas le XOR</button>
+      </div>
+      <div class="quiz-fb"></div>
+      <div class="quiz-exp" hidden><b>Exact.</b> XOR = décision immédiate sur base d'une condition évaluable (« éligible ? »). Event-based = attente : le futur décide (message reçu ou délai écoulé). Dans les deux cas, une seule branche est suivie.</div>
+    </div>
+  </div>
+
+  <div class="quiz" data-answer="3">
+    <div class="quiz-head"><svg width="16" height="16" viewBox="0 0 16 16"><path d="M8 1 L15 8 L8 15 L1 8 Z" fill="#D9930D"/></svg>A4 · Lean</div>
+    <div class="quiz-body">
+      <div class="quiz-q">« Vérifier la validité des diplômes lors d'une admission à l'université » est une étape…</div>
+      <div class="quiz-opts">
+        <button>VA, car l'étudiant en bénéficie</button>
+        <button>NVA, car c'est un contrôle</button>
+        <button>NVA, car elle prend du temps</button>
+        <button>BVA, car nécessaire au fonctionnement / à la conformité, sans valeur directe pour le client</button>
+      </div>
+      <div class="quiz-fb"></div>
+      <div class="quiz-exp" hidden><b>BVA</b> — c'est l'exemple exact du slide 82. Le candidat ne « paierait » pas pour ce contrôle, mais l'université en a besoin (conformité, réduction de risque). Attention : un contrôle n'est pas automatiquement NVA !</div>
+    </div>
+  </div>
+
+  <div class="quiz" data-answer="2">
+    <div class="quiz-head"><svg width="16" height="16" viewBox="0 0 16 16"><path d="M8 1 L15 8 L8 15 L1 8 Z" fill="#D9930D"/></svg>A5 · Hammer</div>
+    <div class="quiz-body">
+      <div class="quiz-q">Le numéro unique 112 avec centres interconnectés via ASTRID et charge mutualisée illustre le principe…</div>
+      <div class="quiz-opts">
+        <button>P1 — Organisation autour des résultats</button>
+        <button>P5 — Lier les activités parallèles</button>
+        <button>P4 — Traiter les ressources distribuées géographiquement comme si elles étaient centralisées</button>
+        <button>P6 — Points de décision là où le travail est effectué</button>
+      </div>
+      <div class="quiz-fb"></div>
+      <div class="quiz-exp" hidden><b>P4</b> (S. 107–108). Symptôme : ressources locales séparées (un centre par province, files distinctes, surcharge sans solution) → mutualisation via une porte d'entrée unique et l'interconnexion.</div>
+    </div>
+  </div>
+
+  <div class="quiz" data-answer="1">
+    <div class="quiz-head"><svg width="16" height="16" viewBox="0 0 16 16"><path d="M8 1 L15 8 L8 15 L1 8 Z" fill="#D9930D"/></svg>A6 · Surveillance</div>
+    <div class="quiz-body">
+      <div class="quiz-q">Analyser l'ensemble des dossiers clôturés de 2025 pour comprendre pourquoi certains ont pris plus de 6 mois relève de…</div>
+      <div class="quiz-opts">
+        <button>La surveillance en ligne</button>
+        <button>La surveillance hors ligne</button>
+        <button>Du re-design</button>
+        <button>De l'identification des processus</button>
+      </div>
+      <div class="quiz-fb"></div>
+      <div class="quiz-exp" hidden><b>Hors ligne</b> : cas <em>terminés</em>, recherche des <em>raisons</em> des mauvaises performances (S. 127). En ligne aurait été : alerter pendant que le dossier est encore en cours.</div>
+    </div>
+  </div>
+
+  <h3>Série B — Vrai / Faux à justifier</h3>
+
+  <details class="reveal">
+    <summary>B1 · « Un message flow peut relier deux lanes d'un même pool. »</summary>
+    <div class="rv-q">Vrai ou faux ? Justifiez en une phrase.</div>
+    <div class="rv-a"><p><strong>FAUX.</strong> Un message flow ne peut pas connecter des éléments du même processus/pool <span class="slideref">S. 53</span> ; entre lanes d'un même pool, c'est le <strong>sequence flow</strong> qui s'applique (les lanes ne sont que des subdivisions internes). Le message flow est réservé aux échanges <em>entre pools distincts</em>.</p></div>
+  </details>
+
+  <details class="reveal">
+    <summary>B2 · « Digitaliser un processus améliore automatiquement sa performance. »</summary>
+    <div class="rv-q">Vrai ou faux ? Justifiez avec la référence du cours.</div>
+    <div class="rv-a"><p><strong>FAUX.</strong> Citation de Bill Gates <span class="slideref">S. 13</span> : l'automatisation <em>magnifie</em> ce qui existe — l'efficience d'un bon processus, mais aussi <em>l'inefficience</em> d'un mauvais (« automatiser le chaos », <span class="slideref">S. 22</span>). D'où l'apport n°2 du BPM : maîtriser et optimiser les processus <em>avant</em> la digitalisation.</p></div>
+  </details>
+
+  <details class="reveal">
+    <summary>B3 · « L'amélioration incrémentale est préférable au redesign car elle est moins risquée. »</summary>
+    <div class="rv-q">Vrai ou faux ? Nuancez.</div>
+    <div class="rv-a"><p><strong>Ni vrai ni faux — à nuancer.</strong> L'incrémental est moins risqué (ajustements progressifs, ciblés) mais les gains sont limités ; le redesign est plus risqué mais offre des <strong>gains potentiels plus importants</strong> <span class="slideref">S. 93</span>. Le choix dépend du contexte : ampleur des dysfonctionnements, appétit au risque, moyens. Une réponse d'examen complète présente le trade-off risque/gain plutôt que de trancher absolument.</p></div>
+  </details>
+
+  <details class="reveal">
+    <summary>B4 · « Une activité BPMN peut être réalisée uniquement par un humain. »</summary>
+    <div class="rv-q">Vrai ou faux ?</div>
+    <div class="rv-a"><p><strong>FAUX.</strong> Une activité est une unité de travail réalisée par <strong>une personne, un système, ou une combinaison des deux</strong> <span class="slideref">S. 46</span>. Un pool peut d'ailleurs représenter un acteur <em>ou un processus</em>.</p></div>
+  </details>
+
+  <details class="reveal">
+    <summary>B5 · « À l'étape d'identification, on modélise les processus en détail. »</summary>
+    <div class="rv-q">Vrai ou faux ?</div>
+    <div class="rv-a"><p><strong>FAUX.</strong> L'identification produit un <strong>listing / une carte high-level</strong> avec types et priorités — <em>pas de modélisation détaillée</em> <span class="slideref">S. 28</span> : c'est le rôle de la phase suivante, la <strong>découverte</strong>.</p></div>
+  </details>
+
+  <h3>Série C — Mises en situation</h3>
+
+  <details class="reveal">
+    <summary>C1 · Diagnostic Hammer complet</summary>
+    <div class="rv-q">Pour obtenir une bourse d'études, un étudiant doit : (a) demander une attestation de revenus à ses parents, qui la demandent au SPF Finances ; (b) fournir sa composition de ménage (registre national) ; (c) déposer le tout au service bourses, qui transmet au service juridique pour validation systématique, puis au directeur pour signature ; (d) si un avis diverge entre juridique et direction, le dossier fait des allers-retours. Identifiez <strong>au moins 3 principes de Hammer violés</strong> et proposez le redesign.</div>
+    <div class="rv-a">
+      <p><strong>P7 — Capturer l'information une seule fois à la source</strong> : revenus (SPF Finances) et composition de ménage (registre national) sont <em>déjà connus</em> de l'administration ; le service bourses devrait les récupérer directement à la source au lieu de les faire transiter par l'étudiant.</p>
+      <p><strong>P2 — Faire exécuter par ceux qui utilisent les résultats</strong> : c'est le service bourses (utilisateur des attestations) qui devrait les collecter, pas l'étudiant qui « court après » les documents — analogie directe avec le cas du C4/ONEM.</p>
+      <p><strong>P6 — Points de décision là où le travail est effectué</strong> : la validation juridique <em>systématique</em> + signature du directeur = chaîne hiérarchique et contrôle a posteriori. Redesign : critères d'octroi intégrés dans l'outil (contrôles automatisés), délégation au gestionnaire du dossier, escalade uniquement pour les cas exceptionnels (cf. cas CPAS/CSSS).</p>
+      <p><strong>Bonus P5</strong> : si juridique et direction analysent séparément puis confrontent leurs avis à la fin (allers-retours), on peut lier leurs analyses en temps réel sur une plateforme commune.</p>
+    </div>
+  </details>
+
+  <details class="reveal">
+    <summary>C2 · Pentagone du diable</summary>
+    <div class="rv-q">Une commune impose un contrôle qualité supplémentaire sur chaque dossier avant envoi. Analysez l'impact sur les 5 dimensions.</div>
+    <div class="rv-a">
+      <p><strong>Qualité ↑</strong> (moins d'erreurs en sortie, meilleure conformité). En contrepartie : <strong>Temps ↑</strong> (une étape de plus, file d'attente possible → délais), <strong>Coût ↑</strong> (main-d'œuvre du contrôle). <strong>Flexibilité</strong> : plutôt ↓ (une étape obligatoire de plus rigidifie le flux, surtout en pic de demande). <strong>Durabilité</strong> : impact marginal, éventuellement ↓ si le contrôle implique des impressions/déplacements supplémentaires.</p>
+      <p><em>Le point à démontrer à l'examen :</em> aucune amélioration n'est gratuite — tirer sur une dimension déforme le pentagone <span class="slideref">S. 90–92</span>. On peut aussi noter, en analyse Lean, que ce contrôle est une étape <strong>BVA</strong> (réduction de risque) à maintenir mais à réduire au strict nécessaire — voire une NVA déguisée s'il duplique un contrôle existant.</p>
+    </div>
+  </details>
+
+  <details class="reveal">
+    <summary>C3 · Choisir la bonne phase du cycle</summary>
+    <div class="rv-q">Pour chaque action, indiquez la phase du cycle de vie BPM : ① interviewer les agents pour dessiner le fonctionnement actuel du traitement des primes ; ② dresser la carte des 30 processus de la commune et choisir les 3 prioritaires ; ③ configurer le workflow dans le nouveau logiciel ; ④ mesurer chaque mois le délai moyen de traitement ; ⑤ classer les étapes en VA/BVA/NVA ; ⑥ dessiner la version cible sans double encodage.</div>
+    <div class="rv-a"><p>① <strong>Découverte</strong> (produit l'as-is) · ② <strong>Identification</strong> (liste priorisée) · ③ <strong>Implémentation</strong> (modèles exécutables) · ④ <strong>Suivi</strong> (performance) · ⑤ <strong>Analyse</strong> (insights sur les problèmes — l'analyse VA/BVA/NVA est un outil de cette phase) · ⑥ <strong>Re-design</strong> (produit le to-be).</p></div>
+  </details>
+
+  <h3>Série D — Modélisation BPMN (le gros morceau)</h3>
+
+  <details class="reveal">
+    <summary>D1 · Modélisation guidée — Demande de prime vélo</summary>
+    <div class="rv-q"><p style="font-weight:400">« Le processus démarre lorsqu'un citoyen envoie sa demande de prime vélo à la Région. Un agent vérifie la complétude du dossier. Si le dossier est incomplet, l'agent demande les pièces manquantes au citoyen et attend sa réponse ; si aucune réponse n'arrive dans les 60 jours, le dossier est classé sans suite et le citoyen en est notifié. Une fois le dossier complet, l'agent vérifie <em>en parallèle</em> la facture d'achat et la domiciliation du demandeur. Quand les deux vérifications sont terminées, l'agent décide : si les conditions sont remplies, il octroie la prime et notifie le citoyen (demande acceptée) ; sinon il notifie le refus (demande refusée). On se concentre sur la Région ; le citoyen peut rester en black box. »</p>Modélisez, puis comparez à la correction.</div>
+    <div class="rv-a">
+      <p><strong>Pools :</strong> « Citoyen » (black box) et « Région » (détaillé). Tous les échanges Citoyen ↔ Région = <strong>message flows pointillés</strong>.</p>
+      <p><strong>Pool Région :</strong> ① <strong>Start message</strong> « Demande reçue » → ② activité « Vérifier la complétude du dossier » → ③ <strong>XOR « Dossier complet ? »</strong>. Branche <em>non</em> : activité « Demander les pièces manquantes » (+ message flow sortant) → <strong>event-based gateway</strong> → deux branches en course : <strong>message catch</strong> « Pièces reçues » (retour vers la vérification de complétude — boucle) <em>ou</em> <strong>timer catch</strong> « 60 jours » → « Notifier le classement sans suite » (+ message flow) → <strong>end « Dossier classé sans suite »</strong>.</p>
+      <p>Branche <em>oui</em> : ④ <strong>AND split</strong> → « Vérifier la facture d'achat » ∥ « Vérifier la domiciliation » → <strong>AND join</strong> → ⑤ <strong>XOR « Conditions remplies ? »</strong> → <em>oui</em> : « Octroyer la prime » → « Notifier l'acceptation » (message flow) → <strong>end « Demande acceptée »</strong> · <em>non</em> : « Notifier le refus » (message flow) → <strong>end « Demande refusée »</strong>.</p>
+      <p><strong>Grille d'auto-correction :</strong> ✔ 3 end events nommés (accepté / refusé / sans suite) ✔ « en parallèle… quand les deux terminées » = AND split + AND join ✔ « attend la réponse OU 60 jours » = event-based + message catch + timer catch ✔ aucun sequence flow ne sort du pool Région ✔ activités en verbe + complément ✔ questions sur les XOR, réponses sur les branches.</p>
+    </div>
+  </details>
+
+  <details class="reveal">
+    <summary>D2 · Redesign — Changement de domicile version to-be <span class="slideref" style="background:#fff">S. 119–121</span></summary>
+    <div class="rv-q">Reprenez le processus as-is du changement de domicile (partie 2). Appliquez le principe 3 de Hammer et décrivez le modèle to-be du cours.</div>
+    <div class="rv-a">
+      <p><strong>Redesign (P3 — intégrer le traitement de l'information à sa production)</strong> : dans le to-be <span class="slideref">S. 121</span>, la déclaration du citoyen arrive <strong>directement à la police locale</strong> (start message dans le pool Police). L'agent « Visite le nouveau domicile » puis « Rédige et enregistre le rapport ». <strong>XOR « Domicile validé ? »</strong> : <em>non</em> → « Notifier le refus » → end « Demande refusée » ; <em>oui</em> → transmission à l'administration communale qui « Met à jour le registre national » et « Notifie l'acceptation » → end « Demande acceptée ».</p>
+      <p><strong>Ce que le redesign supprime :</strong> le transfert initial commune → police (NVA pur : l'administration ne faisait que relayer la demande), les temps d'attente associés, et un aller-retour d'information. L'information est traitée là où elle est produite (le constat de l'agent alimente directement la décision et la mise à jour). Gain sur <strong>temps</strong> et <strong>coût</strong> sans perte de <strong>qualité</strong> — un redesign qui « bat » le pentagone du diable en éliminant du gaspillage plutôt qu'en déplaçant la tension.</p>
+    </div>
+  </details>
+
+  <details class="reveal">
+    <summary>D3 · Question de réflexion — perspectives & modélisation</summary>
+    <div class="rv-q">« Un directeur souhaite modéliser uniquement ce qui se passe dans son service pour préparer la digitalisation d'un processus qui traverse quatre services. Que lui répondez-vous ? » (réponse structurée attendue)</div>
+    <div class="rv-a">
+      <p><strong>1. Nommer le risque :</strong> une modélisation en perspective purement <strong>interne</strong> donne une vision fragmentée, masque les problèmes <em>aux interfaces</em> entre services et conduit à des sous-optimisations locales — « optimisé ici, mais pas globalement » <span class="slideref">S. 38</span>.</p>
+      <p><strong>2. Recommander la perspective externe</strong> pour le projet de digitalisation : vision transversale de la chaîne de valeur, identification des bottlenecks/transferts inutiles/doublons, orientation valeur citoyen <span class="slideref">S. 39</span> — tout en reconnaissant ses coûts (coordination, sponsor fort, perte de repères des managers).</p>
+      <p><strong>3. Conclure « les deux »</strong> <span class="slideref">S. 40</span> : garder la vue interne pour gérer son service (responsabilités, charge de travail), mais mener la transformation avec la vue externe. Bonus : rappeler que digitaliser sans cette analyse reviendrait à « automatiser le chaos ».</p>
+    </div>
+  </details>
+
+  <div class="callout co-simple" style="margin-top:36px"><span class="co-tag">Fin du parcours</span>
+    <p>Si vous avez réussi les checkpoints des 4 parties et les séries A–D, vous couvrez l'essentiel du chapitre 3. Pour la modélisation, rien ne remplace la pratique <em>sur papier</em> : refaites les exercices « changement de domicile » (S. 69), « précompte immobilier » (S. 71–72) et D1 sans regarder les corrections, en chronométrant ~20 minutes par modèle. Bon travail ! 🎯</p>
+  </div>
+
+  <button class="nextbtn" data-goto="p0">↺ Retour à la vue d'ensemble</button>
+</section>
+</main>
+</div>
+
+<script>
+// ---------- Navigation ----------
+const pages = document.querySelectorAll('section.page');
+const navBtns = document.querySelectorAll('nav button[data-page]');
+function goTo(id){
+  pages.forEach(p=>p.classList.toggle('visible', p.id===id));
+  navBtns.forEach(b=>{
+    if(b.dataset.page===id){ b.classList.add('active'); }
+    else { if(b.classList.contains('active')) b.classList.add('done'); b.classList.remove('active'); }
+  });
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+navBtns.forEach(b=>b.addEventListener('click',()=>goTo(b.dataset.page)));
+document.querySelectorAll('.nextbtn').forEach(b=>b.addEventListener('click',()=>goTo(b.dataset.goto)));
+
+// ---------- Quiz QCM ----------
+document.querySelectorAll('.quiz').forEach(q=>{
+  const ans = parseInt(q.dataset.answer,10);
+  const opts = q.querySelectorAll('.quiz-opts button');
+  const fb = q.querySelector('.quiz-fb');
+  const exp = q.querySelector('.quiz-exp');
+  opts.forEach((btn,i)=>{
+    btn.addEventListener('click',()=>{
+      opts.forEach(o=>o.disabled=true);
+      if(i===ans){
+        btn.classList.add('correct');
+        fb.className='quiz-fb ok';
+        fb.innerHTML = exp ? exp.innerHTML : '<b>Correct !</b>';
+      } else {
+        btn.classList.add('wrong');
+        opts[ans].classList.add('correct');
+        fb.className='quiz-fb ko';
+        fb.innerHTML = '<b>Pas tout à fait — la bonne réponse est surlignée en vert.</b>' + (exp ? exp.innerHTML.replace(/<b>.*?<\/b>/,'') : '');
+      }
+    });
+  });
+});
+
+// ---------- Classify (VA/BVA/NVA) ----------
+document.querySelectorAll('.classify .cl-item').forEach(item=>{
+  const ans = item.dataset.ans;
+  const expTxt = item.dataset.exp;
+  const btns = item.querySelectorAll('.cl-btns button');
+  const exp = item.querySelector('.cl-exp');
+  btns.forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      btns.forEach(b=>b.disabled=true);
+      const good = btn.textContent.trim()===ans;
+      btn.classList.add(good?'picked-ok':'picked-ko');
+      if(!good){ btns.forEach(b=>{ if(b.textContent.trim()===ans) b.classList.add('answer'); }); }
+      exp.innerHTML = (good?'<strong>✔ Correct — '+ans+'.</strong> ':'<strong>✘ Réponse : '+ans+'.</strong> ')+expTxt;
+      item.classList.add('done');
+    });
+  });
+});
+</script>
+<a href="../index.html#/theorie" style="position:fixed;right:14px;bottom:14px;z-index:99999;display:inline-flex;align-items:center;gap:6px;background:#0e7c86;color:#fff;text-decoration:none;font:600 13px/1 system-ui,sans-serif;padding:9px 14px;border-radius:999px;box-shadow:0 2px 10px rgba(0,0,0,.25);" title="Revenir au site BPMN &amp; ArchiMate — TP interactifs">&#8592; Parcours SIG</a>
+</body>
+</html>

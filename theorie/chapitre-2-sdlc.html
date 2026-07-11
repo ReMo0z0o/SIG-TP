@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapitre 2 — Cycle de développement des SI (SDLC)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Public+Sans:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --encre:#12343b;        /* bleu-vert profond (UNamur-like) */
+  --sarcelle:#0e7c86;     /* teal du cours */
+  --sarcelle-clair:#e2f2f3;
+  --papier:#fbfaf7;
+  --carte:#ffffff;
+  --ambre:#c97b1e;        /* accent "exam" */
+  --ambre-clair:#fdf1e0;
+  --vert-ok:#2e7d32;
+  --vert-clair:#e8f5e9;
+  --rouge:#b3403a;
+  --rouge-clair:#fdecea;
+  --gris:#5b6b6d;
+  --ligne:#dde5e4;
+  --radius:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Public Sans',system-ui,sans-serif;
+  background:var(--papier);
+  color:var(--encre);
+  line-height:1.65;
+  font-size:16.5px;
+}
+h1,h2,h3,h4{font-family:'Fraunces',Georgia,serif;line-height:1.25}
+main{max-width:920px;margin:0 auto;padding:0 22px 90px}
+
+/* ---------- entête ---------- */
+header.hero{
+  background:linear-gradient(135deg,var(--encre) 0%,var(--sarcelle) 100%);
+  color:#fff;padding:56px 22px 46px;
+}
+.hero-in{max-width:920px;margin:0 auto}
+.hero .kicker{
+  text-transform:uppercase;letter-spacing:.14em;font-size:.78rem;
+  font-weight:700;color:#bfe6e9;margin-bottom:10px;
+}
+.hero h1{font-size:clamp(1.7rem,4vw,2.6rem);margin-bottom:14px}
+.hero p{max-width:640px;color:#e5f4f5;font-size:1.02rem}
+.hero .badges{margin-top:20px;display:flex;flex-wrap:wrap;gap:8px}
+.hero .badge{
+  background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.35);
+  border-radius:999px;padding:4px 14px;font-size:.82rem;
+}
+
+/* ---------- sommaire ---------- */
+nav.toc{
+  background:var(--carte);border:1px solid var(--ligne);border-radius:var(--radius);
+  padding:22px 26px;margin:-28px auto 46px;max-width:920px;position:relative;
+  box-shadow:0 8px 24px rgba(18,52,59,.08);
+}
+nav.toc h2{font-size:1.05rem;margin-bottom:10px}
+nav.toc ol{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:6px 26px}
+nav.toc a{color:var(--sarcelle);text-decoration:none;font-weight:600;font-size:.95rem}
+nav.toc a:hover{text-decoration:underline}
+nav.toc .num{color:var(--ambre);font-family:'Fraunces',serif;margin-right:8px}
+@media(max-width:640px){nav.toc ol{grid-template-columns:1fr}}
+
+/* ---------- sections ---------- */
+section{margin-top:64px}
+.sec-head{display:flex;align-items:baseline;gap:14px;border-bottom:3px solid var(--sarcelle);padding-bottom:8px;margin-bottom:22px}
+.sec-head .num{font-family:'Fraunces',serif;font-size:2rem;color:var(--ambre);font-weight:700}
+.sec-head h2{font-size:clamp(1.3rem,3vw,1.75rem)}
+h3{color:var(--sarcelle);margin:30px 0 10px;font-size:1.2rem}
+p{margin-bottom:14px}
+p.intro{font-size:1.05rem}
+strong{color:var(--encre)}
+em{color:var(--gris)}
+
+/* encadrés */
+.box{border-radius:var(--radius);padding:18px 22px;margin:18px 0}
+.box .titre{font-weight:700;text-transform:uppercase;font-size:.76rem;letter-spacing:.1em;margin-bottom:8px;display:block}
+.box.def{background:var(--sarcelle-clair);border-left:5px solid var(--sarcelle)}
+.box.def .titre{color:var(--sarcelle)}
+.box.exam{background:var(--ambre-clair);border-left:5px solid var(--ambre)}
+.box.exam .titre{color:var(--ambre)}
+.box.lien{background:#efeaf7;border-left:5px solid #6b4fa0}
+.box.lien .titre{color:#6b4fa0}
+.box.piege{background:var(--rouge-clair);border-left:5px solid var(--rouge)}
+.box.piege .titre{color:var(--rouge)}
+.box p:last-child{margin-bottom:0}
+.box ul{margin:6px 0 0 20px}
+.box li{margin-bottom:6px}
+
+ul.liste{margin:0 0 16px 22px}
+ul.liste li{margin-bottom:8px}
+ol.liste{margin:0 0 16px 24px}
+ol.liste li{margin-bottom:8px}
+
+/* étoiles priorité */
+.etoiles{color:var(--ambre);letter-spacing:2px}
+
+/* ---------- visuel cascade ---------- */
+.cascade{display:flex;flex-direction:column;gap:0;margin:26px 0}
+.marche{
+  display:flex;align-items:stretch;gap:0;
+}
+.marche .bloc{
+  background:var(--carte);border:2px solid var(--sarcelle);border-radius:10px;
+  padding:10px 16px;min-width:190px;font-weight:700;color:var(--sarcelle);
+  display:flex;align-items:center;gap:10px;
+}
+.marche .bloc .n{
+  background:var(--sarcelle);color:#fff;border-radius:50%;width:26px;height:26px;
+  display:inline-flex;align-items:center;justify-content:center;font-size:.85rem;flex:none;
+}
+.marche .desc{padding:8px 0 8px 16px;color:var(--gris);font-size:.92rem;display:flex;align-items:center}
+.fleche-bas{color:var(--sarcelle);font-size:1.1rem;margin:2px 0 2px 90px;line-height:1}
+@media(max-width:640px){.marche{flex-direction:column}.marche .desc{padding:6px 0 0 0}.fleche-bas{margin-left:12px}}
+
+/* tableaux */
+table{width:100%;border-collapse:collapse;margin:18px 0;background:var(--carte);border-radius:var(--radius);overflow:hidden;font-size:.95rem}
+th{background:var(--sarcelle);color:#fff;text-align:left;padding:10px 14px}
+td{padding:10px 14px;border-bottom:1px solid var(--ligne);vertical-align:top}
+tr:last-child td{border-bottom:none}
+td.c1{font-weight:700;color:var(--sarcelle);white-space:nowrap}
+
+/* triangle */
+.tri-wrap{display:flex;justify-content:center;margin:24px 0}
+.tri-wrap svg{max-width:460px;width:100%;height:auto}
+
+/* moscow grid */
+.moscow{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:22px 0}
+.mos{border-radius:12px;padding:16px 18px;border:2px solid}
+.mos h4{font-family:'Public Sans',sans-serif;font-size:1rem;margin-bottom:6px}
+.mos p{font-size:.92rem;margin-bottom:6px}
+.mos .ex{font-size:.88rem;color:var(--gris);font-style:italic;margin:0}
+.mos.m{background:#fde8f0;border-color:#c2185b}.mos.m h4{color:#c2185b}
+.mos.s{background:#e0f7f1;border-color:#00897b}.mos.s h4{color:#00897b}
+.mos.c{background:#e3ecfb;border-color:#3568c4}.mos.c h4{color:#3568c4}
+.mos.w{background:#ece7f6;border-color:#6b4fa0}.mos.w h4{color:#6b4fa0}
+@media(max-width:640px){.moscow{grid-template-columns:1fr}}
+
+/* scrum flow */
+.flux{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:20px 0;justify-content:center}
+.flux .etape{
+  background:var(--carte);border:2px solid var(--sarcelle);border-radius:10px;
+  padding:10px 14px;font-weight:600;font-size:.9rem;text-align:center;color:var(--encre);
+}
+.flux .etape small{display:block;font-weight:400;color:var(--gris);font-size:.78rem}
+.flux .fl{color:var(--ambre);font-weight:700;font-size:1.2rem}
+.flux .etape.cycle{border-color:var(--ambre);background:var(--ambre-clair)}
+
+/* cartes rôles */
+.cartes3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:20px 0}
+.carte-r{background:var(--carte);border:1px solid var(--ligne);border-top:5px solid var(--sarcelle);border-radius:12px;padding:16px 18px}
+.carte-r h4{font-family:'Public Sans',sans-serif;font-size:1rem;color:var(--sarcelle);margin-bottom:8px}
+.carte-r ul{margin-left:18px;font-size:.92rem}
+.carte-r li{margin-bottom:5px}
+@media(max-width:720px){.cartes3{grid-template-columns:1fr}}
+
+/* ---------- quiz ---------- */
+.quiz{
+  background:var(--carte);border:2px dashed var(--sarcelle);border-radius:var(--radius);
+  padding:20px 24px;margin:28px 0;
+}
+.quiz .q-label{
+  display:inline-block;background:var(--sarcelle);color:#fff;border-radius:999px;
+  padding:3px 14px;font-size:.78rem;font-weight:700;letter-spacing:.08em;
+  text-transform:uppercase;margin-bottom:10px;
+}
+.quiz p.question{font-weight:600;margin-bottom:12px}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opts button{
+  text-align:left;background:var(--papier);border:1.5px solid var(--ligne);
+  border-radius:10px;padding:10px 14px;font:inherit;font-size:.95rem;cursor:pointer;
+  transition:border-color .15s, background .15s;color:var(--encre);
+}
+.opts button:hover{border-color:var(--sarcelle)}
+.opts button:focus-visible{outline:3px solid var(--ambre);outline-offset:2px}
+.opts button.ok{background:var(--vert-clair);border-color:var(--vert-ok);font-weight:600}
+.opts button.ko{background:var(--rouge-clair);border-color:var(--rouge)}
+.quiz .fb{display:none;margin-top:12px;padding:12px 16px;border-radius:10px;font-size:.93rem}
+.quiz .fb.show{display:block}
+.quiz .fb.good{background:var(--vert-clair);border-left:4px solid var(--vert-ok)}
+.quiz .fb.bad{background:var(--rouge-clair);border-left:4px solid var(--rouge)}
+
+/* reveal (questions ouvertes) */
+details.reveal{background:var(--carte);border:1px solid var(--ligne);border-radius:12px;margin:14px 0;overflow:hidden}
+details.reveal summary{
+  cursor:pointer;padding:14px 18px;font-weight:600;color:var(--sarcelle);
+  list-style:none;display:flex;justify-content:space-between;align-items:center;gap:12px;
+}
+details.reveal summary::after{content:"+ réponse";font-size:.8rem;color:var(--ambre);font-weight:700;white-space:nowrap}
+details.reveal[open] summary::after{content:"– masquer"}
+details.reveal .corps{padding:0 18px 16px;border-top:1px dashed var(--ligne);font-size:.95rem}
+details.reveal .corps p{margin-top:12px}
+
+/* checklist finale */
+.prio{background:var(--carte);border:1px solid var(--ligne);border-radius:var(--radius);padding:6px 22px;margin:18px 0}
+.prio .item{display:flex;gap:14px;padding:13px 0;border-bottom:1px solid var(--ligne);align-items:baseline}
+.prio .item:last-child{border-bottom:none}
+.prio .et{flex:none;width:70px}
+footer{margin-top:70px;text-align:center;color:var(--gris);font-size:.85rem;border-top:1px solid var(--ligne);padding-top:22px}
+.pill-haut{position:fixed;bottom:18px;right:18px;background:var(--sarcelle);color:#fff;border-radius:999px;padding:9px 16px;text-decoration:none;font-size:.85rem;box-shadow:0 4px 14px rgba(0,0,0,.2)}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-in">
+    <div class="kicker">SIG · Prof. Simonofski · 2025–2026 · Chapitre 2</div>
+    <h1>Le cycle de développement des systèmes d'information</h1>
+    <p>Comment passe-t-on d'un problème métier (« les citoyens signalent des nids-de-poule mais le suivi est opaque ») à un système d'information opérationnel ? Ce chapitre te donne la réponse : le SDLC, ses 7 phases, ses deux grandes philosophies (Waterfall vs Agile/SCRUM), le rôle du Business Analyst et l'ingénierie des exigences.</p>
+    <div class="badges">
+      <span class="badge">7 phases du SDLC</span>
+      <span class="badge">Waterfall vs Agile</span>
+      <span class="badge">SCRUM</span>
+      <span class="badge">Business Analyst</span>
+      <span class="badge">Exigences &amp; MoSCoW</span>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Sommaire">
+  <h2>Sommaire du chapitre</h2>
+  <ol>
+    <li><span class="num">1</span><a href="#s1">Le cycle de conception d'un SI (7 phases)</a></li>
+    <li><span class="num">2</span><a href="#s2">Avantages du SDLC &amp; triangle de gestion de projet</a></li>
+    <li><span class="num">3</span><a href="#s3">Waterfall : la cascade et ses limites</a></li>
+    <li><span class="num">4</span><a href="#s4">Le modèle agile &amp; SCRUM</a></li>
+    <li><span class="num">5</span><a href="#s5">Le Business Analyst et l'analyse métier</a></li>
+    <li><span class="num">6</span><a href="#s6">L'ingénierie des exigences &amp; MoSCoW</a></li>
+    <li><span class="num">7</span><a href="#s7">Pourquoi modéliser ? (lien Chapitre 1)</a></li>
+    <li><span class="num">★</span><a href="#prio">À maîtriser en priorité</a></li>
+    <li><span class="num">✎</span><a href="#train">Exercices d'entraînement</a></li>
+  </ol>
+</nav>
+
+<main>
+<!-- ================= SECTION 1 ================= -->
+<section id="s1">
+  <div class="sec-head"><span class="num">1</span><h2>Le cycle de conception d'un SI : les 7 phases du SDLC</h2></div>
+
+  <p class="intro">Le <strong>SDLC</strong> (<em>System Development Life Cycle</em>, cycle de développement des systèmes) est la colonne vertébrale de ce chapitre. L'idée est simple : construire un système d'information est un projet complexe, donc on le découpe en <strong>7 phases successives</strong>, chacune avec un <strong>objectif</strong> précis et un <strong>livrable (output)</strong> concret. Le fil rouge du cours est l'exemple <strong>FixMyStreet</strong> : une ville veut un système pour gérer les signalements citoyens (nids-de-poule, déchets, éclairage défectueux…).</p>
+
+  <div class="box def">
+    <span class="titre">L'idée clé</span>
+    <p>Chaque phase <strong>transforme l'output de la phase précédente</strong> : le problème devient une étude de faisabilité, qui devient un cahier des exigences, qui devient un design, qui devient du code, qui est testé, déployé, puis maintenu. Retiens le trio <strong>Objectif → Output → Exemple</strong> pour chaque phase : c'est exactement le format des slides et une question d'examen très probable.</p>
+  </div>
+
+  <div class="cascade" role="img" aria-label="Les 7 phases du SDLC en cascade">
+    <div class="marche"><div class="bloc"><span class="n">1</span>Analyse préliminaire</div><div class="desc">Faut-il lancer le projet ? → Étude de faisabilité</div></div>
+    <div class="fleche-bas">▼</div>
+    <div class="marche"><div class="bloc"><span class="n">2</span>Analyse du système</div><div class="desc">Que doit faire le système ? → Cahier des exigences</div></div>
+    <div class="fleche-bas">▼</div>
+    <div class="marche"><div class="bloc"><span class="n">3</span>Conception du système</div><div class="desc">Comment le construire ? → Document de conception</div></div>
+    <div class="fleche-bas">▼</div>
+    <div class="marche"><div class="bloc"><span class="n">4</span>Programmation</div><div class="desc">On développe → MVP / Release</div></div>
+    <div class="fleche-bas">▼</div>
+    <div class="marche"><div class="bloc"><span class="n">5</span>Tests</div><div class="desc">Ça marche ? → Rapports de qualité + version stabilisée</div></div>
+    <div class="fleche-bas">▼</div>
+    <div class="marche"><div class="bloc"><span class="n">6</span>Implémentation</div><div class="desc">Mise en service → Système opérationnel en production</div></div>
+    <div class="fleche-bas">▼</div>
+    <div class="marche"><div class="bloc"><span class="n">7</span>Maintenance</div><div class="desc">Support continu → SLA, backlog, nouvelles versions</div></div>
+  </div>
+
+  <h3>Phase 1 — Analyse préliminaire</h3>
+  <p><strong>Objectif :</strong> clarifier le <em>problème à résoudre</em>, vérifier qu'une solution est possible, recenser les <em>alternatives</em> et l'existant, et juger l'adéquation avec l'organisation. On lance une <strong>étude de faisabilité</strong> sur trois plans : <strong>technique</strong> (peut-on le construire ?), <strong>économique</strong> (peut-on se le payer ?) et <strong>légale</strong> (a-t-on le droit ? ex. RGPD).</p>
+  <p><strong>Output :</strong> l'étude de faisabilité → décision <strong>go / no-go</strong>, scénario recommandé, risques majeurs, ordre de grandeur budget/délais, état souhaité du système.</p>
+  <p><strong>Exemple FixMyStreet :</strong> problème = « les citoyens signalent des incidents mais le suivi est opaque et les services sont débordés ». Alternatives = améliorer l'outil actuel, acheter une solution en licence, développer sur mesure, étendre un CRM existant.</p>
+  <div class="box piege">
+    <span class="titre">Piège d'examen</span>
+    <p>Ne confonds pas <strong>analyse préliminaire</strong> (est-ce qu'on fait le projet ? — vision go/no-go) et <strong>analyse du système</strong> (qu'est-ce que le système doit faire ? — vision besoins). La première décide, la seconde spécifie.</p>
+  </div>
+
+  <h3>Phase 2 — Analyse du système</h3>
+  <p><strong>Objectif :</strong> travailler <strong>avec les parties prenantes</strong> pour définir ce que le système doit faire : documentation des processus et collecte des besoins. C'est ici qu'intervient le Business Analyst (section 5).</p>
+  <p><strong>Output :</strong> le <strong>cahier des exigences</strong>.</p>
+  <p><strong>Exemple FixMyStreet :</strong> parties prenantes = citoyens, guichet, service voirie, propreté, éclairage, police, sous-traitants, direction, IT. Exigences sous forme de <em>user stories</em> : « en tant que citoyen, j'aimerais déposer une plainte géolocalisée avec photo », « en tant qu'agent, j'aimerais prioritiser les plaintes ».</p>
+
+  <h3>Phase 3 — Conception du système</h3>
+  <p><strong>Objectif :</strong> <strong>traduire les besoins métier en spécifications techniques</strong>. On passe du « quoi » (langage métier) au « comment » (langage technique).</p>
+  <p><strong>Output :</strong> le <strong>document de conception</strong> (<em>System Design Document</em>) : schémas d'architecture, modèles de données, maquettes, spécifications API, règles techniques.</p>
+  <p><strong>Exemple FixMyStreet :</strong> interfaces (portail citoyen + back-office agents), données (entités « Plainte », « Localisation », « Catégorie », « Service », « Intervention », « Pièce jointe », « Utilisateur »), intégrations (SIG cartographique, planification des équipes, ERP, messagerie).</p>
+  <div class="box lien">
+    <span class="titre">Lien avec le chapitre 1</span>
+    <p>Les « entités » et « modèles de données » de cette phase, c'est exactement le <strong>modèle Entité-Association</strong> du chapitre 1 (types d'entités, attributs, associations, cardinalités). La conception du système est le moment du SDLC où ces modèles sont produits.</p>
+  </div>
+
+  <h3>Phase 4 — Programmation</h3>
+  <p><strong>Objectif :</strong> développement du logiciel <strong>conformément au design</strong> par des développeurs.</p>
+  <p><strong>Output :</strong> une <strong>version initiale fonctionnelle</strong>, appelée <strong>MVP</strong> (<em>Minimum Viable Product</em>) ou <em>Release</em> : une application qui implémente les exigences + une documentation technique minimale.</p>
+  <p><strong>Exemple FixMyStreet :</strong> formulaire de signalement, moteur de workflow, tableaux de bord.</p>
+
+  <h3>Phase 5 — Tests</h3>
+  <p><strong>Objectif :</strong> vérification <strong>structurée</strong> de la qualité, à trois niveaux — retiens bien la hiérarchie :</p>
+  <ul class="liste">
+    <li><strong>Tests unitaires</strong> : on teste chaque <em>brique de code</em> isolément pour détecter erreurs et bugs.</li>
+    <li><strong>Tests système</strong> : on teste l'<em>intégration des composants ensemble</em> (ex. la connexion avec le SIG, l'envoi d'e-mails, la synchronisation avec les outils).</li>
+    <li><strong>Tests métiers</strong> : on <em>valide avec les utilisateurs</em> sur des scénarios réels (ex. vérifier la lisibilité citoyenne).</li>
+  </ul>
+  <p><strong>Output :</strong> rapports de qualité + <strong>version stabilisée validée pour mise en production</strong>.</p>
+
+  <h3>Phase 6 — Implémentation</h3>
+  <p><strong>Objectif :</strong> la <strong>mise en service dans l'organisation</strong> : formation, documentation, migration des données, stratégie de déploiement et d'adoption. Attention : « implémentation » ici ne veut pas dire « coder » (ça, c'était la phase 4) mais <strong>déployer dans l'organisation</strong>.</p>
+  <p><strong>Output :</strong> <strong>système opérationnel en production</strong>.</p>
+  <p><strong>Exemple FixMyStreet :</strong> formation (agents de triage, services techniques, administrateurs, helpdesk), import des plaintes historiques, déploiement <strong>pilote sur 1–2 quartiers puis généralisation</strong>, communication citoyenne (site, réseaux, affiches).</p>
+
+  <h3>Phase 7 — Maintenance</h3>
+  <p><strong>Objectif :</strong> le <strong>support continu</strong> : corrections de bugs, évolutions fonctionnelles, mises à jour, sauvegardes, monitoring, sécurité. La <strong>gestion budgétaire est souvent différente</strong> : il faut prévoir des frais de fonctionnement récurrents, distincts du budget projet initial.</p>
+  <p><strong>Output :</strong> process de support et <strong>SLA</strong> (<em>Service-Level Agreement</em>, engagement contractuel de niveau de service), backlog d'améliorations, nouvelles versions.</p>
+  <p><strong>Exemple FixMyStreet :</strong> bugs (problème d'upload, lenteur carte, erreur d'assignation automatique) ; évolutions (nouvelles catégories, nouvelles règles de priorité, fonction « vote/confirmation » par d'autres citoyens).</p>
+
+  <div class="quiz" data-quiz>
+    <span class="q-label">Vérifie ta compréhension</span>
+    <p class="question">La commune de Namur reçoit le document suivant : « décision go, scénario recommandé : étendre le CRM existant, risque majeur : résistance des services, budget estimé : 250 k€ ». De quelle phase ce document est-il l'output ?</p>
+    <div class="opts">
+      <button data-ok="0">Analyse du système</button>
+      <button data-ok="1">Analyse préliminaire</button>
+      <button data-ok="0">Conception du système</button>
+      <button data-ok="0">Implémentation</button>
+    </div>
+    <div class="fb"></div>
+    <p class="expl" hidden>C'est une <strong>étude de faisabilité</strong> (go/no-go + scénario + risques + budget) : l'output de la phase 1, l'analyse préliminaire. Le cahier des exigences (phase 2) décrirait les besoins, pas la décision de lancement.</p>
+  </div>
+
+  <div class="quiz" data-quiz>
+    <span class="q-label">Vérifie ta compréhension</span>
+    <p class="question">« On teste l'envoi d'e-mails et la synchronisation entre le module carte et le module planification. » Quel type de test ?</p>
+    <div class="opts">
+      <button data-ok="0">Test unitaire</button>
+      <button data-ok="1">Test système</button>
+      <button data-ok="0">Test métier</button>
+    </div>
+    <div class="fb"></div>
+    <p class="expl" hidden>On vérifie l'<strong>intégration de composants entre eux</strong> → test système. Unitaire = une brique de code isolée ; métier = validation par les utilisateurs sur des scénarios réels.</p>
+  </div>
+</section>
+
+<!-- ================= SECTION 2 ================= -->
+<section id="s2">
+  <div class="sec-head"><span class="num">2</span><h2>Avantages du SDLC &amp; triangle de gestion de projet</h2></div>
+
+  <p class="intro">Pourquoi s'imposer une méthode structurée plutôt que de coder directement ? Le cours donne <strong>4 avantages du SDLC</strong> :</p>
+  <ol class="liste">
+    <li><strong>Visibilité accrue</strong> du processus de développement pour toutes les parties prenantes impliquées ;</li>
+    <li><strong>Estimation, planification et ordonnancement efficaces</strong> ;</li>
+    <li><strong>Amélioration de la gestion des risques</strong> et de l'estimation des coûts ;</li>
+    <li><strong>Livraison systématique</strong> des logiciels et meilleure <strong>satisfaction des clients</strong>.</li>
+  </ol>
+
+  <h3>Le triangle qualité – rapidité – coût</h3>
+  <p>Un projet a trois ambitions : être de <strong>bonne qualité</strong>, être <strong>rapide</strong>, et avoir un <strong>faible coût</strong>. La leçon du triangle : <strong>on ne peut en choisir que deux</strong>. Chaque côté du triangle montre ce qu'on sacrifie :</p>
+
+  <div class="tri-wrap">
+    <svg viewBox="0 0 460 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Triangle qualité, rapide, faible coût">
+      <polygon points="230,50 60,300 400,300" fill="none" stroke="#0e7c86" stroke-width="3"/>
+      <text x="230" y="34" text-anchor="middle" font-size="19" font-weight="bold" fill="#12343b">Bonne qualité</text>
+      <text x="52" y="330" text-anchor="middle" font-size="19" font-weight="bold" fill="#12343b">Rapide</text>
+      <text x="402" y="330" text-anchor="middle" font-size="19" font-weight="bold" fill="#12343b">Faible coût</text>
+      <text x="118" y="168" text-anchor="middle" font-size="15" fill="#b3403a" transform="rotate(-56 118 168)">Projet cher</text>
+      <text x="342" y="168" text-anchor="middle" font-size="15" fill="#b3403a" transform="rotate(56 342 168)">Projet lent</text>
+      <text x="230" y="292" text-anchor="middle" font-size="15" fill="#b3403a">Projet bâclé</text>
+    </svg>
+  </div>
+
+  <ul class="liste">
+    <li><strong>Qualité + Rapide</strong> → projet <strong>cher</strong> (il faut payer plus de ressources) ;</li>
+    <li><strong>Qualité + Faible coût</strong> → projet <strong>lent</strong> (on prend son temps avec peu de moyens) ;</li>
+    <li><strong>Rapide + Faible coût</strong> → projet <strong>bâclé</strong> (la qualité saute).</li>
+  </ul>
+
+  <div class="quiz" data-quiz>
+    <span class="q-label">Vérifie ta compréhension</span>
+    <p class="question">Ton client exige une application de très haute qualité, livrée en 2 mois. D'après le triangle, quelle conséquence est inévitable ?</p>
+    <div class="opts">
+      <button data-ok="0">Le projet sera bâclé</button>
+      <button data-ok="1">Le projet sera cher</button>
+      <button data-ok="0">Le projet sera lent</button>
+    </div>
+    <div class="fb"></div>
+    <p class="expl" hidden>Qualité + rapidité exigées ensemble → c'est le <strong>coût</strong> qui explose. On ne peut jamais optimiser les trois sommets à la fois.</p>
+  </div>
+</section>
+
+<!-- ================= SECTION 3 ================= -->
+<section id="s3">
+  <div class="sec-head"><span class="num">3</span><h2>Waterfall : la cascade et ses limites</h2></div>
+
+  <p class="intro">Le modèle <strong>Waterfall</strong> (en cascade) est la façon la plus intuitive d'exécuter le SDLC : les 7 phases s'enchaînent <strong>séquentiellement</strong>, chaque nouvelle phase <strong>dépend du résultat de la phase précédente</strong>. Conceptuellement, la conception « s'écoule » d'une phase à la suivante, comme une cascade — d'où le schéma en escalier de la section 1.</p>
+
+  <div class="box def">
+    <span class="titre">Définition</span>
+    <p><strong>Waterfall</strong> = organisation de toutes les phases du SDLC de manière <strong>séquentielle</strong> : on ne commence une phase que lorsque la précédente est terminée et validée, et on ne revient (en principe) pas en arrière.</p>
+  </div>
+
+  <h3>Les deux défis du Waterfall (à connaître par cœur)</h3>
+  <ul class="liste">
+    <li><strong>Peu de place pour le changement</strong> une fois qu'une phase est considérée comme terminée : toute modification tardive affecte le <strong>délai de livraison, le coût et la qualité</strong>. Si on découvre en phase de tests que les besoins étaient mal compris, il faut remonter toute la cascade… très cher.</li>
+    <li>Il est donc <strong>le plus adapté aux petits projets</strong>, où les tâches sont faciles à organiser et à gérer et où <strong>les exigences peuvent être prédéfinies avec précision</strong>.</li>
+  </ul>
+
+  <div class="box exam">
+    <span class="titre">À l'examen</span>
+    <p>Question situationnelle typique : « <em>Une start-up veut lancer une app dont les besoins vont fortement évoluer selon les retours utilisateurs. Waterfall ou Agile ? Justifiez.</em> » Réponse attendue : <strong>Agile</strong>, car Waterfall gèle les exigences tôt et gère mal le changement ; Waterfall ne convient que si les exigences sont <strong>stables et prédéfinissables avec précision</strong> (petit projet, contexte réglementaire figé…).</p>
+  </div>
+
+  <div class="quiz" data-quiz>
+    <span class="q-label">Vérifie ta compréhension</span>
+    <p class="question">Dans quel cas le modèle Waterfall est-il le plus approprié ?</p>
+    <div class="opts">
+      <button data-ok="0">Un grand projet innovant dont les besoins sont encore flous</button>
+      <button data-ok="1">Un petit projet dont les exigences peuvent être prédéfinies avec précision</button>
+      <button data-ok="0">Un projet où le client veut voir une version utilisable toutes les 3 semaines</button>
+    </div>
+    <div class="fb"></div>
+    <p class="expl" hidden>Waterfall convient aux <strong>petits projets aux exigences stables et précises</strong>. Besoins flous ou livraisons fréquentes → Agile.</p>
+  </div>
+</section>
+<!-- ================= SECTION 4 ================= -->
+<section id="s4">
+  <div class="sec-head"><span class="num">4</span><h2>Le modèle agile &amp; SCRUM</h2></div>
+
+  <p class="intro">Face aux limites du Waterfall, l'approche <strong>agile</strong> réorganise les phases du SDLC : au lieu d'un seul grand cycle, on fait <strong>plusieurs petits cycles de développement</strong> (sprints). À chaque cycle, l'équipe traverse rapidement toutes les phases (plan → design → develop → test → deploy → review) et ne livre que de <strong>petites modifications incrémentielles</strong>. Elle évalue en permanence les exigences, les plans et les résultats afin de <strong>réagir rapidement aux changements</strong>.</p>
+
+  <div class="box def">
+    <span class="titre">Définition (à mémoriser mot pour mot)</span>
+    <p>Le développement logiciel agile est une approche <strong>itérative</strong> et <strong>incrémentale</strong> qui permet de produire des logiciels de manière hautement <strong>adaptative</strong> et <strong>collaborative</strong>.</p>
+  </div>
+
+  <p>Les 4 mots-clés de la définition, avec leur sens précis :</p>
+  <table>
+    <tr><th>Mot-clé</th><th>Signification exacte</th></tr>
+    <tr><td class="c1">Itérative</td><td>basée sur des <strong>itérations limitées dans le temps</strong> (les sprints, 2 à 4 semaines).</td></tr>
+    <tr><td class="c1">Incrémentale</td><td><strong>subdivision du système en petits sous-systèmes</strong> ; chaque nouvelle version du produit <strong>ajoute de la valeur commerciale et est utilisable</strong>.</td></tr>
+    <tr><td class="c1">Adaptative</td><td><strong>ouverture au changement</strong> (contrairement au Waterfall).</td></tr>
+    <tr><td class="c1">Collaborative</td><td><strong>collaboration efficace entre toutes les parties prenantes</strong> du projet.</td></tr>
+  </table>
+
+  <div class="box piege">
+    <span class="titre">Piège d'examen : itératif ≠ incrémental</span>
+    <p><strong>Itératif</strong> parle du <em>temps</em> (on répète des cycles courts). <strong>Incrémental</strong> parle du <em>produit</em> (on le construit morceau par morceau, chaque morceau étant utilisable). Un examen peut te demander de distinguer les deux.</p>
+  </div>
+
+  <h3>Les défis de l'agile (oui, l'agile a aussi des limites !)</h3>
+  <ul class="liste">
+    <li>Une <strong>confiance excessive dans les commentaires des clients</strong> peut entraîner des <strong>modifications excessives de la portée du projet</strong> (le fameux <em>scope creep</em> : le projet enfle sans fin).</li>
+    <li>Les méthodologies agiles doivent être <strong>adaptées au contexte des organisations</strong> — on ne copie-colle pas SCRUM tel quel partout.</li>
+  </ul>
+
+  <h3>SCRUM : la méthodologie agile la plus utilisée</h3>
+  <p>SCRUM domine largement le paysage agile (≈ 58 % des équipes, 68 % avec les hybrides Scrum/XP). Il faut connaître sa structure en <strong>3 × 4 × 2</strong> : <strong>3 rôles, 4 réunions, 2 artefacts</strong>.</p>
+
+  <div class="flux" role="img" aria-label="Déroulement d'un projet SCRUM">
+    <div class="etape">Vision produit<small>User stories</small></div>
+    <div class="fl">→</div>
+    <div class="etape">Product Backlog<small>géré par le Product Owner</small></div>
+    <div class="fl">→</div>
+    <div class="etape">Sprint Planning<small>on choisit les stories</small></div>
+    <div class="fl">→</div>
+    <div class="etape cycle">SPRINT 2–4 sem.<small>+ Daily Meeting 15 min</small></div>
+    <div class="fl">→</div>
+    <div class="etape">Livraison<small>Sprint Review + Rétrospective</small></div>
+  </div>
+
+  <h4 style="margin-top:26px">Les 3 rôles</h4>
+  <div class="cartes3">
+    <div class="carte-r">
+      <h4>Product Owner</h4>
+      <ul>
+        <li><strong>Contact avec les clients</strong></li>
+        <li><strong>Définit les fonctionnalités</strong> du produit</li>
+        <li><strong>Gère le backlog produit</strong></li>
+        <li><strong>Accepte ou rejette les résultats</strong></li>
+      </ul>
+    </div>
+    <div class="carte-r">
+      <h4>Équipe de développement</h4>
+      <ul>
+        <li><strong>Pluridisciplinaire</strong> (5 à 10 personnes) : IHM, développeur, analyste commercial, expert en tests…</li>
+        <li><strong>Auto-organisée</strong></li>
+        <li>Dédiée au projet <strong>à temps plein et ne change pas</strong></li>
+      </ul>
+    </div>
+    <div class="carte-r">
+      <h4>SCRUM Master</h4>
+      <ul>
+        <li><strong>Responsable méthodologique</strong></li>
+        <li><strong>Supprime les obstacles</strong></li>
+        <li><strong>Facilite la coopération</strong></li>
+        <li>⚠ Ce n'est <em>pas</em> le chef de l'équipe !</li>
+      </ul>
+    </div>
+  </div>
+
+  <h4>Les 4 réunions (meetings)</h4>
+  <table>
+    <tr><th>Réunion</th><th>Quand / Quoi</th></tr>
+    <tr><td class="c1">Sprint Planning</td><td>Au début du sprint : <strong>choisir les user stories</strong> à développer pendant le sprint, <strong>estimation et division en tâches</strong>.</td></tr>
+    <tr><td class="c1">Daily Meeting</td><td>Chaque jour, <strong>15 min, debout</strong>. 3 questions : Qu'avez-vous fait hier ? Que comptez-vous faire aujourd'hui ? Y a-t-il un obstacle ?</td></tr>
+    <tr><td class="c1">Sprint Review</td><td>Fin de sprint : l'équipe <strong>présente ce qu'elle a fait</strong>, démonstration informelle, réflexion sur le <strong>produit</strong>.</td></tr>
+    <tr><td class="c1">Sprint Rétrospective</td><td>Fin de sprint : réunion <strong>interne</strong> (équipe + Scrum Master), amélioration du <strong>processus</strong> de travail.</td></tr>
+  </table>
+
+  <div class="box piege">
+    <span class="titre">Piège d'examen : Review vs Rétrospective</span>
+    <p><strong>Sprint Review</strong> = on regarde le <strong>produit</strong> (démo aux parties prenantes). <strong>Sprint Rétrospective</strong> = on regarde le <strong>processus</strong> (comment l'équipe peut mieux travailler, en interne). Deux réunions, deux objets différents.</p>
+  </div>
+
+  <h4>Les 2 artefacts</h4>
+  <table>
+    <tr><th>Artefact</th><th>Contenu</th></tr>
+    <tr><td class="c1">Product Backlog</td><td><strong>Liste des exigences</strong> du produit, <strong>classées par ordre de priorité commerciale</strong>, <strong>définies par le Product Owner</strong>, <strong>révisées en permanence</strong> (le « grooming » : estimer, insérer, reprioriser, raffiner, supprimer des items).</td></tr>
+    <tr><td class="c1">Sprint Backlog</td><td>Le sous-ensemble d'items du Product Backlog sélectionnés pour <strong>le sprint en cours</strong>, décomposés en <strong>tâches</strong> concrètes.</td></tr>
+  </table>
+
+  <p>Les exigences du backlog sont souvent formulées en <strong>user stories</strong> selon le gabarit : <em>« When [situation], I want to [motivation], so I can [expected outcome] »</em> — situation, motivation, résultat attendu.</p>
+
+  <div class="quiz" data-quiz>
+    <span class="q-label">Vérifie ta compréhension</span>
+    <p class="question">Qui gère le Product Backlog et accepte ou rejette les résultats du sprint ?</p>
+    <div class="opts">
+      <button data-ok="0">Le SCRUM Master</button>
+      <button data-ok="0">L'équipe de développement</button>
+      <button data-ok="1">Le Product Owner</button>
+      <button data-ok="0">Le client final directement</button>
+    </div>
+    <div class="fb"></div>
+    <p class="expl" hidden>Le <strong>Product Owner</strong> est le gardien du backlog : contact client, définition des fonctionnalités, priorisation, acceptation/rejet. Le SCRUM Master ne gère pas le produit : il gère la <em>méthode</em>.</p>
+  </div>
+
+  <div class="quiz" data-quiz>
+    <span class="q-label">Vérifie ta compréhension</span>
+    <p class="question">« À la fin du sprint, l'équipe et le Scrum Master se réunissent seuls pour discuter de comment mieux collaborer au prochain sprint. » De quelle réunion s'agit-il ?</p>
+    <div class="opts">
+      <button data-ok="0">Sprint Review</button>
+      <button data-ok="1">Sprint Rétrospective</button>
+      <button data-ok="0">Daily Meeting</button>
+      <button data-ok="0">Sprint Planning</button>
+    </div>
+    <div class="fb"></div>
+    <p class="expl" hidden>Réunion <strong>interne</strong> + amélioration du <strong>processus</strong> = Sprint <strong>Rétrospective</strong>. La Review, elle, montre le produit.</p>
+  </div>
+</section>
+
+<!-- ================= SECTION 5 ================= -->
+<section id="s5">
+  <div class="sec-head"><span class="num">5</span><h2>Le Business Analyst et l'analyse métier</h2></div>
+
+  <p class="intro">Retour sur la <strong>phase 2 du SDLC</strong> (analyse du système) : c'est le terrain de jeu du <strong>Business Analyst (BA)</strong>. Rappelle-toi le chiffre du cours : les projets informatiques échouent d'abord pour des raisons <em>humaines</em>. Le BA est justement le pont entre humains.</p>
+
+  <div class="box def">
+    <span class="titre">Définition</span>
+    <p>Les <strong>Business Analysts</strong> sont chargés d'<strong>analyser les besoins de leurs clients</strong>. Ils assurent une fonction de <strong>liaison entre le côté affaires</strong> de l'entreprise <strong>et les prestataires de services internes et externes</strong>. Ils étudient et analysent le domaine d'affaires, puis <strong>proposent une solution ou des recommandations</strong>.</p>
+  </div>
+
+  <ul class="liste">
+    <li>La solution n'est <strong>pas nécessairement technologique</strong> ! C'est souvent une <strong>optimisation du processus d'affaires existant</strong> pour <strong>éliminer ou réduire les activités sans valeur ajoutée</strong> → augmentation de la performance ou réduction des coûts.</li>
+    <li>Le BA intervient <strong>lors de la création d'un nouveau produit</strong> ou <strong>lors de l'amélioration d'un produit actuel</strong> ; il aide à résoudre un problème et aide l'équipe projet à <strong>mieux comprendre les besoins du client</strong>.</li>
+  </ul>
+
+  <div class="box lien">
+    <span class="titre">Lien avec le chapitre 3 (BPM)</span>
+    <p>« Éliminer les activités sans valeur ajoutée » : tu retrouveras exactement cette idée dans le chapitre BPM avec l'analyse <strong>VA / BVA / NVA</strong> de Lean. Le BA et le BPM partagent la même philosophie d'optimisation des processus.</p>
+  </div>
+
+  <h3>Les 4 phases de toute analyse métier (ordre à connaître)</h3>
+  <div class="flux" role="img" aria-label="Les 4 phases de la business analysis">
+    <div class="etape">1. Identifier<br>le problème<small>que faut-il résoudre / améliorer ?</small></div>
+    <div class="fl">→</div>
+    <div class="etape">2. Évaluer<br>l'état actuel<small>quels facteurs causent le problème ?</small></div>
+    <div class="fl">→</div>
+    <div class="etape">3. Identifier<br>l'état désiré<small>avec le client</small></div>
+    <div class="fl">→</div>
+    <div class="etape">4. Comprendre<br>le gap<small>quels éléments manquent ?</small></div>
+  </div>
+  <p>Autrement dit : comprendre et définir la <strong>situation actuelle</strong> → définir la <strong>situation future espérée</strong> → <strong>définir l'écart (gap)</strong> entre les deux → proposer des <strong>solutions ou recommandations</strong> pour combler cet écart.</p>
+
+  <h3>Pourquoi c'est si difficile ? L'échec des projets informatiques</h3>
+  <p>D'après la seule étude longitudinale au monde sur l'échec informatique (Standish, 8 500–13 500 projets étudiés tous les 2 ans depuis 1994), une grande partie des projets sont des échecs ou des succès « mitigés ». Vocabulaire à connaître :</p>
+  <ul class="liste">
+    <li><strong>Succès</strong> = projet terminé en respectant le cahier des charges techniques et <strong>sans dépassement</strong> de temps/budget ;</li>
+    <li><strong>Mitigé</strong> = terminé <strong>sans respect</strong> du cahier des charges et/ou <strong>avec dépassement</strong> de temps/budget ;</li>
+    <li><strong>Échec</strong> = projet <strong>arrêté avant la fin</strong> prévue ou <strong>jamais mis en service</strong>.</li>
+  </ul>
+  <p>Les <strong>trois raisons</strong> les plus souvent invoquées (avec les % du cours) :</p>
+  <ol class="liste">
+    <li><strong>Manque d'implication des utilisateurs</strong> (15,9 %) ;</li>
+    <li><strong>Support de la hiérarchie</strong> insuffisant (13,9 %) ;</li>
+    <li><strong>Manque de clarté des spécifications de départ</strong> (13 %).</li>
+  </ol>
+  <div class="box exam">
+    <span class="titre">À l'examen — l'idée maîtresse</span>
+    <p>L'échec n'est <strong>pas seulement un problème technique de « bonne modélisation »</strong>, mais <strong>surtout un problème humain et organisationnel de « bonne compréhension / représentation »</strong> : les informaticiens ne sont pas du métier, et les utilisateurs ont du mal à expliquer ce qu'ils font au quotidien. D'où la « déperdition de la communication » : de <strong>ce que l'on veut dire (100 %)</strong> → ce que l'on dit réellement (70 %) → ce qui est entendu (60 %) → écouté (50 %) → compris (40 %) → retenu (20 %) → <strong>répercuté (10 %)</strong>. La modélisation existe précisément pour limiter cette déperdition.</p>
+  </div>
+
+  <div class="quiz" data-quiz>
+    <span class="q-label">Vérifie ta compréhension</span>
+    <p class="question">Quelle est la première cause d'échec des projets informatiques citée dans le cours ?</p>
+    <div class="opts">
+      <button data-ok="0">La mauvaise qualité du code</button>
+      <button data-ok="1">Le manque d'implication des utilisateurs</button>
+      <button data-ok="0">Le choix d'une mauvaise technologie</button>
+      <button data-ok="0">Le manque de budget</button>
+    </div>
+    <div class="fb"></div>
+    <p class="expl" hidden><strong>Manque d'implication des utilisateurs (15,9 %)</strong>, devant le support de la hiérarchie (13,9 %) et la clarté des spécifications (13 %). Note bien : les trois premières causes sont <em>humaines et organisationnelles</em>, pas techniques.</p>
+  </div>
+
+  <div class="quiz" data-quiz>
+    <span class="q-label">Vérifie ta compréhension</span>
+    <p class="question">Un BA constate que le processus de validation des factures comporte trois signatures redondantes. Il recommande d'en supprimer deux, sans aucun nouveau logiciel. Est-ce conforme au rôle du BA ?</p>
+    <div class="opts">
+      <button data-ok="1">Oui : la solution d'un BA n'est pas nécessairement technologique</button>
+      <button data-ok="0">Non : un BA doit toujours proposer une solution informatique</button>
+    </div>
+    <div class="fb"></div>
+    <p class="expl" hidden>Oui ! La solution proposée est souvent une <strong>optimisation du processus existant</strong> visant à éliminer les activités <strong>sans valeur ajoutée</strong> — ici les signatures redondantes.</p>
+  </div>
+</section>
+<!-- ================= SECTION 6 ================= -->
+<section id="s6">
+  <div class="sec-head"><span class="num">6</span><h2>L'ingénierie des exigences &amp; MoSCoW</h2></div>
+
+  <p class="intro">L'output de la phase 2 du SDLC est le <strong>cahier des exigences</strong>. Mais qu'est-ce qu'une exigence, exactement, et comment les obtenir, les trier, les prioriser ? C'est tout l'objet de l'<strong>ingénierie des exigences</strong> (<em>requirements engineering</em>).</p>
+
+  <div class="box def">
+    <span class="titre">Définition d'une exigence (3 volets)</span>
+    <p>Une exigence, c'est :</p>
+    <ul>
+      <li>(1) une <strong>condition ou capacité nécessaire à un utilisateur</strong> afin de résoudre un problème ou atteindre un objectif ;</li>
+      <li>(2) une condition ou capacité qui doit être remplie ou possédée par un composant du <strong>système</strong> pour satisfaire un contrat, une spécification ou d'autres documents formellement imposés ;</li>
+      <li>(3) une <strong>représentation documentée</strong> d'une condition ou capacité comme dans (1) ou (2).</li>
+    </ul>
+  </div>
+
+  <h3>Les 3 types d'exigences (classification à maîtriser parfaitement)</h3>
+  <table>
+    <tr><th>Type</th><th>Définition</th><th>Exemples du cours</th></tr>
+    <tr>
+      <td class="c1">Fonctionnelle</td>
+      <td>Une <strong>action</strong> que le logiciel doit <strong>effectuer</strong> pour être utile à l'utilisateur. → « le logiciel doit <em>permettre de faire</em> X »</td>
+      <td>« Le logiciel doit permettre de suivre les paiements individuels » ; « … d'ajouter un nouveau client ».</td>
+    </tr>
+    <tr>
+      <td class="c1">Non-fonctionnelle</td>
+      <td>Une <strong>propriété ou qualité</strong> que le logiciel doit <strong>avoir</strong>. → « le logiciel doit <em>être</em> X »</td>
+      <td>« Le logiciel doit être rapide et sécurisé » ; « … beau et facile à utiliser ».</td>
+    </tr>
+    <tr>
+      <td class="c1">Globale</td>
+      <td>Une <strong>contrainte sur l'ensemble du projet</strong> (pas seulement sur le logiciel).</td>
+      <td>« Le projet doit être terminé pour le 1er mai » ; « Tous les clients devront utiliser le futur produit ».</td>
+    </tr>
+  </table>
+
+  <div class="box piege">
+    <span class="titre">Astuce anti-piège</span>
+    <p>Test rapide : l'exigence décrit-elle un <strong>verbe d'action du système</strong> (fonctionnelle), un <strong>adjectif du système</strong> (non-fonctionnelle) ou une <strong>contrainte de projet</strong> — délai, budget, obligation d'usage (globale) ? Attention : « le logiciel doit être sécurisé » est non-fonctionnelle, mais « le logiciel doit permettre de réinitialiser un mot de passe » est fonctionnelle, même si les deux touchent à la sécurité.</p>
+  </div>
+
+  <h3>Les activités de l'ingénierie des exigences</h3>
+  <p>Les procédés varient selon le domaine, les personnes et l'organisation, mais certaines <strong>activités génériques</strong> sont communes à tous les processus. Le cours les détaille ainsi :</p>
+  <table>
+    <tr><th>Activité</th><th>En quoi ça consiste</th></tr>
+    <tr><td class="c1">Élicitation</td><td><strong>Apprendre, découvrir, extraire, faire émerger</strong> les besoins des clients, des utilisateurs et des autres intervenants potentiels. (Interviews, observations, ateliers…)</td></tr>
+    <tr><td class="c1">Analyse</td><td>Analyser les informations obtenues des parties prenantes pour <strong>générer une liste d'exigences candidates</strong>, souvent via la <strong>création et l'analyse de modèles d'exigences</strong> — objectif : mieux comprendre, <strong>améliorer l'exhaustivité, réduire l'incohérence</strong>.</td></tr>
+    <tr><td class="c1">Triage</td><td>Déterminer <strong>quel sous-ensemble</strong> des exigences est approprié pour <strong>des éditions (versions) spécifiques</strong> du système. → c'est ici qu'intervient MoSCoW !</td></tr>
+    <tr><td class="c1">Spécification</td><td><strong>Documenter le comportement externe souhaité</strong> du système.</td></tr>
+    <tr><td class="c1">Vérification</td><td>Déterminer le <strong>caractère raisonnable, la cohérence, l'exhaustivité, la pertinence et l'absence de défauts</strong> dans un ensemble d'exigences.</td></tr>
+  </table>
+
+  <div class="box lien">
+    <span class="titre">Lien SDLC ↔ spécification (slide « L'importance des modèles »)</span>
+    <p>Une <strong>spécification</strong> décrit les fonctions d'un logiciel afin de le réaliser. Elle définit le <strong>QUOI</strong> (toutes les fonctionnalités et exigences que le logiciel doit satisfaire) mais <strong>pas le COMMENT</strong> (aucun détail d'implémentation ni de technique de construction). Le COMMENT arrive en phase 3 (conception) et 4 (programmation) du SDLC.</p>
+  </div>
+
+  <h3>Prioriser les exigences : la méthode MoSCoW</h3>
+  <p>Impossible de tout construire dans la première version. <strong>MoSCoW</strong> classe chaque exigence en 4 niveaux (les majuscules donnent le nom : <strong>M</strong>o<strong>S</strong>ic<strong>C</strong>o<strong>W</strong>… non, juste M-S-C-W avec des « o » pour prononcer !) :</p>
+
+  <div class="moscow">
+    <div class="mos m">
+      <h4>M — Must have</h4>
+      <p>« Doit être fait » : <strong>vital</strong>. Sans ça, le produit ne fonctionne pas ou n'atteint pas son objectif de base.</p>
+      <p class="ex">App fitness : inscription/connexion, plans d'entraînement personnalisés, tutoriels vidéo.</p>
+    </div>
+    <div class="mos s">
+      <h4>S — Should have</h4>
+      <p>« Devrait être fait dans la mesure du possible » : <strong>essentiel</strong>, forte valeur ajoutée, mais pas critique pour le lancement.</p>
+      <p class="ex">Notifications push, intégration avec les montres connectées.</p>
+    </div>
+    <div class="mos c">
+      <h4>C — Could have</h4>
+      <p>« Pourrait être fait » si cela n'a <strong>pas d'impact sur les autres tâches</strong> : <strong>confort</strong>, améliore l'expérience.</p>
+      <p class="ex">Gamification, partage sur les réseaux sociaux.</p>
+    </div>
+    <div class="mos w">
+      <h4>W — Won't have (this time)</h4>
+      <p>« Ne sera pas fait cette fois mais plus tard » : <strong>luxe</strong>. C'est votre <strong>zone d'optimisation budgétaire</strong>.</p>
+      <p class="ex">Suivi de journal (log tracking).</p>
+    </div>
+  </div>
+
+  <div class="box exam">
+    <span class="titre">À l'examen</span>
+    <p>Deux formats probables : (1) <em>donner la signification exacte des 4 lettres</em> avec les nuances vital / essentiel / confort / luxe ; (2) <em>classer une liste d'exigences</em> pour un cas concret (comme FixMyStreet) en justifiant. N'oublie pas : le <strong>W</strong> n'est pas « abandonné » — c'est « pas cette fois, mais souhaité pour le futur ».</p>
+  </div>
+
+  <div class="quiz" data-quiz>
+    <span class="q-label">Vérifie ta compréhension</span>
+    <p class="question">« Le logiciel doit être facile à utiliser par des agents non techniques. » Quel type d'exigence ?</p>
+    <div class="opts">
+      <button data-ok="0">Fonctionnelle</button>
+      <button data-ok="1">Non-fonctionnelle</button>
+      <button data-ok="0">Globale</button>
+    </div>
+    <div class="fb"></div>
+    <p class="expl" hidden>« Doit <strong>être</strong> facile à utiliser » = une <strong>qualité</strong> du logiciel → non-fonctionnelle. Fonctionnelle = action (« permettre de… ») ; globale = contrainte projet (délai, adoption obligatoire…).</p>
+  </div>
+
+  <div class="quiz" data-quiz>
+    <span class="q-label">Vérifie ta compréhension</span>
+    <p class="question">L'activité qui consiste à décider quelles exigences iront dans la version 1 et lesquelles attendront la version 2 s'appelle…</p>
+    <div class="opts">
+      <button data-ok="0">L'élicitation</button>
+      <button data-ok="0">La vérification</button>
+      <button data-ok="1">Le triage</button>
+      <button data-ok="0">La spécification</button>
+    </div>
+    <div class="fb"></div>
+    <p class="expl" hidden>Le <strong>triage</strong> : déterminer quel sous-ensemble d'exigences est approprié pour des <strong>éditions spécifiques</strong> du système. MoSCoW est l'outil de priorisation typique de cette activité.</p>
+  </div>
+
+  <div class="quiz" data-quiz>
+    <span class="q-label">Vérifie ta compréhension</span>
+    <p class="question">Dans MoSCoW, quelle catégorie est décrite comme « votre zone d'optimisation budgétaire » ?</p>
+    <div class="opts">
+      <button data-ok="0">M — Must have</button>
+      <button data-ok="0">S — Should have</button>
+      <button data-ok="0">C — Could have</button>
+      <button data-ok="1">W — Won't have this time</button>
+    </div>
+    <div class="fb"></div>
+    <p class="expl" hidden>Le <strong>W</strong> (luxe) : ce qu'on reporte pour tenir le budget, mais qu'on aimerait faire dans le futur.</p>
+  </div>
+</section>
+
+<!-- ================= SECTION 7 ================= -->
+<section id="s7">
+  <div class="sec-head"><span class="num">7</span><h2>Pourquoi modéliser ? (le pont avec le chapitre 1)</h2></div>
+
+  <p class="intro">La fin du chapitre boucle sur le chapitre 1 : puisque la communication humaine perd 90 % de l'information en route et que les spécifications en texte libre sont ambiguës (relis l'exemple de l'ouverture de compte bancaire : un paragraphe touffu, plein de cas particuliers cachés !), il faut des <strong>modèles</strong>.</p>
+
+  <div class="box def">
+    <span class="titre">Définitions à connaître</span>
+    <p>Un <strong>modèle</strong> = (A) chose ou personne qui, grâce à ses caractéristiques, peut <strong>servir de référence à l'imitation ou à la reproduction</strong> ; (B) système physique, mathématique ou logique représentant les <strong>structures essentielles</strong> d'une réalité et capable d'en <strong>expliquer</strong> ou d'en <strong>reproduire dynamiquement le fonctionnement</strong>.</p>
+    <p>En résumé opérationnel : <strong>modèle = représentation réduite / simplifiée / abstraite d'un (aspect d'un) système</strong>.</p>
+  </div>
+
+  <p>Ses <strong>3 buts</strong> : <strong>aider à comprendre</strong> un problème/une solution complexe, <strong>communiquer</strong> des informations sur le problème/la solution, et <strong>diriger l'implémentation</strong>. Un modèle implique toujours un <strong>langage</strong> dans lequel il est exprimé : <strong>adapté à ses interlocuteurs</strong>, <strong>idéalement standardisé et formalisé</strong>, <strong>afin d'éviter les ambiguïtés</strong> (c'est exactement ce que seront BPMN au chapitre 3 et ArchiMate au chapitre 4).</p>
+
+  <h3>Les 5 qualités d'un modèle (concept transversal ★★★)</h3>
+  <table>
+    <tr><th>Qualité</th><th>Ce que ça veut dire</th></tr>
+    <tr><td class="c1">Abstrait</td><td><strong>Focalisation sur les aspects importants</strong> = mise de côté des détails. Un modèle est toujours une simplification, une caricature, un point de vue. L'abstraction est <strong>le moyen le plus efficace de gérer la complexité croissante des SI</strong>.</td></tr>
+    <tr><td class="c1">Compréhensible</td><td>La forme doit être <strong>intuitive pour l'audience</strong>. Fonction de l'<strong>expressivité</strong> : transmettre une idée complexe avec peu d'information directe. Contre-exemple : le code d'un programme est peu compréhensible (mais très précis).</td></tr>
+    <tr><td class="c1">Précis</td><td>Le modèle doit dire <strong>la vérité</strong> (correct), <strong>toute la vérité</strong> (complet <em>relativement à son degré d'abstraction</em>), <strong>rien que la vérité</strong> (pas de bruit ni de sur-spécification). Exemple du cours : « ∀x. Oiseau(x) ⇒ Vole(x) » est <em>formel et non ambigu</em>… mais <em>imprécis</em> (l'autruche et le pingouin ne volent pas !). Formel ≠ précis.</td></tr>
+    <tr><td class="c1">Prédictif</td><td>Le modèle permet de <strong>déduire des propriétés correctes et non triviales</strong> du système. Ex. du diagramme d'activités UML : on peut déduire qu'<em>une livraison ne peut avoir lieu sans que le client ait payé</em>. Dépend fortement de la précision et de la forme.</td></tr>
+    <tr><td class="c1">Peu coûteux</td><td>Le modèle doit être <strong>beaucoup moins coûteux à construire et à étudier que le système réel</strong> — que le système existe déjà ou non (la maquette de la ville coûte moins cher que la ville).</td></tr>
+  </table>
+
+  <div class="box lien">
+    <span class="titre">Concept transversal — le retrouver partout</span>
+    <p>Ces 5 qualités apparaissent au chapitre 1 (théorie de la modélisation), ici au chapitre 2 (importance des modèles dans le SDLC), et implicitement aux chapitres 3 (BPMN) et 4 (ArchiMate) : chaque notation existe pour produire des modèles abstraits, compréhensibles, précis, prédictifs et peu coûteux. Question théorique <strong>ultra-probable</strong> à l'examen.</p>
+  </div>
+
+  <div class="quiz" data-quiz>
+    <span class="q-label">Vérifie ta compréhension</span>
+    <p class="question">« ∀x. Oiseau(x) ⇒ Vole(x) » est formel et non ambigu. Pourquoi le cours dit-il pourtant que ce modèle est déficient ?</p>
+    <div class="opts">
+      <button data-ok="0">Parce qu'il n'est pas assez abstrait</button>
+      <button data-ok="1">Parce qu'il est imprécis : il ne dit pas la vérité (autruche, pingouin)</button>
+      <button data-ok="0">Parce qu'il est trop coûteux à construire</button>
+    </div>
+    <div class="fb"></div>
+    <p class="expl" hidden>Un modèle peut être <strong>formel sans être précis</strong>. « Précis » = dire la vérité, toute la vérité, rien que la vérité. Or certains oiseaux ne volent pas : le modèle est incorrect par rapport à la définition communément admise d'un oiseau.</p>
+  </div>
+</section>
+
+<!-- ================= PRIORITÉS ================= -->
+<section id="prio">
+  <div class="sec-head"><span class="num">★</span><h2>À maîtriser en priorité pour l'examen</h2></div>
+  <p>Mon classement, basé sur le format d'examen (~40 % théorie + questions situationnelles) et les concepts transversaux du cours :</p>
+  <div class="prio">
+    <div class="item"><span class="et etoiles">★★★</span><div><strong>Les 7 phases du SDLC avec objectif + output de chacune.</strong> C'est LE squelette du chapitre. Sois capable, face à un livrable (« cahier des exigences », « MVP », « étude de faisabilité »…), de nommer sa phase — et inversement.</div></div>
+    <div class="item"><span class="et etoiles">★★★</span><div><strong>Waterfall vs Agile</strong> : définitions, les 4 mots-clés de l'agile (itérative / incrémentale / adaptative / collaborative) et les défis de chacun. Question situationnelle quasi garantie (« quel modèle recommandez-vous et pourquoi ? »).</div></div>
+    <div class="item"><span class="et etoiles">★★★</span><div><strong>SCRUM en 3-4-2</strong> : 3 rôles (et surtout <em>qui fait quoi</em> : PO ↔ backlog, SM ↔ méthode), 4 réunions (piège Review/Rétrospective), 2 artefacts.</div></div>
+    <div class="item"><span class="et etoiles">★★★</span><div><strong>Les 3 types d'exigences</strong> (fonctionnelle / non-fonctionnelle / globale) et <strong>MoSCoW</strong> : exercices de classification très probables.</div></div>
+    <div class="item"><span class="et etoiles">★★★</span><div><strong>Les 5 qualités d'un modèle</strong> — concept transversal qui revient dans plusieurs questions théoriques (déjà vu au chapitre 1 : c'est un signal fort).</div></div>
+    <div class="item"><span class="et etoiles">★★</span><div><strong>Le rôle du Business Analyst</strong> (liaison affaires ↔ IT, solution pas forcément technologique) et les <strong>4 phases de l'analyse métier</strong> (problème → état actuel → état désiré → gap).</div></div>
+    <div class="item"><span class="et etoiles">★★</span><div><strong>Les causes d'échec des projets informatiques</strong> (implication des utilisateurs 15,9 %, hiérarchie 13,9 %, spécifications 13 %) + l'idée « problème humain, pas seulement technique » et la déperdition 100 % → 10 %.</div></div>
+    <div class="item"><span class="et etoiles">★★</span><div><strong>Les 5 activités de l'ingénierie des exigences</strong> (élicitation, analyse, triage, spécification, vérification) et <strong>spécification = QUOI, pas COMMENT</strong>.</div></div>
+    <div class="item"><span class="et etoiles">★</span><div><strong>Le triangle qualité/rapide/coût</strong>, les <strong>4 avantages du SDLC</strong>, les <strong>3 niveaux de tests</strong> — parfaits pour des QCM ou des petites questions de définition.</div></div>
+  </div>
+</section>
+
+<!-- ================= EXERCICES ================= -->
+<section id="train">
+  <div class="sec-head"><span class="num">✎</span><h2>Exercices d'entraînement</h2></div>
+  <p>D'abord une série de QCM en conditions d'examen, puis des questions ouvertes de type « théorie + application » avec réponse modèle cachée. Réponds avant de cliquer !</p>
+
+  <div class="quiz" data-quiz>
+    <span class="q-label">QCM 1</span>
+    <p class="question">Associe : « Document de conception avec schémas d'architecture, modèles de données, maquettes et spécifications API ». Phase du SDLC ?</p>
+    <div class="opts">
+      <button data-ok="0">Analyse du système</button>
+      <button data-ok="1">Conception du système</button>
+      <button data-ok="0">Programmation</button>
+      <button data-ok="0">Analyse préliminaire</button>
+    </div>
+    <div class="fb"></div>
+    <p class="expl" hidden>Le <strong>System Design Document</strong> est l'output de la phase 3, conception du système : traduction des besoins métier en spécifications techniques.</p>
+  </div>
+
+  <div class="quiz" data-quiz>
+    <span class="q-label">QCM 2</span>
+    <p class="question">« Chaque nouvelle version du produit ajoute de la valeur commerciale et est utilisable. » Ce point de la définition de l'agile correspond au mot-clé…</p>
+    <div class="opts">
+      <button data-ok="0">Itérative</button>
+      <button data-ok="1">Incrémentale</button>
+      <button data-ok="0">Adaptative</button>
+      <button data-ok="0">Collaborative</button>
+    </div>
+    <div class="fb"></div>
+    <p class="expl" hidden><strong>Incrémentale</strong> = subdivision en petits sous-systèmes, chaque version utilisable et créatrice de valeur. « Itérative » ne parle que des cycles limités dans le temps.</p>
+  </div>
+
+  <div class="quiz" data-quiz>
+    <span class="q-label">QCM 3</span>
+    <p class="question">Pour FixMyStreet, l'équipe classe « fonction vote/confirmation par d'autres citoyens » comme souhaitable mais reportée à une version ultérieure pour tenir le budget. En MoSCoW, c'est un…</p>
+    <div class="opts">
+      <button data-ok="0">Must have</button>
+      <button data-ok="0">Should have</button>
+      <button data-ok="0">Could have</button>
+      <button data-ok="1">Won't have this time</button>
+    </div>
+    <div class="fb"></div>
+    <p class="expl" hidden>Reporté à plus tard pour raisons budgétaires mais souhaité dans le futur = <strong>W</strong>, la zone d'optimisation budgétaire.</p>
+  </div>
+
+  <div class="quiz" data-quiz>
+    <span class="q-label">QCM 4</span>
+    <p class="question">« Le projet doit être terminé pour le 1er mai. » Type d'exigence ?</p>
+    <div class="opts">
+      <button data-ok="0">Fonctionnelle</button>
+      <button data-ok="0">Non-fonctionnelle</button>
+      <button data-ok="1">Globale</button>
+    </div>
+    <div class="fb"></div>
+    <p class="expl" hidden>C'est une <strong>contrainte sur l'ensemble du projet</strong> (un délai), pas une propriété ni une action du logiciel → exigence <strong>globale</strong>.</p>
+  </div>
+
+  <div class="quiz" data-quiz>
+    <span class="q-label">QCM 5</span>
+    <p class="question">Un développeur se plaint qu'une dépendance externe bloque son travail. Dans SCRUM, qui est chargé de « supprimer les obstacles » ?</p>
+    <div class="opts">
+      <button data-ok="0">Le Product Owner</button>
+      <button data-ok="1">Le SCRUM Master</button>
+      <button data-ok="0">L'équipe de développement elle-même, obligatoirement</button>
+    </div>
+    <div class="fb"></div>
+    <p class="expl" hidden>Le <strong>SCRUM Master</strong> : responsable méthodologique, il supprime les obstacles et facilite la coopération.</p>
+  </div>
+
+  <div class="quiz" data-quiz>
+    <span class="q-label">QCM 6</span>
+    <p class="question">Une spécification définit…</p>
+    <div class="opts">
+      <button data-ok="1">Le QUOI (fonctionnalités et exigences), mais pas le COMMENT (implémentation)</button>
+      <button data-ok="0">Le COMMENT (techniques de construction), mais pas le QUOI</button>
+      <button data-ok="0">À la fois le QUOI et le COMMENT en détail</button>
+    </div>
+    <div class="fb"></div>
+    <p class="expl" hidden>La spécification liste tout ce que le système doit <strong>faire</strong> (QUOI) sans dire <strong>comment</strong> le réaliser techniquement.</p>
+  </div>
+
+  <div class="quiz" data-quiz>
+    <span class="q-label">QCM 7</span>
+    <p class="question">Selon l'étude sur l'échec des projets informatiques, un projet « mitigé » est un projet…</p>
+    <div class="opts">
+      <button data-ok="0">Arrêté avant la fin prévue ou jamais mis en service</button>
+      <button data-ok="1">Terminé, mais sans respect du cahier des charges et/ou avec dépassement de temps ou de budget</button>
+      <button data-ok="0">Terminé dans les temps mais avec un budget dépassé de moins de 10 %</button>
+    </div>
+    <div class="fb"></div>
+    <p class="expl" hidden>Mitigé = terminé, mais en trahissant le cahier des charges ou les contraintes de temps/budget. Arrêté / jamais mis en service = <strong>échec</strong>.</p>
+  </div>
+
+  <h3>Questions ouvertes (type examen)</h3>
+
+  <details class="reveal">
+    <summary>Q1. Citez et décrivez brièvement les 7 phases du SDLC, en donnant l'output principal de chacune.</summary>
+    <div class="corps">
+      <p><strong>1. Analyse préliminaire</strong> — clarifier le problème, les alternatives, l'adéquation ; étude de faisabilité (technique, économique, légale). <em>Output :</em> étude de faisabilité (go/no-go, scénario, risques, budget/délais).<br>
+      <strong>2. Analyse du système</strong> — définir avec les parties prenantes ce que le système doit faire. <em>Output :</em> cahier des exigences.<br>
+      <strong>3. Conception du système</strong> — traduire les besoins métier en spécifications techniques. <em>Output :</em> document de conception (architecture, modèles de données, maquettes, API).<br>
+      <strong>4. Programmation</strong> — développer conformément au design. <em>Output :</em> MVP / release + documentation technique minimale.<br>
+      <strong>5. Tests</strong> — vérification structurée : unitaires, système, métiers. <em>Output :</em> rapports de qualité + version stabilisée.<br>
+      <strong>6. Implémentation</strong> — mise en service : formation, migration des données, déploiement, adoption. <em>Output :</em> système opérationnel en production.<br>
+      <strong>7. Maintenance</strong> — support continu : bugs, évolutions, mises à jour, monitoring, sécurité. <em>Output :</em> process de support et SLA, backlog d'améliorations, nouvelles versions.</p>
+    </div>
+  </details>
+
+  <details class="reveal">
+    <summary>Q2. Une PME veut digitaliser la gestion de ses congés : besoins clairs, périmètre réduit, réglementation stable. Un éditeur de jeux mobiles veut lancer une nouvelle app dont le concept évoluera au gré des retours joueurs. Quel modèle de développement recommandez-vous à chacun ? Justifiez.</summary>
+    <div class="corps">
+      <p><strong>PME congés → Waterfall.</strong> Petit projet, tâches faciles à organiser, exigences prédéfinissables avec précision (règles légales stables) : c'est exactement le contexte où Waterfall est le plus adapté ; la rigidité au changement n'est pas un problème puisque les besoins ne bougeront pas.</p>
+      <p><strong>Jeu mobile → Agile (ex. SCRUM).</strong> Les exigences vont fortement évoluer selon les retours utilisateurs : il faut une approche itérative (sprints courts), incrémentale (chaque version utilisable), adaptative (ouverture au changement) et collaborative. Waterfall serait catastrophique : tout changement après la clôture d'une phase impacte délai, coût et qualité.</p>
+      <p><em>Bonus :</em> mentionner un défi de l'agile pour nuancer : attention au <strong>scope creep</strong> si on suit aveuglément tous les retours joueurs.</p>
+    </div>
+  </details>
+
+  <details class="reveal">
+    <summary>Q3. Décrivez les 3 rôles de SCRUM et expliquez pourquoi le SCRUM Master n'est pas un « chef de projet » classique.</summary>
+    <div class="corps">
+      <p><strong>Product Owner :</strong> contact avec les clients, définit les fonctionnalités, gère le backlog produit (priorisation commerciale), accepte ou rejette les résultats.<br>
+      <strong>Équipe de développement :</strong> pluridisciplinaire (5–10 personnes : IHM, développeurs, analyste commercial, expert en tests…), <strong>auto-organisée</strong>, dédiée à temps plein et stable.<br>
+      <strong>SCRUM Master :</strong> responsable méthodologique, supprime les obstacles, facilite la coopération.</p>
+      <p>Le SCRUM Master n'assigne pas les tâches et ne décide pas du contenu du produit : l'équipe est <strong>auto-organisée</strong> (elle se répartit le travail) et le contenu appartient au <strong>Product Owner</strong>. Le SCRUM Master est un facilitateur/gardien de la méthode, pas un supérieur hiérarchique.</p>
+    </div>
+  </details>
+
+  <details class="reveal">
+    <summary>Q4. Pour l'app FixMyStreet, classez ces exigences (fonctionnelle / non-fonctionnelle / globale) : (a) « permettre de déposer une plainte géolocalisée avec photo » ; (b) « l'interface doit être lisible par tous les citoyens » ; (c) « le pilote doit être déployé avant les élections communales » ; (d) « permettre à l'agent de prioritiser les plaintes » ; (e) « le système doit être sécurisé ».</summary>
+    <div class="corps">
+      <p>(a) <strong>Fonctionnelle</strong> — action que le système doit permettre.<br>
+      (b) <strong>Non-fonctionnelle</strong> — qualité (lisibilité/facilité d'usage).<br>
+      (c) <strong>Globale</strong> — contrainte de délai sur l'ensemble du projet.<br>
+      (d) <strong>Fonctionnelle</strong> — action offerte à l'utilisateur agent.<br>
+      (e) <strong>Non-fonctionnelle</strong> — propriété que le logiciel doit avoir.</p>
+    </div>
+  </details>
+
+  <details class="reveal">
+    <summary>Q5. Expliquez pourquoi l'échec des projets informatiques n'est « pas seulement un problème technique », en citant les 3 causes principales et le rôle de la modélisation.</summary>
+    <div class="corps">
+      <p>Les trois causes les plus invoquées sont <strong>humaines et organisationnelles</strong> : manque d'implication des utilisateurs (15,9 %), support insuffisant de la hiérarchie (13,9 %), manque de clarté des spécifications de départ (13 %). Le problème est celui d'une « bonne compréhension/représentation » : les informaticiens ne sont pas du métier et les utilisateurs peinent à expliquer ce qu'ils font au quotidien. La communication naturelle perd énormément d'information (de 100 % voulu à ~10 % répercuté). La <strong>modélisation</strong> répond à ce problème : un modèle exprimé dans un langage <strong>standardisé et formalisé</strong>, adapté aux interlocuteurs, réduit les ambiguïtés, aide à comprendre, à communiquer et à diriger l'implémentation.</p>
+    </div>
+  </details>
+
+  <details class="reveal">
+    <summary>Q6. Citez les 5 qualités d'un modèle et illustrez « précis » avec l'exemple des oiseaux du cours.</summary>
+    <div class="corps">
+      <p><strong>Abstrait</strong> (focalisation sur l'important, mise de côté des détails — moyen le plus efficace de gérer la complexité des SI), <strong>compréhensible</strong> (forme intuitive pour l'audience, expressivité), <strong>précis</strong> (la vérité, toute la vérité — relativement au degré d'abstraction —, rien que la vérité), <strong>prédictif</strong> (permet de déduire des propriétés correctes et non triviales), <strong>peu coûteux</strong> (beaucoup moins cher à construire/étudier que le système réel).</p>
+      <p><em>Illustration :</em> « ∀x. Oiseau(x) ⇒ Vole(x) » est <strong>formel et non ambigu</strong> mais <strong>imprécis</strong> : il ne dit pas la vérité, puisque l'autruche et le pingouin sont des oiseaux qui ne volent pas. Moralité : formel ≠ précis ; la précision se juge par rapport à la réalité modélisée.</p>
+    </div>
+  </details>
+
+  <details class="reveal">
+    <summary>Q7. Différenciez Sprint Review et Sprint Rétrospective, puis Product Backlog et Sprint Backlog.</summary>
+    <div class="corps">
+      <p><strong>Sprint Review :</strong> l'équipe présente ce qu'elle a fait pendant le sprint — démonstration informelle, réflexion sur le <strong>produit</strong> (ouvert aux parties prenantes).<br>
+      <strong>Sprint Rétrospective :</strong> réunion <strong>interne</strong> (équipe + Scrum Master), amélioration du <strong>processus</strong> de travail.</p>
+      <p><strong>Product Backlog :</strong> liste de <em>toutes</em> les exigences du produit, priorisées commercialement, définies par le Product Owner, révisées en permanence.<br>
+      <strong>Sprint Backlog :</strong> le sous-ensemble d'items sélectionnés lors du Sprint Planning pour <em>le sprint en cours</em>, décomposés en tâches.</p>
+    </div>
+  </details>
+
+  <details class="reveal">
+    <summary>Q8 (synthèse trans-chapitres). En quoi la phase « analyse du système » du SDLC prépare-t-elle la modélisation des processus (chapitre 3) et des données (chapitre 1) ?</summary>
+    <div class="corps">
+      <p>L'analyse du système consiste à <strong>documenter les processus et collecter les besoins</strong> avec les parties prenantes. Or, documenter un processus de manière non ambiguë, c'est le modéliser — d'où BPMN (chapitre 3) comme langage standardisé de modélisation des processus. De même, les besoins en information identifiés débouchent, en phase de conception, sur des <strong>modèles de données</strong> (entités « Plainte », « Utilisateur »… dans FixMyStreet), c'est-à-dire des schémas Entité-Association (chapitre 1) qui seront traduits en base de données. Le SDLC est donc le <strong>cadre temporel</strong> dans lequel s'insèrent toutes les techniques de modélisation du cours, et les modèles y jouent leurs trois rôles : comprendre, communiquer, diriger l'implémentation.</p>
+    </div>
+  </details>
+</section>
+
+<footer>
+  Support de révision généré pour le cours « Systèmes d'Information de Gestion » (Prof. Simonofski, UNamur, 2025–2026) — Chapitre 2 : Cycle de développement des SI. Les slides du cours restent la source examinable de référence.
+</footer>
+
+<script>
+document.querySelectorAll('[data-quiz]').forEach(function(quiz){
+  var buttons = quiz.querySelectorAll('.opts button');
+  var fb = quiz.querySelector('.fb');
+  var expl = quiz.querySelector('.expl');
+  buttons.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      if (quiz.dataset.done) return;
+      quiz.dataset.done = "1";
+      var correct = btn.dataset.ok === "1";
+      buttons.forEach(function(b){
+        if (b.dataset.ok === "1") b.classList.add('ok');
+        b.disabled = true;
+      });
+      if (!correct) btn.classList.add('ko');
+      fb.classList.add('show', correct ? 'good' : 'bad');
+      fb.innerHTML = (correct ? "<strong>✔ Correct !</strong> " : "<strong>✘ Pas tout à fait.</strong> ") + (expl ? expl.innerHTML : "");
+    });
+  });
+});
+</script>
+
+</main>
+<a class="pill-haut" href="#top">↑ Haut</a>
+<a href="../index.html#/theorie" style="position:fixed;left:14px;bottom:14px;z-index:99999;display:inline-flex;align-items:center;gap:6px;background:#0e7c86;color:#fff;text-decoration:none;font:600 13px/1 system-ui,sans-serif;padding:9px 14px;border-radius:999px;box-shadow:0 2px 10px rgba(0,0,0,.25);" title="Revenir au site BPMN &amp; ArchiMate — TP interactifs">&#8592; Parcours SIG</a>
+</body>
+</html>

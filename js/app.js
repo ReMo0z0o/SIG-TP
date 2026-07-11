@@ -53,6 +53,8 @@ function bootApp() {
   const ORDER = [
     { group: 'Découvrir' },
     { route: 'home', icon: '⌂' },
+    { group: 'Théorie du cours' },
+    { route: 'theorie' },
     { group: 'Parcours BPMN' },
     { route: 'bpmn' },
     { route: 'tp1' },

@@ -23,6 +23,7 @@ Compatible GitHub Pages : il suffit d'activer Pages sur la branche pour publier 
 
 | Module | Contenu |
 |---|---|
+| **Théorie du cours** | Les 6 chapitres du cours magistral : Introduction aux SIG, SDLC, BPM, TOGAF & ArchiMate, Théories des SI (apps de révision autonomes dans `theorie/`) + Conclusion orientée examen, avec suivi de progression par chapitre |
 | **Théorie BPMN** | Événements, tâches, flux, pools/lanes, gateways (avec **simulateur de jetons**), sous-processus, boucles/multi-instances, événements frontière (scénario animé) + quiz |
 | **TP1 — BPMN de base** | Les 9 exercices officiels : 6 lectures de diagrammes interactives (tableaux Oui/Non, QCM, simulation de la boucle infinie) + 3 modélisations (commande, plaintes, Event Bureau) avec **solutions construites étape par étape** |
 | **TP2 — BPMN avancé** | Hypothèques (gateway événementiel), recrutement (boucle & multi-instance), clients défaillants (timers frontière non-interruptibles) — énoncés officiels, corrections pas à pas |
