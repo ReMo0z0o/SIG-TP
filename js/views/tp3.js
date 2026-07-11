@@ -77,9 +77,9 @@
       { id: 'jAnd', kind: 'junction', x: 705, y: 280, label: 'And' },
       { id: 'send', kind: 'process', layer: 'business', x: 815, y: 280, w: 125, h: 44, label: 'Send order to delivery' },
       { id: 'roleDS', container: true, layer: 'business', kind: 'role', x: 230, y: 330, w: 870, h: 100, label: 'Delivery Service', labelAnchor: 'start', labelX: 243 },
-      { id: 'check', kind: 'process', layer: 'business', x: 610, y: 385, w: 125, h: 44, label: 'Check customer data' },
+      { id: 'check', kind: 'process', layer: 'business', x: 595, y: 385, w: 110, h: 44, label: 'Check customer data' },
       { id: 'sOrder', kind: 'service', layer: 'app', x: 420, y: 490, w: 125, h: 46, label: 'Order service' },
-      { id: 'sCust', kind: 'service', layer: 'app', x: 585, y: 490, w: 130, h: 46, label: 'Customer service' },
+      { id: 'sCust', kind: 'service', layer: 'app', x: 595, y: 490, w: 135, h: 46, label: 'Customer service' },
       { id: 'sPay', kind: 'service', layer: 'app', x: 750, y: 490, w: 125, h: 46, label: 'payment service' },
       { id: 'sDel', kind: 'service', layer: 'app', x: 920, y: 490, w: 125, h: 46, label: 'Delivery service' },
       { id: 'cOrder', kind: 'component', layer: 'app', x: 480, y: 585, w: 130, h: 48, label: 'Order system' },
@@ -94,13 +94,14 @@
       { id: 'rF2', from: 'payP', to: 'val', type: 'flow', points: [[620, 258], [620, 182]], label: 'Payment info', lx: 658, ly: 225 },
       { id: 'rJ1', from: 'regO', to: 'jOr', type: 'triggering', points: [[478, 280], [503, 280]] },
       { id: 'rJ2', from: 'jOr', to: 'payP', type: 'triggering', points: [[517, 280], [552, 280]], label: '[yes]', lx: 535, ly: 298 },
-      { id: 'rJ3', from: 'jOr', to: 'check', type: 'triggering', points: [[510, 287], [510, 385], [547, 385]], label: '[no]', lx: 528, ly: 370 },
+      { id: 'rJ3', from: 'jOr', to: 'check', type: 'triggering', points: [[510, 287], [510, 385], [540, 385]], label: '[no]', lx: 528, ly: 370 },
       { id: 'rJ4', from: 'payP', to: 'jAnd', type: 'triggering', points: [[668, 280], [698, 280]] },
       { id: 'rJ5', from: 'jAnd', to: 'send', type: 'triggering', points: [[712, 280], [752, 280]] },
-      { id: 'rJ6', from: 'check', to: 'jAnd', type: 'triggering', points: [[648, 363], [705, 310], [705, 287]] },
+      { id: 'rJ6', from: 'check', to: 'jAnd', type: 'triggering', points: [[640, 363], [705, 310], [705, 287]] },
       { id: 'rF3', from: 'send', to: 'conf', type: 'flow', points: [[878, 280], [910, 280], [910, 182]], label: 'info 2', lx: 895, ly: 250 },
       { id: 'rS1', from: 'sOrder', to: 'regO', type: 'serving', points: [[420, 467], [420, 302]], label: 'serving', lx: 448, ly: 452 },
-      { id: 'rS2', from: 'sCust', to: 'check', type: 'serving', points: [[585, 467], [585, 407]], label: 'serving', lx: 613, ly: 452 },
+      { id: 'rS2', from: 'sCust', to: 'check', type: 'serving', points: [[580, 467], [580, 407]], label: 'serving', lx: 552, ly: 452 },
+      { id: 'servInv', from: 'payP', to: 'sCust', type: 'serving', points: [[655, 302], [655, 467]] },
       { id: 'rS3', from: 'sPay', to: 'payP', type: 'serving', points: [[750, 467], [750, 330], [648, 302]], label: 'serving', lx: 778, ly: 452 },
       { id: 'rS4', from: 'sDel', to: 'conf', type: 'serving', points: [[955, 467], [955, 182]], label: 'serving', lx: 983, ly: 452 },
       { id: 'rR1', from: 'cOrder', to: 'sOrder', type: 'realization', points: [[470, 561], [432, 513]], label: 'realization', lx: 420, ly: 545 },
@@ -247,13 +248,17 @@
       QUIZ.hotspot(body, {
         id: 'tp3-ex2',
         api: api2,
-        question: 'Trois erreurs de modélisation se cachent dans ce diagramme (celles du correctif). Cliquez sur les éléments concernés, puis validez.',
+        question: 'Quatre erreurs de modélisation se cachent dans ce diagramme (les zones marquées du correctif + l’incohérence de placement). Cliquez sur les éléments concernés, puis validez.',
         aliases: { 'rDir1': 'rDir2' },
         targets: {
           'jAnd': `La jonction « <b>And</b> » (et son marquage [yes]/[no] autour du « Or ») importe de la <b>logique de contrôle
             BPMN</b> dans un modèle d'architecture : une junction ArchiMate sert uniquement à combiner plusieurs relations
-            du même type — pas à reconstruire des gateways de synchronisation/décision. Ici elle « synchronise » le paiement
-            avec « Check customer data » : ce niveau de détail appartient au diagramme de processus BPMN, pas à ArchiMate.`,
+            du même type — pas à reconstruire des gateways de synchronisation/décision. Ce niveau de détail appartient
+            au diagramme de processus BPMN, pas à ArchiMate.`,
+          'servInv': `Serving <b>inversé</b> : la flèche part du processus métier « Process payment » et descend <b>vers</b> le
+            service applicatif « Customer service ». C'est le monde à l'envers — un service applicatif <b>sert</b> le processus
+            métier (flèche vers le haut), un processus métier ne « sert » pas la couche application. Comparez avec sa jumelle
+            correcte juste à côté : « payment service » → « Process payment ».`,
           'check': `Le processus « Check customer data » est placé dans le conteneur du rôle <b>« Delivery Service »</b>, alors
             que c'est une activité de gestion de commande (vérifier les données du client avant paiement). Le rôle Delivery
             Service n'exécute par ailleurs <b>aucun</b> processus de livraison — l'affectation processus/rôle est incohérente.`,
@@ -263,6 +268,7 @@
             métier. Un trait direct composant → processus est une erreur de structure.`
         },
         decoys: [
+          { id: 'rS3', why: '« payment service » —serving→ « Process payment » est dans le BON sens : le service applicatif sert le processus métier. C’est sa jumelle croisée (qui DESCEND vers « Customer service ») qui est fausse.' },
           { id: 'rFl1', why: 'Un flow « order data » entre deux composants applicatifs est parfaitement légal : transfert d’information.' },
           { id: 'sDel', why: '« Delivery service » (service applicatif) réalisé par « Delivery system » et servant un processus : la chaîne est correcte.' },
           { id: 'evt', why: 'Un business event qui déclenche (triggering) le premier processus : usage canonique.' }
