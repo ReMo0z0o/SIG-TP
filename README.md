@@ -1,8 +1,10 @@
-# BPMN & ArchiMate — Comprendre et réussir les TP (ECGEB210)
+# Réussir ECGEB210 — théorie & pratique BPMN / ArchiMate
 
 Site d'apprentissage interactif construit à partir des supports officiels du cours
-**Systèmes d'information de gestion (ECGEB210, Université de Namur)** : les TP BPMN (TP1, TP2),
-le TP ArchiMate (TP3), la fiche récapitulative ArchiMate et les slides de théorie (3_BPM, 4_EA).
+**Systèmes d'information de gestion (ECGEB210, Université de Namur)** : les slides des 6 chapitres,
+les TP BPMN (TP1, TP2), le TP ArchiMate (TP3) et la fiche récapitulative ArchiMate.
+La théorie et la pratique y sont traitées à parts égales — comme à l'examen écrit
+(40 % théorie, 40 % modélisation).
 
 ## Lancer le site
 
@@ -29,7 +31,8 @@ Compatible GitHub Pages : il suffit d'activer Pages sur la branche pour publier 
 | **TP2 — BPMN avancé** | Hypothèques (gateway événementiel), recrutement (boucle & multi-instance), clients défaillants (timers frontière non-interruptibles) — énoncés officiels, corrections pas à pas |
 | **Théorie ArchiMate** | Les 3 couches, tous les éléments de la fiche récapitulative, les 11 relations et leurs flèches, l'exemple ArchiSurance commenté |
 | **TP3 — ArchiMate** | Expliquer un diagramme (réponse modèle), **2 chasses aux erreurs cliquables** (FoodExpress, location de véhicules), analyse de consultant (EasyPharm) |
-| **Examen blanc** | 20 questions mélangées avec explications détaillées |
+| **Examen type** | Le **format réel de l'examen** : vrai/faux à justifier, questions ouvertes larges (UTAUT vs UTAUT2…), mise en situation agile/SCRUM, 2 modélisations BPMN corrigées pas à pas et un modèle ArchiMate à commenter |
+| **Examen blanc** | 20 questions QCM mélangées avec explications détaillées |
 
 ## Fonctionnalités
 
@@ -50,7 +53,8 @@ js/app.js             Routeur, progression, navigation
 js/lib/bpmn.js        Moteur de rendu SVG BPMN 2.0 + jetons animés
 js/lib/archi.js       Moteur de rendu SVG ArchiMate 3.x
 js/lib/quiz.js        Moteur d'exercices (QCM, tableaux, hotspots, étapes, questions ouvertes)
-js/views/*.js         Les 7 pages de contenu
+js/views/*.js         Les pages de contenu (accueil, théorie, TP, examens)
+theorie/*.html        Les 6 chapitres du cours (apps autonomes + sommaire latéral partagé)
 ```
 
 > Ce site est un outil d'entraînement : en cas de divergence, les supports officiels du cours font foi.

@@ -56,14 +56,15 @@ function bootApp() {
     { route: 'home', icon: '⌂' },
     { group: 'Théorie du cours' },
     { route: 'theorie' },
-    { group: 'Parcours BPMN' },
+    { group: 'Pratique BPMN' },
     { route: 'bpmn' },
     { route: 'tp1' },
     { route: 'tp2' },
-    { group: 'Parcours ArchiMate' },
+    { group: 'Pratique ArchiMate' },
     { route: 'archimate' },
     { route: 'tp3' },
-    { group: 'Évaluation' },
+    { group: 'Examen' },
+    { route: 'examen-type' },
     { route: 'examen' }
   ];
 
