@@ -141,6 +141,17 @@
           <div class="stat-tile"><b>${Math.round((acquired / totalSec) * 100)}%</b><span>théorie maîtrisée</span></div>
         </div>
 
+        <section class="card" style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">
+          <div style="flex:1;min-width:240px">
+            <h3 style="margin:0 0 4px">Synthèse théorique — 47 pages, en PDF</h3>
+            <p style="margin:0;font-size:.94rem;color:var(--ink-2)">Toute la matière théorique du cours en un
+            seul document imprimable : les fondements des SIG, le SDLC et l'agile, la gestion des processus,
+            TOGAF, les théories de l'acceptation — avec <b>tous les modèles redessinés</b>. Les notations BPMN
+            et ArchiMate en sont exclues : elles s'entraînent dans les TP.</p>
+          </div>
+          <a class="btn btn-primary" href="Synthese-theorique-ECGEB210.pdf" download>Télécharger le PDF ↓</a>
+        </section>
+
         <div class="toc-legend">
           <b>Légende :</b>
           <span><span class="toc-dot" style="display:inline-grid"></span> pas encore vue</span>

@@ -1,0 +1,484 @@
+<!-- ===================== PARTIE 5 ===================== -->
+<div data-break="1" data-part="Partie 5 · Recherche et théories des SI" id="p5">
+  <div class="part-open">
+    <span class="po-num">5</span>
+    <div class="po-txt">
+      <p class="po-kicker">Chapitre 5 du cours · 80 slides</p>
+      <h2>Recherche et théories des systèmes d'information</h2>
+    </div>
+  </div>
+  <div class="part-exam"><b>Ce que l'examen attend de cette partie :</b> rappeler et <b>appliquer</b> les modèles
+  théoriques d'acceptation des technologies — TAM, UTAUT, UTAUT2. Concrètement : savoir <b>redessiner chaque
+  modèle de mémoire</b> (boîtes <i>et</i> flèches), définir chaque variable, et l'appliquer à un cas.
+  La question « présentez UTAUT, puis ce qui change avec UTAUT2 » est tombée à la session passée.</div>
+</div>
+
+<figure>
+<svg viewBox="0 0 660 108" role="img" aria-label="La généalogie des modèles d'acceptation">
+  <defs><marker id="gen-a" markerWidth="9" markerHeight="8" refX="8" refY="4" orient="auto">
+    <path d="M0 0 L8 4 L0 8 Z" fill="#455760"/></marker></defs>
+  <g text-anchor="middle">
+    <rect x="20" y="26" width="130" height="54" rx="6" fill="#e4f1f2" stroke="#0e7c86" stroke-width="1.6"/>
+    <text x="85" y="50" font-size="15" font-weight="700" fill="#0a5a63">TRA</text>
+    <text x="85" y="66" font-size="8.6" fill="#455760">1975 · psychologie</text>
+
+    <rect x="185" y="26" width="130" height="54" rx="6" fill="#e4f1f2" stroke="#0e7c86" stroke-width="1.6"/>
+    <text x="250" y="50" font-size="15" font-weight="700" fill="#0a5a63">TAM</text>
+    <text x="250" y="66" font-size="8.6" fill="#455760">1989 · les SI au travail</text>
+
+    <rect x="350" y="26" width="130" height="54" rx="6" fill="#e4f1f2" stroke="#0e7c86" stroke-width="1.6"/>
+    <text x="415" y="50" font-size="15" font-weight="700" fill="#0a5a63">UTAUT</text>
+    <text x="415" y="66" font-size="8.6" fill="#455760">2003 · unification</text>
+
+    <rect x="515" y="26" width="130" height="54" rx="6" fill="#e4f1f2" stroke="#0e7c86" stroke-width="1.6"/>
+    <text x="580" y="50" font-size="15" font-weight="700" fill="#0a5a63">UTAUT2</text>
+    <text x="580" y="66" font-size="8.6" fill="#455760">2012 · consommateur</text>
+  </g>
+  <g stroke="#455760" stroke-width="1.8" marker-end="url(#gen-a)">
+    <line x1="154" y1="53" x2="180" y2="53"/><line x1="319" y1="53" x2="345" y2="53"/><line x1="484" y1="53" x2="510" y2="53"/>
+  </g>
+  <text x="330" y="98" font-size="9.5" font-style="italic" fill="#78868f" text-anchor="middle">chaque flèche se lit « répond aux limites de »</text>
+</svg>
+<figcaption data-n="Figure 5.1">La lignée à maîtriser. Chaque modèle corrige les limites du précédent —
+c'est le fil conducteur de toute la partie.</figcaption>
+</figure>
+
+<h3 id="p5-1" class="keep"><span class="h3-num">5.1</span>Qu'est-ce que la recherche scientifique ?</h3>
+
+<p>Le cours retient <b>trois piliers</b> de la recherche de connaissances : ① <b>admettre son ignorance</b> —
+la science part du principe que nous ne savons pas tout, ce qui autorise la remise en question permanente ;
+② placer l'<b>observation au centre</b> — recueillir des observations puis utiliser des outils formels pour les
+relier en <b>théories cohérentes</b> ; ③ <b>acquérir de nouveaux pouvoirs</b> — utiliser ces théories pour
+développer de nouvelles capacités, en particulier de nouvelles <b>technologies</b>.</p>
+
+<figure>
+<svg viewBox="0 0 660 194" role="img" aria-label="Le triangle théorie, mesure, évidence de Recker">
+  <defs><marker id="rk-a" markerWidth="9" markerHeight="8" refX="8" refY="4" orient="auto">
+    <path d="M0 0 L8 4 L0 8 Z" fill="#455760"/></marker></defs>
+  <rect x="40" y="30" width="200" height="62" rx="5" fill="#e4f1f2" stroke="#0e7c86" stroke-width="1.6"/>
+  <text x="140" y="54" font-size="12.5" font-weight="700" fill="#0a5a63" text-anchor="middle">Théorie</text>
+  <text x="140" y="70" font-size="9" fill="#455760" text-anchor="middle">explications proposées</text>
+  <text x="140" y="82" font-size="9" fill="#455760" text-anchor="middle">d'un phénomène réel</text>
+
+  <rect x="420" y="30" width="200" height="62" rx="5" fill="#e4f1f2" stroke="#0e7c86" stroke-width="1.6"/>
+  <text x="520" y="54" font-size="12.5" font-weight="700" fill="#0a5a63" text-anchor="middle">Évidence</text>
+  <text x="520" y="70" font-size="9" fill="#455760" text-anchor="middle">observations soigneusement</text>
+  <text x="520" y="82" font-size="9" fill="#455760" text-anchor="middle">collectées</text>
+
+  <rect x="230" y="118" width="200" height="58" rx="5" fill="#fbf3de" stroke="#c9971f" stroke-width="1.6"/>
+  <text x="330" y="140" font-size="12.5" font-weight="700" fill="#8a6111" text-anchor="middle">Mesure</text>
+  <text x="330" y="156" font-size="9" fill="#455760" text-anchor="middle">méthodes de collecte reliant</text>
+  <text x="330" y="168" font-size="9" fill="#455760" text-anchor="middle">évidence et explications</text>
+
+  <line x1="246" y1="61" x2="414" y2="61" stroke="#455760" stroke-width="2" marker-end="url(#rk-a)" marker-start="url(#rk-a)"/>
+  <line x1="140" y1="98" x2="226" y2="140" stroke="#455760" stroke-width="1.6" marker-end="url(#rk-a)" marker-start="url(#rk-a)"/>
+  <line x1="520" y1="98" x2="434" y2="140" stroke="#455760" stroke-width="1.6" marker-end="url(#rk-a)" marker-start="url(#rk-a)"/>
+
+  <text x="140" y="20" font-size="9" font-style="italic" fill="#5f4b96" text-anchor="middle">I — nos explications sont-elles bonnes ?</text>
+  <text x="520" y="20" font-size="9" font-style="italic" fill="#5f4b96" text-anchor="middle">II — nos observations sont-elles bonnes ?</text>
+  <text x="330" y="190" font-size="9" font-style="italic" fill="#5f4b96" text-anchor="middle">III — nos mesures sont-elles bonnes ?</text>
+</svg>
+<figcaption data-n="Figure 5.2">Le triangle de <b>Recker (2021)</b>. La recherche fait l'aller-retour entre
+<b>théorie</b> et <b>évidence</b>, reliées par la <b>mesure</b> — chaque sommet portant sa question de qualité.</figcaption>
+</figure>
+
+<p><b>Trois profils de chercheurs :</b> le <b>théoricien</b> se consacre à l'<i>élaboration</i> de théories ;
+l'<b>expérimental</b> à leur <i>évaluation</i> ; l'<b>ingénieur</b> applique la théorie à la <i>conception
+d'artefacts</i>. Le <b>corpus de connaissances</b> d'un domaine est constitué des <b>théories validées</b>
+(pas encore réfutées) et des <b>méthodes</b> qui ont servi à les valider ou réfuter, accessibles à la
+<b>communauté scientifique</b>.</p>
+
+<h3 id="p5-2" class="keep"><span class="h3-num">5.2</span>Une (bonne) théorie : types et 4 building blocks</h3>
+
+<div class="box def keep">
+  <span class="box-t">Définition du cours</span>
+  <p>Une (bonne) théorie est « une <b>explication proposée des phénomènes empiriques</b>, formulée dans le
+  <b>respect de la méthode scientifique</b> ». En médecine : comprendre les causes de la maladie (théorie)
+  n'est pas la même chose que soigner un patient (conception) — les deux sont liés mais peuvent être
+  indépendants.</p>
+</div>
+
+<figure>
+<svg viewBox="0 0 660 250" role="img" aria-label="Les cinq types de théories de Gregor">
+  <defs><marker id="gr-a" markerWidth="9" markerHeight="8" refX="8" refY="4" orient="auto">
+    <path d="M0 0 L8 4 L0 8 Z" fill="#78868f"/></marker></defs>
+  <g text-anchor="middle">
+    <rect x="235" y="184" width="190" height="48" rx="5" fill="#fdfefe" stroke="#0e7c86" stroke-width="1.4"/>
+    <text x="330" y="204" font-size="11" font-weight="700" fill="#0a5a63">(I) Analyser</text>
+    <text x="330" y="220" font-size="9" fill="#455760">« qu'est-ce que c'est ? »</text>
+
+    <rect x="45" y="108" width="190" height="48" rx="5" fill="#fdfefe" stroke="#0e7c86" stroke-width="1.4"/>
+    <text x="140" y="128" font-size="11" font-weight="700" fill="#0a5a63">(II) Expliquer</text>
+    <text x="140" y="144" font-size="9" fill="#455760">« comment et pourquoi ? »</text>
+
+    <rect x="425" y="108" width="190" height="48" rx="5" fill="#fdfefe" stroke="#0e7c86" stroke-width="1.4"/>
+    <text x="520" y="128" font-size="11" font-weight="700" fill="#0a5a63">(III) Prédire</text>
+    <text x="520" y="144" font-size="9" fill="#455760">« qu'est-ce que ce sera ? »</text>
+
+    <rect x="45" y="26" width="190" height="52" rx="5" fill="#e4f1f2" stroke="#0e7c86" stroke-width="2.2"/>
+    <text x="140" y="46" font-size="11" font-weight="700" fill="#0a5a63">(IV) Expliquer et prédire</text>
+    <text x="140" y="62" font-size="9" font-weight="700" fill="#8a6111">TAM · UTAUT · UTAUT2</text>
+
+    <rect x="425" y="26" width="190" height="52" rx="5" fill="#fdfefe" stroke="#0e7c86" stroke-width="1.4"/>
+    <text x="520" y="46" font-size="11" font-weight="700" fill="#0a5a63">(V) Conception et action</text>
+    <text x="520" y="62" font-size="9" fill="#455760">« comment faire ? »</text>
+  </g>
+  <g stroke="#78868f" stroke-width="1.4" marker-end="url(#gr-a)" fill="none">
+    <path d="M 280 184 L 180 160"/><path d="M 380 184 L 480 160"/>
+    <path d="M 140 104 L 140 82"/><path d="M 520 104 L 520 82"/>
+    <path d="M 200 108 L 420 82" opacity="0.5"/><path d="M 460 108 L 240 82" opacity="0.5"/>
+  </g>
+  <text x="330" y="244" font-size="9" font-style="italic" fill="#78868f" text-anchor="middle">Gregor (2006), « The nature of theory in information systems », MIS Quarterly</text>
+</svg>
+<figcaption data-n="Figure 5.3">Les <b>5 types de théories</b>. Chaque type s'appuie sur les précédents.
+Le TAM et l'UTAUT sont des théories de <b>type IV</b> : elles expliquent <i>et</i> prédisent.</figcaption>
+</figure>
+
+<h4>Les 4 building blocks — la grille d'analyse de toute théorie</h4>
+<table class="compact">
+  <tr><th style="width:19%">Block</th><th style="width:31%">Question</th><th>Application au TAM</th></tr>
+  <tr><td><b>1 · Quoi ?</b><br><span class="small">les éléments constitutifs</span></td><td>De quels concepts la théorie parle-t-elle ? Ce sont les <b>boîtes</b> du modèle</td><td>Utilité perçue, facilité d'utilisation perçue, intention d'utilisation</td></tr>
+  <tr><td><b>2 · Comment ?</b><br><span class="small">les relations</span></td><td>Comment ces concepts sont-ils reliés ? Ce sont les <b>flèches</b></td><td>La facilité d'utilisation conduit à l'utilité perçue, qui conduit à l'intention</td></tr>
+  <tr><td><b>3 · Pourquoi ?</b><br><span class="small">la justification</span></td><td>Quelle logique explique que ces flèches existent ?</td><td>Les principes de la <b>dissonance cognitive</b> : les humains adaptent leurs comportements pour qu'ils soient en accord avec leurs perceptions et croyances</td></tr>
+  <tr><td><b>4 · Qui, où, quand ?</b><br><span class="small">les conditions limites</span></td><td>Sur quelles populations, dans quels contextes, à quelle époque la théorie s'applique-t-elle ?</td><td><b>Absentes de l'article original</b> — c'est l'une des critiques majeures du TAM, et une porte d'entrée classique pour contribuer</td></tr>
+</table>
+
+<h3 id="p5-3" class="keep"><span class="h3-num">5.3</span>La recherche en SI et l'adoption des technologies</h3>
+
+<p>La recherche en gestion des systèmes d'information s'intéresse au <b>développement</b>, à l'<b>utilisation</b>
+et à l'<b>impact</b> des technologies numériques. C'est une science <b>sociale</b>, ce qui a quatre
+conséquences : elle implique des <b>personnes</b> et leurs relations ; elle étudie les technologies <b>dans leur
+utilisation</b> ; elle est <b>toujours en cours de développement</b> et suit les évolutions technologiques ;
+et elle inclut des <b>erreurs de mesure</b>, car les phénomènes étudiés — perceptions, intentions — sont
+souvent vagues. C'est précisément pourquoi l'on utilise des <b>questionnaires validés</b> issus de travaux
+publiés plutôt que des questions inventées.</p>
+
+<figure>
+<svg viewBox="0 0 660 246" role="img" aria-label="La courbe d'adoption des technologies et le gouffre">
+  <defs>
+    <clipPath id="bellclip">
+      <path d="M 55 196 C 150 196 190 62 340 56 C 490 62 530 196 625 196 Z"/>
+    </clipPath>
+  </defs>
+  <g clip-path="url(#bellclip)">
+    <rect x="55" y="40" width="120" height="160" fill="#1c8f7a"/>
+    <rect x="175" y="40" width="75" height="160" fill="#7cb342"/>
+    <rect x="250" y="40" width="90" height="160" fill="#e8930c"/>
+    <rect x="340" y="40" width="90" height="160" fill="#c0523b"/>
+    <rect x="430" y="40" width="195" height="160" fill="#34495e"/>
+  </g>
+  <path d="M 55 196 C 150 196 190 62 340 56 C 490 62 530 196 625 196" fill="none" stroke="#152a31" stroke-width="1.6"/>
+  <line x1="55" y1="196" x2="625" y2="196" stroke="#152a31" stroke-width="1.2"/>
+
+  <line x1="250" y1="46" x2="250" y2="196" stroke="#b8403a" stroke-width="2.2" stroke-dasharray="6 4"/>
+  <text x="250" y="38" font-size="11" font-weight="700" fill="#b8403a" text-anchor="middle">THE CHASM — le gouffre</text>
+  <text x="150" y="60" font-size="9" font-weight="700" fill="#78868f" text-anchor="middle">EARLY MARKET</text>
+  <text x="430" y="60" font-size="9" font-weight="700" fill="#78868f" text-anchor="middle">MAINSTREAM MARKET</text>
+
+  <g text-anchor="middle">
+    <text x="115" y="212" font-size="9.4" font-weight="700" fill="#152a31">Innovators</text>
+    <text x="115" y="224" font-size="9" fill="#78868f">2,5 %</text>
+    <text x="212" y="212" font-size="9.4" font-weight="700" fill="#152a31">Early adopters</text>
+    <text x="212" y="224" font-size="9" fill="#78868f">13,5 %</text>
+    <text x="295" y="212" font-size="9.4" font-weight="700" fill="#152a31">Early majority</text>
+    <text x="295" y="224" font-size="9" fill="#78868f">34 %</text>
+    <text x="385" y="212" font-size="9.4" font-weight="700" fill="#152a31">Late majority</text>
+    <text x="385" y="224" font-size="9" fill="#78868f">34 %</text>
+    <text x="500" y="212" font-size="9.4" font-weight="700" fill="#152a31">Laggards</text>
+    <text x="500" y="224" font-size="9" fill="#78868f">16 %</text>
+  </g>
+  <text x="330" y="242" font-size="9" font-style="italic" fill="#78868f" text-anchor="middle">l'acceptation mesure si une technologie sera effectivement utilisée par ses utilisateurs cibles</text>
+</svg>
+<figcaption data-n="Figure 5.4">La courbe d'adoption : cinq profils d'adoptants et le fameux <b>gouffre</b>
+entre le marché précoce et le marché de masse — là où beaucoup de technologies meurent.</figcaption>
+</figure>
+
+<h3 id="p5-4" class="keep"><span class="h3-num">5.4</span>TRA — la théorie de l'action raisonnée (1975)</h3>
+
+<p>Le point de départ vient de la <b>psychologie</b>. La <b>TRA</b> (Fishbein &amp; Ajzen, 1975) énonce que le
+<b>comportement</b> est déterminé par l'<b>intention</b> d'adopter ce comportement, elle-même déterminée par
+deux forces : l'<b>attitude envers le comportement</b> (mes croyances et mon évaluation des conséquences) et
+les <b>normes subjectives</b> (mes croyances sur ce que les autres pensent que je devrais faire).</p>
+
+<figure>
+<svg viewBox="0 0 660 168" role="img" aria-label="Le modèle TRA">
+  <defs><marker id="tra-a" markerWidth="9" markerHeight="8" refX="8" refY="4" orient="auto">
+    <path d="M0 0 L8 4 L0 8 Z" fill="#455760"/></marker></defs>
+  <g text-anchor="middle">
+    <rect x="25" y="22" width="185" height="46" rx="4" fill="#fdecd2" stroke="#c98a2e" stroke-width="1.6"/>
+    <text x="117" y="42" font-size="10.5" font-weight="700" fill="#152a31">Attitude envers</text>
+    <text x="117" y="56" font-size="10.5" font-weight="700" fill="#152a31">le comportement</text>
+
+    <rect x="25" y="98" width="185" height="46" rx="4" fill="#fdecd2" stroke="#c98a2e" stroke-width="1.6"/>
+    <text x="117" y="126" font-size="10.5" font-weight="700" fill="#152a31">Normes subjectives</text>
+
+    <rect x="290" y="60" width="150" height="46" rx="4" fill="#fdecd2" stroke="#c98a2e" stroke-width="1.6"/>
+    <text x="365" y="88" font-size="10.5" font-weight="700" fill="#152a31">Intention</text>
+
+    <rect x="500" y="60" width="150" height="46" rx="4" fill="#e0a300" stroke="#8a6d00" stroke-width="1.6"/>
+    <text x="575" y="82" font-size="10.5" font-weight="700" fill="#3a2e00">Comportement</text>
+    <text x="575" y="96" font-size="10.5" font-weight="700" fill="#3a2e00">effectif</text>
+  </g>
+  <g stroke="#455760" stroke-width="1.8" marker-end="url(#tra-a)" fill="none">
+    <path d="M 214 45 L 250 45 L 250 76 L 285 76"/>
+    <path d="M 214 121 L 250 121 L 250 90 L 285 90"/>
+    <line x1="444" y1="83" x2="495" y2="83"/>
+  </g>
+</svg>
+<figcaption data-n="Figure 5.5">Le modèle <b>TRA</b>. Il est <b>général</b> : il vaut pour n'importe quel
+comportement. Davis se demandera : « et si utiliser un système d'information était un comportement comme un
+autre ? » — d'où le TAM.</figcaption>
+</figure>
+
+<table class="compact">
+  <caption>La TRA en situation : l'exemple de la soirée étudiante</caption>
+  <tr><th style="width:32%">Construct</th><th>Dans l'exemple du cours</th></tr>
+  <tr><td><b>Attitude</b> <span class="small">(croyances + évaluation des conséquences)</span></td><td>« Être saoul peut être amusant <b style="color:#2e7d46">(++)</b> » mais « je ne veux pas de gueule de bois <b style="color:#b8403a">(−)</b> »</td></tr>
+  <tr><td><b>Normes subjectives</b> <span class="small">(opinion perçue des autres)</span></td><td>« Pression sociale des autres à la fête <b style="color:#2e7d46">(+)</b> » mais « maman ne serait pas fière <b style="color:#b8403a">(−−−)</b> »</td></tr>
+  <tr><td><b>Intention</b></td><td>« Je vais boire juste un petit peu »</td></tr>
+  <tr><td><b>Comportement effectif</b></td><td>Consommation responsable</td></tr>
+</table>
+
+<h3 id="p5-5" class="keep"><span class="h3-num">5.5</span>TAM — Technology Acceptance Model (1989)</h3>
+
+<p><b>Davis</b> adapte la TRA au contexte des systèmes d'information : <b>utiliser un système est un
+comportement</b>. Le TAM reste aujourd'hui <b>le modèle le plus connu</b> pour étudier l'adoption d'une
+technologie. Deux croyances y influencent l'utilisation, via l'intention : l'<b>utilité perçue</b> — la mesure
+dans laquelle l'individu pense que le système <b>améliorera ses performances professionnelles</b> — et la
+<b>facilité d'utilisation perçue</b> — le degré auquel il croit que l'utilisation serait <b>exempte
+d'efforts</b> physiques et mentaux.</p>
+
+<figure>
+<svg viewBox="0 0 660 214" role="img" aria-label="Le modèle TAM">
+  <defs><marker id="tam-a" markerWidth="9" markerHeight="8" refX="8" refY="4" orient="auto">
+    <path d="M0 0 L8 4 L0 8 Z" fill="#455760"/></marker></defs>
+  <g text-anchor="middle">
+    <rect x="15" y="82" width="130" height="50" rx="4" fill="#fdecd2" stroke="#c98a2e" stroke-width="1.6"/>
+    <text x="80" y="102" font-size="10" font-weight="700" fill="#152a31">Caractéristiques</text>
+    <text x="80" y="116" font-size="10" font-weight="700" fill="#152a31">du système</text>
+
+    <rect x="195" y="20" width="160" height="48" rx="4" fill="#fdecd2" stroke="#c98a2e" stroke-width="1.6"/>
+    <text x="275" y="49" font-size="10.5" font-weight="700" fill="#152a31">Utilité perçue</text>
+
+    <rect x="195" y="146" width="160" height="48" rx="4" fill="#fdecd2" stroke="#c98a2e" stroke-width="1.6"/>
+    <text x="275" y="168" font-size="10.5" font-weight="700" fill="#152a31">Facilité d'utilisation</text>
+    <text x="275" y="182" font-size="10.5" font-weight="700" fill="#152a31">perçue</text>
+
+    <rect x="405" y="82" width="130" height="50" rx="4" fill="#fdecd2" stroke="#c98a2e" stroke-width="1.6"/>
+    <text x="470" y="112" font-size="10.5" font-weight="700" fill="#152a31">Intention</text>
+
+    <rect x="565" y="82" width="85" height="50" rx="4" fill="#e0a300" stroke="#8a6d00" stroke-width="1.6"/>
+    <text x="607" y="103" font-size="10" font-weight="700" fill="#3a2e00">Utilisation</text>
+    <text x="607" y="117" font-size="10" font-weight="700" fill="#3a2e00">effective</text>
+  </g>
+  <g stroke="#455760" stroke-width="1.8" marker-end="url(#tam-a)" fill="none">
+    <path d="M 149 96 L 170 96 L 170 44 L 190 44"/>
+    <path d="M 149 118 L 170 118 L 170 170 L 190 170"/>
+    <path d="M 359 44 L 380 44 L 380 96 L 400 96"/>
+    <path d="M 359 170 L 380 170 L 380 118 L 400 118"/>
+    <line x1="539" y1="107" x2="560" y2="107"/>
+  </g>
+  <path d="M 275 142 L 275 72" stroke="#b8403a" stroke-width="2.2" marker-end="url(#tam-red)" fill="none"/>
+  <defs><marker id="tam-red" markerWidth="9" markerHeight="8" refX="8" refY="4" orient="auto">
+    <path d="M0 0 L8 4 L0 8 Z" fill="#b8403a"/></marker></defs>
+  <text x="300" y="110" font-size="9" font-weight="700" fill="#b8403a">la flèche piège</text>
+</svg>
+<figcaption data-n="Figure 5.6">Le modèle <b>TAM</b> — 5 boîtes, 6 flèches. La flèche en rouge est le piège
+classique de l'examen : <b>la facilité d'utilisation perçue influence l'utilité perçue</b> (plus c'est facile,
+plus cela paraît utile) — <b>et pas l'inverse</b>.</figcaption>
+</figure>
+
+<div class="grid3">
+  <div class="card"><span class="c-kick">Limitation 1</span><h4>Des aspects essentiels ignorés</h4><p>Devenus importants avec l'évolution des technologies : la <b>confiance</b> dans les services, l'influence des <b>normes sociales</b>.</p></div>
+  <div class="card"><span class="c-kick">Limitation 2</span><h4>Un domaine devenu chaotique</h4><p>De très nombreux ajustements marginaux ont été publiés : on ne sait plus quelle est la <b>dernière version largement acceptée</b>.</p></div>
+  <div class="card"><span class="c-kick">Limitation 3</span><h4>Des boîtes noires</h4><p>Le TAM ne dit pas quelles <b>mesures correctives</b> prendre concrètement pour améliorer l'utilité ou la facilité perçues.</p></div>
+</div>
+
+<h3 id="p5-6" class="keep"><span class="h3-num">5.6</span>UTAUT — la théorie unifiée (2003)</h3>
+
+<p>En réponse aux critiques du TAM, les extensions se sont multipliées, jusqu'à ce que <b>Venkatesh, Morris,
+Davis &amp; Davis (2003)</b> unifient l'ensemble dans l'<b>UTAUT</b> — <i>Unified Theory of Acceptance and Use
+of Technology</i>. Quatre <b>déterminants</b>, deux <b>résultats</b>, et la grande nouveauté : quatre
+<b>variables modératrices</b>.</p>
+
+<figure>
+<svg viewBox="0 0 660 320" role="img" aria-label="Le modèle UTAUT">
+  <defs><marker id="ut-a" markerWidth="9" markerHeight="8" refX="8" refY="4" orient="auto">
+    <path d="M0 0 L8 4 L0 8 Z" fill="#455760"/></marker></defs>
+  <g text-anchor="middle">
+    <rect x="15" y="18" width="175" height="42" rx="4" fill="#fdecd2" stroke="#c98a2e" stroke-width="1.6"/>
+    <text x="102" y="44" font-size="10" font-weight="700" fill="#152a31">Attentes de performance</text>
+    <rect x="15" y="70" width="175" height="42" rx="4" fill="#fdecd2" stroke="#c98a2e" stroke-width="1.6"/>
+    <text x="102" y="96" font-size="10" font-weight="700" fill="#152a31">Attentes d'effort</text>
+    <rect x="15" y="122" width="175" height="42" rx="4" fill="#fdecd2" stroke="#c98a2e" stroke-width="1.6"/>
+    <text x="102" y="148" font-size="10" font-weight="700" fill="#152a31">Influence sociale</text>
+    <rect x="15" y="174" width="175" height="42" rx="4" fill="#fdecd2" stroke="#c98a2e" stroke-width="1.6"/>
+    <text x="102" y="200" font-size="10" font-weight="700" fill="#152a31">Conditions facilitantes</text>
+
+    <rect x="315" y="70" width="140" height="46" rx="4" fill="#fdecd2" stroke="#c98a2e" stroke-width="1.6"/>
+    <text x="385" y="98" font-size="10.5" font-weight="700" fill="#152a31">Intention</text>
+
+    <rect x="520" y="70" width="128" height="46" rx="4" fill="#e0a300" stroke="#8a6d00" stroke-width="1.6"/>
+    <text x="584" y="90" font-size="10" font-weight="700" fill="#3a2e00">Utilisation</text>
+    <text x="584" y="104" font-size="10" font-weight="700" fill="#3a2e00">effective</text>
+  </g>
+  <g stroke="#455760" stroke-width="1.7" marker-end="url(#ut-a)" fill="none">
+    <path d="M 194 39 L 250 39 L 250 84 L 310 84"/>
+    <path d="M 194 91 L 250 91 L 250 90 L 310 90"/>
+    <path d="M 194 143 L 250 143 L 250 100 L 310 100"/>
+    <line x1="459" y1="93" x2="515" y2="93"/>
+  </g>
+  <path d="M 194 195 L 250 195 L 250 228 L 584 228 L 584 121" stroke="#b8403a" stroke-width="2.2" fill="none" marker-end="url(#ut-red)"/>
+  <defs><marker id="ut-red" markerWidth="9" markerHeight="8" refX="8" refY="4" orient="auto">
+    <path d="M0 0 L8 4 L0 8 Z" fill="#b8403a"/></marker></defs>
+  <text x="420" y="222" font-size="9" font-weight="700" fill="#b8403a" text-anchor="middle">les conditions facilitantes agissent sur l'USAGE, pas sur l'intention</text>
+
+  <g text-anchor="middle">
+    <rect x="60" y="248" width="112" height="38" rx="19" fill="#efecf8" stroke="#5f4b96" stroke-width="1.5" stroke-dasharray="5 4"/>
+    <text x="116" y="272" font-size="10" font-weight="700" fill="#5f4b96">Genre</text>
+    <rect x="190" y="248" width="112" height="38" rx="19" fill="#efecf8" stroke="#5f4b96" stroke-width="1.5" stroke-dasharray="5 4"/>
+    <text x="246" y="272" font-size="10" font-weight="700" fill="#5f4b96">Âge</text>
+    <rect x="320" y="248" width="122" height="38" rx="19" fill="#efecf8" stroke="#5f4b96" stroke-width="1.5" stroke-dasharray="5 4"/>
+    <text x="381" y="272" font-size="10" font-weight="700" fill="#5f4b96">Expérience</text>
+    <rect x="460" y="248" width="132" height="38" rx="19" fill="#efecf8" stroke="#5f4b96" stroke-width="1.5" stroke-dasharray="5 4"/>
+    <text x="526" y="272" font-size="10" font-weight="700" fill="#5f4b96">Volontarisme</text>
+  </g>
+  <text x="330" y="310" font-size="9" font-style="italic" fill="#5f4b96" text-anchor="middle">les modérateurs modifient la force — voire l'existence — des relations du modèle</text>
+</svg>
+<figcaption data-n="Figure 5.7">Le modèle <b>UTAUT</b>. Deux pièges structurels : les <b>conditions
+facilitantes n'influencent pas l'intention</b> (leur effet y est déjà capturé par les attentes d'effort) —
+elles agissent directement sur l'usage ; et il existe souvent un <b>écart entre l'intention et l'utilisation
+effective</b>.</figcaption>
+</figure>
+
+<table class="compact">
+  <caption>Les 4 déterminants — définitions du cours</caption>
+  <tr><th style="width:24%">Déterminant</th><th>Définition</th><th style="width:24%">En une question</th></tr>
+  <tr><td><b>Attentes de performance</b></td><td>Mesure dans laquelle les utilisateurs pensent que la technologie améliorera leurs performances ou leur facilitera la vie</td><td>« Est-ce que ça m'aide vraiment ? »</td></tr>
+  <tr><td><b>Attentes d'effort</b></td><td>Mesure dans laquelle ils pensent que l'utilisation sera facile et demandera peu d'efforts</td><td>« Est-ce facile à utiliser ? »</td></tr>
+  <tr><td><b>Influence sociale</b></td><td>Mesure dans laquelle ils sont influencés par les opinions d'autres personnes — pairs, collègues</td><td>« Les autres m'y poussent-ils ? »</td></tr>
+  <tr><td><b>Conditions facilitantes</b></td><td>Mesure dans laquelle ils disposent des ressources et du soutien nécessaires — formation, assistance technique</td><td>« Ai-je les moyens et le support ? »</td></tr>
+</table>
+
+<table class="compact">
+  <caption>Ce que font les modérateurs</caption>
+  <tr><th style="width:26%">Relation</th><th style="width:24%">Modérée par</th><th>Effet plus fort chez…</th></tr>
+  <tr><td>Performance → Intention</td><td>Genre, âge</td><td>les hommes, surtout les <b>jeunes</b> hommes</td></tr>
+  <tr><td>Effort → Intention</td><td>Genre, âge, expérience</td><td>les femmes, les travailleurs <b>âgés</b>, les personnes avec <b>peu d'expérience</b> — surtout au début, l'effet diminuant ensuite</td></tr>
+  <tr><td>Influence sociale → Intention</td><td>Genre, âge, <b>volontarisme</b>, expérience</td><td>en contexte d'usage <b>obligatoire</b> (faible ou nul en contexte volontaire), chez les femmes plus âgées, en début d'expérience</td></tr>
+  <tr><td>Conditions facilitantes → Usage</td><td>Âge, expérience</td><td>les travailleurs plus âgés, à mesure que l'expérience augmente</td></tr>
+</table>
+
+<h3 id="p5-7" class="keep"><span class="h3-num">5.7</span>UTAUT2 — le contexte consommateur (2012)</h3>
+
+<p>L'UTAUT étudie des technologies <b>internes</b> à l'organisation — ERP, CRM. <b>Venkatesh, Thong &amp; Xu
+(2012)</b> l'adaptent au contexte <b>consommateur</b> — applications, services numériques, mobiles :
+c'est l'<b>UTAUT2</b>.</p>
+
+<figure>
+<svg viewBox="0 0 660 388" role="img" aria-label="Le modèle UTAUT2">
+  <defs><marker id="u2-a" markerWidth="9" markerHeight="8" refX="8" refY="4" orient="auto">
+    <path d="M0 0 L8 4 L0 8 Z" fill="#455760"/></marker>
+    <marker id="u2-n" markerWidth="9" markerHeight="8" refX="8" refY="4" orient="auto">
+    <path d="M0 0 L8 4 L0 8 Z" fill="#0e7c86"/></marker></defs>
+  <g text-anchor="middle">
+    <rect x="15" y="14" width="172" height="38" rx="4" fill="#fdecd2" stroke="#c98a2e" stroke-width="1.5"/>
+    <text x="101" y="38" font-size="9.6" font-weight="700" fill="#152a31">Attentes de performance</text>
+    <rect x="15" y="58" width="172" height="38" rx="4" fill="#fdecd2" stroke="#c98a2e" stroke-width="1.5"/>
+    <text x="101" y="82" font-size="9.6" font-weight="700" fill="#152a31">Attentes d'effort</text>
+    <rect x="15" y="102" width="172" height="38" rx="4" fill="#fdecd2" stroke="#c98a2e" stroke-width="1.5"/>
+    <text x="101" y="126" font-size="9.6" font-weight="700" fill="#152a31">Influence sociale</text>
+    <rect x="15" y="146" width="172" height="38" rx="4" fill="#fdecd2" stroke="#c98a2e" stroke-width="1.5"/>
+    <text x="101" y="170" font-size="9.6" font-weight="700" fill="#152a31">Conditions facilitantes</text>
+    <rect x="15" y="190" width="172" height="38" rx="4" fill="#e4f1f2" stroke="#0e7c86" stroke-width="2"/>
+    <text x="101" y="214" font-size="9.6" font-weight="700" fill="#0a5a63">Motivation hédonique</text>
+    <rect x="15" y="234" width="172" height="38" rx="4" fill="#e4f1f2" stroke="#0e7c86" stroke-width="2"/>
+    <text x="101" y="258" font-size="9.6" font-weight="700" fill="#0a5a63">Valeur de prix</text>
+    <rect x="15" y="278" width="172" height="38" rx="4" fill="#e4f1f2" stroke="#0e7c86" stroke-width="2"/>
+    <text x="101" y="302" font-size="9.6" font-weight="700" fill="#0a5a63">Habitude</text>
+
+    <rect x="330" y="118" width="140" height="46" rx="4" fill="#fdecd2" stroke="#c98a2e" stroke-width="1.6"/>
+    <text x="400" y="146" font-size="10.5" font-weight="700" fill="#152a31">Intention</text>
+
+    <rect x="528" y="118" width="120" height="46" rx="4" fill="#e0a300" stroke="#8a6d00" stroke-width="1.6"/>
+    <text x="588" y="138" font-size="10" font-weight="700" fill="#3a2e00">Utilisation</text>
+    <text x="588" y="152" font-size="10" font-weight="700" fill="#3a2e00">effective</text>
+  </g>
+  <g stroke="#455760" stroke-width="1.5" marker-end="url(#u2-a)" fill="none">
+    <path d="M 191 33 L 260 33 L 260 128 L 325 128"/>
+    <path d="M 191 77 L 265 77 L 265 134 L 325 134"/>
+    <path d="M 191 121 L 270 121 L 270 140 L 325 140"/>
+    <line x1="474" y1="141" x2="523" y2="141"/>
+  </g>
+  <g stroke="#0e7c86" stroke-width="1.8" marker-end="url(#u2-n)" fill="none">
+    <path d="M 191 165 L 275 165 L 275 146 L 325 146"/>
+    <path d="M 191 209 L 280 209 L 280 152 L 325 152"/>
+    <path d="M 191 253 L 285 253 L 285 158 L 325 158"/>
+    <path d="M 191 297 L 290 297 L 290 162 L 325 162"/>
+  </g>
+  <path d="M 191 175 L 588 175 L 588 169" stroke="#455760" stroke-width="1.5" fill="none" marker-end="url(#u2-a)"/>
+  <path d="M 191 307 L 620 307 L 620 169" stroke="#0e7c86" stroke-width="1.8" fill="none" marker-end="url(#u2-n)"/>
+  <text x="410" y="188" font-size="8.6" fill="#78868f">conditions facilitantes → usage</text>
+  <text x="410" y="320" font-size="8.6" fill="#0a5a63">l'habitude agit aussi directement sur l'usage</text>
+
+  <g text-anchor="middle">
+    <rect x="150" y="336" width="105" height="34" rx="17" fill="#efecf8" stroke="#5f4b96" stroke-width="1.4" stroke-dasharray="5 4"/>
+    <text x="202" y="357" font-size="9.6" font-weight="700" fill="#5f4b96">Âge</text>
+    <rect x="275" y="336" width="105" height="34" rx="17" fill="#efecf8" stroke="#5f4b96" stroke-width="1.4" stroke-dasharray="5 4"/>
+    <text x="327" y="357" font-size="9.6" font-weight="700" fill="#5f4b96">Genre</text>
+    <rect x="400" y="336" width="115" height="34" rx="17" fill="#efecf8" stroke="#5f4b96" stroke-width="1.4" stroke-dasharray="5 4"/>
+    <text x="457" y="357" font-size="9.6" font-weight="700" fill="#5f4b96">Expérience</text>
+  </g>
+  <text x="60" y="357" font-size="8.6" font-style="italic" fill="#b8403a">le volontarisme</text>
+  <text x="60" y="368" font-size="8.6" font-style="italic" fill="#b8403a">a disparu</text>
+</svg>
+<figcaption data-n="Figure 5.8">Le modèle <b>UTAUT2</b> — les ajouts par rapport à l'UTAUT sont en
+<b style="color:#0a5a63">sarcelle</b>. Trois nouvelles variables, une nouvelle flèche (conditions facilitantes
+→ intention), et un modérateur en moins.</figcaption>
+</figure>
+
+<table class="compact">
+  <caption>Ce qui change par rapport à UTAUT — la liste exacte du cours</caption>
+  <tr><th style="width:34%">Changement</th><th>Signification</th></tr>
+  <tr><td><b>+ Motivation hédonique</b></td><td>Le plaisir d'usage compte dans l'intention — « est-ce agréable, fun ? »</td></tr>
+  <tr><td><b>+ Valeur de prix</b></td><td>L'arbitrage bénéfices perçus / coût influence l'intention — « ça vaut le coût ? »</td></tr>
+  <tr><td><b>+ Habitude</b></td><td>Agit sur l'intention <b>ET</b> directement sur l'usage — « je l'utilise presque automatiquement »</td></tr>
+  <tr><td><b>Conditions facilitantes → intention</b></td><td>Nouveau lien : le support disponible influence aussi l'envie d'adopter, en plus de l'usage</td></tr>
+  <tr><td><b>Volontarisme supprimé</b></td><td>Moins pertinent en contexte consommateur — personne ne vous oblige à installer une application grand public</td></tr>
+  <tr><td><b>Intention → usage modulé par l'expérience</b></td><td>L'effet de l'intention sur l'usage <b>diminue</b> quand l'expérience augmente : l'<b>habitude prend le relais</b></td></tr>
+</table>
+
+<div class="box exam">
+  <span class="box-t">Les conditions limites — le 4ᵉ building block appliqué</span>
+  <p>L'étude UTAUT2 porte sur des consommateurs d'<b>Internet mobile à Hong Kong en 2011</b>. Les auteurs
+  reconnaissent eux-mêmes que cela <b>limite la généralisation</b> à d'autres pays, populations et technologies :
+  le poids des variables dépend du contexte, et d'autres variables — la confiance, par exemple — peuvent y
+  devenir importantes. Le citer montre que vous maîtrisez la grille des 4 building blocks.</p>
+</div>
+
+<h3 id="p5-8" class="keep"><span class="h3-num">5.8</span>Le tableau comparatif des quatre modèles</h3>
+
+<table class="compact">
+  <tr><th style="width:16%"></th><th>TRA (1975)</th><th>TAM (1989)</th><th>UTAUT (2003)</th><th>UTAUT2 (2012)</th></tr>
+  <tr><td><b>Contexte</b></td><td>Tout comportement</td><td>Les SI au travail</td><td>Technologies internes à l'organisation</td><td>Consommateur — applications, mobile</td></tr>
+  <tr><td><b>Déterminants de l'intention</b></td><td>Attitude, normes subjectives</td><td>Utilité perçue, facilité d'utilisation perçue</td><td>Performance, effort, influence sociale</td><td>Les mêmes + conditions facilitantes, motivation hédonique, valeur de prix, habitude</td></tr>
+  <tr><td><b>Vers l'usage directement</b></td><td>—</td><td>—</td><td>Conditions facilitantes</td><td>Conditions facilitantes, habitude</td></tr>
+  <tr><td><b>Modérateurs</b></td><td>—</td><td>— <span class="small">(conditions limites absentes)</span></td><td>Genre, âge, expérience, volontarisme</td><td>Genre, âge, expérience</td></tr>
+  <tr><td><b>Auteurs</b></td><td>Fishbein &amp; Ajzen</td><td>Davis</td><td>Venkatesh et al.</td><td>Venkatesh, Thong &amp; Xu</td></tr>
+</table>
+
+<div class="box exam">
+  <span class="box-t">Les deux exercices d'application du cours</span>
+  <p><b>Avec UTAUT — « comment, en tant que manager, mobiliser ces facteurs pour introduire un ERP ? »</b>
+  Un levier par déterminant : démontrer les <b>gains concrets</b> (cas d'usage chiffrés, quick wins) ;
+  réduire l'effort par des <b>formations adaptées</b> et un accompagnement au démarrage ; activer l'<b>influence
+  sociale</b> avec des sponsors visibles et des key users ; renforcer les <b>conditions facilitantes</b>
+  (helpdesk, documentation, matériel) — décisives pour l'usage réel dans la durée. Puis <b>différencier</b>
+  l'accompagnement selon l'âge et l'expérience, et mesurer avec des questionnaires validés.</p>
+  <p style="margin-top:2mm"><b>Avec UTAUT2 — « comment, en tant que chercheur, expliquer le succès de
+  TikTok ? »</b> La <b>motivation hédonique</b> est au cœur du succès (divertissement immédiat) ;
+  l'<b>habitude</b> est créée par l'algorithme et le défilement infini ; la <b>valeur de prix</b> est imbattable
+  (gratuité) ; l'<b>influence sociale</b> joue par les tendances et les partages ; les <b>attentes d'effort</b>
+  sont minimales (prise en main immédiate). Méthode : opérationnaliser ces constructs avec des questionnaires
+  validés, échantillonner la population cible, tenir compte des modérateurs et des conditions limites.</p>
+</div>

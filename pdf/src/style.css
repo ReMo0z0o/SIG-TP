@@ -1,0 +1,182 @@
+/* ==========================================================================
+   Synthèse théorique ECGEB210 — feuille de style d'impression (A4)
+   Le document est paginé en pages .page explicites (voir paginate.js) :
+   chaque .page fait exactement 210 × 297 mm et devient une page du PDF.
+   ========================================================================== */
+
+:root{
+  --teal:#0e7c86; --teal-deep:#0a5a63; --teal-soft:#e4f1f2; --teal-line:#a9d2d6;
+  --ink:#152a31; --ink-2:#455760; --ink-3:#78868f;
+  --line:#d9e2e0; --line-2:#c2cfcc; --paper:#ffffff;
+  --amber:#9c6f19; --amber-soft:#fbf3de; --amber-line:#e6d0a0;
+  --ok:#2e7d46; --ok-soft:#e6f3ea; --ok-line:#a9d3b8;
+  --err:#b8403a; --err-soft:#fbeae8; --err-line:#e8bcb7;
+  --violet:#5f4b96; --violet-soft:#efecf8; --violet-line:#c3b8e4;
+  --serif:"Bitstream Charter",Charter,Georgia,"Liberation Serif",serif;
+  --sans:"Liberation Sans","DejaVu Sans",Helvetica,Arial,sans-serif;
+}
+
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:#8e9a9c}
+body{font-family:var(--serif); color:var(--ink); font-size:10.3pt; line-height:1.52;
+  -webkit-print-color-adjust:exact; print-color-adjust:exact;}
+
+/* ---------- la page ---------- */
+#flow{position:absolute;visibility:hidden;pointer-events:none;left:-10000px;top:0;width:174mm}
+#book{}
+.page{
+  width:210mm; height:297mm; background:var(--paper); position:relative;
+  padding:17mm 18mm 14mm; overflow:hidden;
+  margin:0 auto 6mm; box-shadow:0 2px 12px rgba(0,0,0,.28);
+}
+.page-body{height:255mm; overflow:hidden}
+.page-foot{
+  position:absolute; left:18mm; right:18mm; bottom:9mm; height:7mm;
+  display:flex; align-items:center; justify-content:space-between;
+  font-family:var(--sans); font-size:7.4pt; color:var(--ink-3);
+  border-top:.5pt solid var(--line); padding-top:2mm;
+}
+.page-foot .pf-part{letter-spacing:.04em; text-transform:uppercase; font-weight:600}
+.page-foot .pf-num{font-weight:700; color:var(--teal-deep)}
+.page.no-foot .page-foot{display:none}
+
+@page{ size:A4; margin:0 }
+@media print{
+  html,body{background:#fff}
+  .page{margin:0; box-shadow:none; break-after:page; page-break-after:always}
+  .page:last-child{break-after:auto; page-break-after:auto}
+}
+
+/* ---------- couverture ---------- */
+.cover{position:absolute; inset:0; padding:0; display:flex; flex-direction:column}
+.cover-band{
+  background:linear-gradient(135deg,var(--teal-deep) 0%,var(--teal) 58%,#12909b 100%);
+  color:#fff; padding:32mm 20mm 22mm; position:relative; overflow:hidden;
+}
+.cover-band::after{content:""; position:absolute; right:-30mm; top:-34mm; width:110mm; height:110mm;
+  border:1.2mm solid rgba(255,255,255,.16); border-radius:50%}
+.cover-band::before{content:""; position:absolute; right:14mm; bottom:-52mm; width:78mm; height:78mm;
+  border:1mm solid rgba(255,255,255,.13); border-radius:50%}
+.cover-kicker{font-family:var(--sans); font-size:8.6pt; font-weight:700; letter-spacing:.22em;
+  text-transform:uppercase; color:#bfe6e9; margin:0 0 7mm}
+.cover-band h1{font-size:31pt; line-height:1.1; margin:0 0 5mm; font-weight:700; max-width:150mm}
+.cover-band .sub{font-size:12.4pt; color:#dff0f1; margin:0; max-width:135mm; line-height:1.45}
+.cover-main{flex:1; padding:14mm 20mm 0}
+.cover-scope{display:grid; grid-template-columns:1fr 1fr; gap:6mm; margin-bottom:10mm}
+.scope-box{border:.5pt solid var(--line-2); border-radius:2.4mm; padding:5mm 6mm}
+.scope-box.in{background:var(--teal-soft); border-color:var(--teal-line)}
+.scope-box h4{font-family:var(--sans); font-size:8pt; letter-spacing:.12em; text-transform:uppercase;
+  margin:0 0 2.5mm; color:var(--teal-deep)}
+.scope-box.out h4{color:var(--ink-3)}
+.scope-box ul{margin:0; padding-left:4.5mm; font-size:9.4pt; line-height:1.45}
+.scope-box li{margin:.9mm 0}
+.cover-foot{padding:0 20mm 16mm; font-family:var(--sans); font-size:8.4pt; color:var(--ink-3); line-height:1.5}
+.cover-rule{height:1.1mm; background:var(--teal); width:34mm; margin:0 0 5mm}
+
+/* ---------- sommaire ---------- */
+.toc-h{font-family:var(--serif); font-size:19pt; margin:0 0 1mm; color:var(--teal-deep)}
+.toc-sub{font-family:var(--sans); font-size:8.6pt; color:var(--ink-3); margin:0 0 8mm;
+  letter-spacing:.05em; text-transform:uppercase; font-weight:600}
+.toc-part{display:flex; align-items:baseline; gap:3mm; margin:6mm 0 1.5mm; padding-bottom:1.5mm;
+  border-bottom:.5pt solid var(--teal-line)}
+.toc-part .tp-num{font-family:var(--sans); font-size:8pt; font-weight:700; color:#fff; background:var(--teal);
+  border-radius:50%; width:6.2mm; height:6.2mm; display:flex; align-items:center; justify-content:center; flex:none}
+.toc-part .tp-title{font-weight:700; font-size:11.6pt; color:var(--teal-deep); flex:1}
+.toc-part .tp-page{font-family:var(--sans); font-size:9pt; font-weight:700; color:var(--teal-deep)}
+.toc-row{display:flex; align-items:baseline; gap:2mm; font-size:9.7pt; margin:.6mm 0 .6mm 9.2mm; color:var(--ink-2)}
+.toc-row .tr-title{flex:none}
+.toc-row .tr-dots{flex:1; border-bottom:.4pt dotted var(--line-2); transform:translateY(-1mm)}
+.toc-row .tr-page{font-family:var(--sans); font-size:8.6pt; color:var(--ink-3); flex:none}
+
+/* ---------- titres ---------- */
+h2.part-head{
+  font-size:0; margin:0 0 7mm; padding:0; border:0; position:relative;
+}
+.part-open{display:flex; align-items:flex-start; gap:6mm; border-bottom:1.6pt solid var(--teal); padding-bottom:4mm}
+.part-open .po-num{font-family:var(--serif); font-size:38pt; line-height:.85; font-weight:700;
+  color:var(--teal); opacity:.32; flex:none}
+.part-open .po-txt{flex:1; padding-top:1mm}
+.part-open .po-kicker{font-family:var(--sans); font-size:7.6pt; font-weight:700; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--ink-3); margin:0 0 1.5mm}
+.part-open h2{font-size:19pt; line-height:1.12; margin:0; color:var(--teal-deep); font-weight:700}
+.part-exam{font-family:var(--sans); font-size:8.6pt; background:var(--amber-soft); border:.5pt solid var(--amber-line);
+  border-radius:2mm; padding:3mm 4mm; margin:4mm 0 0; color:#7d5810; line-height:1.45}
+.part-exam b{color:#5f420b}
+
+h3{font-size:12.4pt; margin:6.5mm 0 2mm; color:var(--teal-deep); font-weight:700; line-height:1.25}
+h3 .h3-num{font-family:var(--sans); font-size:8.4pt; font-weight:700; color:var(--teal); margin-right:2mm;
+  letter-spacing:.04em}
+h4{font-size:10.6pt; margin:4mm 0 1.5mm; font-weight:700; color:var(--ink)}
+p{margin:0 0 2.6mm}
+p.lead{font-size:11pt; color:var(--ink-2); line-height:1.5; margin-bottom:4mm}
+b,strong{color:var(--teal-deep)}
+em,i{color:var(--ink-2)}
+ul,ol{margin:0 0 3mm; padding-left:5.5mm}
+li{margin:1.1mm 0}
+li::marker{color:var(--teal)}
+.small{font-size:9pt; color:var(--ink-2)}
+
+/* ---------- encadrés ---------- */
+.box{border-radius:2.4mm; padding:4mm 5mm; margin:0 0 3.5mm; border:.5pt solid; break-inside:avoid}
+.box .box-t{font-family:var(--sans); font-size:7.6pt; font-weight:700; letter-spacing:.13em;
+  text-transform:uppercase; margin:0 0 1.8mm; display:block}
+.box p:last-child,.box ul:last-child{margin-bottom:0}
+.box.def{background:var(--teal-soft); border-color:var(--teal-line)}
+.box.def .box-t{color:var(--teal-deep)}
+.box.def .quote{font-size:10.6pt; font-style:italic; color:var(--ink)}
+.box.exam{background:var(--amber-soft); border-color:var(--amber-line)}
+.box.exam .box-t{color:#8a6111}
+.box.trap{background:var(--err-soft); border-color:var(--err-line)}
+.box.trap .box-t{color:#96332d}
+.box.ex{background:#f7f9f8; border-color:var(--line-2)}
+.box.ex .box-t{color:var(--ink-3)}
+.box.link{background:var(--violet-soft); border-color:var(--violet-line)}
+.box.link .box-t{color:var(--violet)}
+
+.grid2{display:grid; grid-template-columns:1fr 1fr; gap:4mm; margin-bottom:3.5mm}
+.grid3{display:grid; grid-template-columns:1fr 1fr 1fr; gap:3.5mm; margin-bottom:3.5mm}
+.card{border:.5pt solid var(--line-2); border-radius:2.4mm; padding:3.6mm 4.2mm; background:#fdfefe}
+.card h4{margin:0 0 1.4mm; font-size:9.8pt}
+.card p{margin:0; font-size:9.2pt; line-height:1.45}
+.card .c-kick{font-family:var(--sans); font-size:7.2pt; font-weight:700; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--teal); display:block; margin-bottom:1mm}
+
+/* ---------- tableaux ---------- */
+table{border-collapse:collapse; width:100%; font-size:9.2pt; margin:0 0 3.5mm; break-inside:avoid}
+caption{caption-side:top; text-align:left; font-family:var(--sans); font-size:8pt; font-weight:700;
+  letter-spacing:.08em; text-transform:uppercase; color:var(--ink-3); padding-bottom:1.6mm}
+th,td{border:.5pt solid var(--line-2); padding:2.1mm 2.8mm; text-align:left; vertical-align:top; line-height:1.38}
+th{background:var(--teal-soft); color:var(--teal-deep); font-family:var(--sans); font-size:8.4pt;
+  font-weight:700; letter-spacing:.02em}
+tbody tr:nth-child(even) td{background:#fafcfb}
+td b{color:var(--ink)}
+table.compact{font-size:8.8pt}
+table.compact th,table.compact td{padding:1.6mm 2.2mm}
+
+/* ---------- figures ---------- */
+figure{margin:0 0 4mm; border:.5pt solid var(--line-2); border-radius:2.4mm; overflow:hidden;
+  background:#fdfefe; break-inside:avoid}
+figure svg{display:block; width:100%; height:auto; background:#fff}
+figcaption{font-family:var(--sans); font-size:8.2pt; color:var(--ink-2); line-height:1.42;
+  padding:2.6mm 4mm; border-top:.5pt solid var(--line); background:#f7faf9}
+figcaption b{color:var(--teal-deep)}
+figure{counter-increment:fig}
+figcaption::before{content:attr(data-n) " · "; font-weight:700; color:var(--teal-deep)}
+figcaption:not([data-n])::before{content:none}
+svg text{font-family:var(--sans)}
+
+/* ---------- éléments spéciaux ---------- */
+.kv{display:grid; grid-template-columns:auto 1fr; gap:1.4mm 3.5mm; font-size:9.4pt; margin-bottom:3mm}
+.kv dt{font-weight:700; color:var(--teal-deep); font-family:var(--sans); font-size:8.6pt; padding-top:.4mm}
+.kv dd{margin:0}
+.pill{display:inline-block; font-family:var(--sans); font-size:7.4pt; font-weight:700; letter-spacing:.06em;
+  text-transform:uppercase; padding:.8mm 2.2mm; border-radius:6mm; background:var(--teal-soft);
+  color:var(--teal-deep); border:.4pt solid var(--teal-line)}
+.pill.a{background:var(--amber-soft); color:#8a6111; border-color:var(--amber-line)}
+.pill.v{background:var(--violet-soft); color:var(--violet); border-color:var(--violet-line)}
+.stars{color:#c9971f; letter-spacing:.6mm; font-size:9pt}
+hr.soft{border:0; border-top:.5pt solid var(--line); margin:5mm 0}
+.mono{font-family:"DejaVu Sans Mono",monospace; font-size:8.6pt}
+.endnote{font-family:var(--sans); font-size:8pt; color:var(--ink-3); line-height:1.45;
+  border-top:.5pt solid var(--line); padding-top:3mm; margin-top:4mm}
+.keep{}

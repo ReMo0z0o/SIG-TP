@@ -1,0 +1,483 @@
+<!-- ===================== PARTIE 3 ===================== -->
+<div data-break="1" data-part="Partie 3 · La gestion des processus métiers" id="p3">
+  <div class="part-open">
+    <span class="po-num">3</span>
+    <div class="po-txt">
+      <p class="po-kicker">Chapitre 3 du cours · la partie « gestion », hors notation BPMN</p>
+      <h2>La gestion des processus métiers (BPM)</h2>
+    </div>
+  </div>
+  <div class="part-exam"><b>Ce que l'examen attend de cette partie :</b> rappeler et appliquer les différentes
+  phases de la gestion des processus métiers, ainsi que les objectifs et techniques de redesign. Les mises en
+  situation dominent : reconnaître un principe de Hammer violé, classer des étapes en VA / BVA / NVA, ou
+  analyser l'impact d'un changement sur les dimensions de performance.</div>
+</div>
+
+<h3 id="p3-1" class="keep"><span class="h3-num">3.1</span>Processus métier et BPM : les définitions</h3>
+
+<div class="box def keep">
+  <span class="box-t">Processus métier — définition exacte (slide 11)</span>
+  <p class="quote">Un processus métier est « un ensemble d'<b>événements</b>, d'<b>activités</b> et de
+  <b>décisions</b> impliquant des <b>acteurs</b> et des <b>ressources</b> qui collectivement mènent à un
+  <b>résultat de valeur</b> pour l'organisation et ses clients. »</p>
+</div>
+
+<table class="compact">
+  <caption>Les 5 composants, sur l'exemple de la machine à laver cassée</caption>
+  <tr><th style="width:22%">Composant</th><th style="width:40%">Ce que c'est</th><th>Exemple</th></tr>
+  <tr><td><b>Événement</b></td><td>Quelque chose qui <i>arrive</i> — instantané, sans durée</td><td>« Le client appelle le SAV »</td></tr>
+  <tr><td><b>Activité</b></td><td>Du <i>travail</i> à effectuer, qui prend du temps</td><td>« Diagnostiquer la panne »</td></tr>
+  <tr><td><b>Décision</b></td><td>Point où le flux diverge selon une condition</td><td>« Sous garantie ou non ? »</td></tr>
+  <tr><td><b>Acteurs / ressources</b></td><td>Qui fait le travail — humains <b>et</b> systèmes</td><td>Technicien, service garantie, ERP</td></tr>
+  <tr><td><b>Résultat de valeur</b></td><td>Ce que le processus produit — positif ou négatif</td><td>Machine réparée (ou client parti)</td></tr>
+</table>
+
+<p class="small">Un processus métier, c'est <b>tout ce qui se passe entre un déclencheur et un résultat qui a de
+la valeur</b>. Ce n'est ni une tâche isolée (« imprimer un document »), ni un département (« le service RH ») :
+c'est le <b>fil transversal</b>. Exemples du secteur public donnés en cours : délivrance d'une carte d'identité
+ou d'un permis de conduire, changement d'adresse, demande d'allocation de chômage, gestion d'un marché public.</p>
+
+<div class="box def keep">
+  <span class="box-t">Gestion des processus métiers — définition exacte (slide 14)</span>
+  <p class="quote">La <b>Gestion des Processus Métiers</b> (BPM) est une <b>discipline</b> qui regroupe des
+  <b>principes, des méthodes et des outils</b> pour <b>concevoir, analyser, exécuter et suivre</b> des processus
+  métiers, avec l'objectif de pouvoir <b>les améliorer</b>.</p>
+  <p class="small" style="margin-top:2mm">Structure à mémoriser : <b>3 ingrédients</b> (principes, méthodes,
+  outils) × <b>4 verbes</b> (concevoir, analyser, exécuter, suivre) × <b>1 but</b> (améliorer).</p>
+</div>
+
+<div class="box exam">
+  <span class="box-t">Le message-cadre du chapitre — citation de Bill Gates (slide 13)</span>
+  <p class="quote">« La première règle de toute technologie utilisée pour automatiser des opérations déjà
+  efficientes est qu'elle va permettre de magnifier l'efficience. La seconde règle est que cette automatisation
+  appliquée à des opérations inefficientes va magnifier leur inefficience. »</p>
+  <p style="margin-top:2mm">Autrement dit : digitaliser un mauvais processus, c'est <b>automatiser le chaos</b>
+  — on produit du chaos plus vite et à plus grande échelle. Ce sont les <b>systèmes d'information qui permettent
+  l'amélioration des processus</b>, et ce sont les <b>processus améliorés qui délivrent la création de valeur</b>,
+  pas la technologie en elle-même. <b>C'est la réponse attendue</b> à la question « une commune veut acheter un
+  logiciel pour accélérer ses traitements : que lui conseillez-vous d'abord ? »</p>
+</div>
+
+<h4>Les 5 apports du BPM à la digitalisation</h4>
+<div class="grid2">
+  <div class="card"><span class="c-kick">S — Sens</span><h4>Donner du sens à la digitalisation</h4><p>Aligner les initiatives digitales sur les objectifs métiers, clarifier le « pourquoi » du changement, prioriser les processus à plus fort impact.</p></div>
+  <div class="card"><span class="c-kick">M — Maîtriser avant</span><h4>Optimiser avant de digitaliser</h4><p>Éviter d'automatiser le chaos : identifier le gaspillage, les doublons et les activités sans valeur ajoutée.</p></div>
+  <div class="card"><span class="c-kick">C — Collaboration</span><h4>Favoriser l'adoption</h4><p>Vision partagée entre services, meilleure communication métier ↔ IT grâce aux modèles communs, conduite du changement facilitée.</p></div>
+  <div class="card"><span class="c-kick">I — Intégrer</span><h4>Systèmes, données et organisation</h4><p>Montrer les interactions acteurs / données / applications, aider à définir les exigences fonctionnelles, repérer les opportunités de standardisation.</p></div>
+</div>
+<p class="small"><b>P — Piloter :</b> définir les KPI, créer une culture de la mesure et favoriser l'amélioration
+continue. Moyen mnémotechnique de l'ensemble : <b>S-M-C-I-P</b>.</p>
+
+<h3 id="p3-2" class="keep"><span class="h3-num">3.2</span>Le cycle de vie BPM</h3>
+
+<figure>
+<svg viewBox="0 0 660 356" role="img" aria-label="Le cycle de vie BPM en six phases">
+  <defs><marker id="bpm-a" markerWidth="9" markerHeight="8" refX="8" refY="4" orient="auto">
+    <path d="M0 0 L8 4 L0 8 Z" fill="#0e7c86"/></marker></defs>
+  <circle cx="330" cy="180" r="120" fill="none" stroke="#d9e2e0" stroke-width="1.2" stroke-dasharray="4 5"/>
+
+  <g font-size="10.5" text-anchor="middle">
+    <rect x="265" y="33" width="130" height="52" rx="5" fill="#e4f1f2" stroke="#0e7c86" stroke-width="1.4"/>
+    <text x="330" y="54" font-weight="700" fill="#0a5a63">1 · Identification</text>
+    <text x="330" y="70" font-size="8.6" fill="#455760">quels processus,</text>
+    <text x="330" y="80" font-size="8.6" fill="#455760">lesquels prioriser ?</text>
+
+    <rect x="369" y="93" width="130" height="52" rx="5" fill="#e4f1f2" stroke="#0e7c86" stroke-width="1.4"/>
+    <text x="434" y="114" font-weight="700" fill="#0a5a63">2 · Découverte</text>
+    <text x="434" y="130" font-size="8.6" fill="#455760">comment ça marche</text>
+    <text x="434" y="140" font-size="8.6" fill="#455760">aujourd'hui ?</text>
+
+    <rect x="369" y="213" width="130" height="52" rx="5" fill="#e4f1f2" stroke="#0e7c86" stroke-width="1.4"/>
+    <text x="434" y="234" font-weight="700" fill="#0a5a63">3 · Analyse</text>
+    <text x="434" y="250" font-size="8.6" fill="#455760">où sont les problèmes,</text>
+    <text x="434" y="260" font-size="8.6" fill="#455760">quel impact ?</text>
+
+    <rect x="265" y="273" width="130" height="52" rx="5" fill="#e4f1f2" stroke="#0e7c86" stroke-width="1.4"/>
+    <text x="330" y="294" font-weight="700" fill="#0a5a63">4 · Re-design</text>
+    <text x="330" y="310" font-size="8.6" fill="#455760">comment devrait-il</text>
+    <text x="330" y="320" font-size="8.6" fill="#455760">fonctionner ?</text>
+
+    <rect x="161" y="213" width="130" height="52" rx="5" fill="#e4f1f2" stroke="#0e7c86" stroke-width="1.4"/>
+    <text x="226" y="234" font-weight="700" fill="#0a5a63">5 · Implémentation</text>
+    <text x="226" y="250" font-size="8.6" fill="#455760">comment passer</text>
+    <text x="226" y="260" font-size="8.6" fill="#455760">du to-be à la réalité ?</text>
+
+    <rect x="161" y="93" width="130" height="52" rx="5" fill="#e6f3ea" stroke="#2e7d46" stroke-width="1.6"/>
+    <text x="226" y="114" font-weight="700" fill="#2e7d46">6 · Suivi</text>
+    <text x="226" y="130" font-size="8.6" fill="#455760">performe-t-il comme</text>
+    <text x="226" y="140" font-size="8.6" fill="#455760">prévu ?</text>
+  </g>
+
+  <g stroke="#0e7c86" stroke-width="1.8" marker-end="url(#bpm-a)" fill="none">
+    <path d="M 398 76 L 418 88"/>
+    <path d="M 434 149 L 434 207"/>
+    <path d="M 418 270 L 398 282"/>
+    <path d="M 262 282 L 242 270"/>
+    <path d="M 226 207 L 226 149"/>
+    <path d="M 242 88 L 262 76"/>
+  </g>
+
+  <text x="330" y="172" font-size="11.5" font-weight="700" fill="#0a5a63" text-anchor="middle">Le cycle de vie BPM</text>
+  <text x="330" y="188" font-size="9.2" fill="#455760" text-anchor="middle">chaque phase produit le livrable</text>
+  <text x="330" y="200" font-size="9.2" fill="#455760" text-anchor="middle">qui alimente la suivante</text>
+  <text x="330" y="216" font-size="9" font-style="italic" fill="#78868f" text-anchor="middle">I · D · A · R · I · S</text>
+</svg>
+<figcaption data-n="Figure 3.1">Le cycle de vie BPM. Le <b>suivi</b> ne clôt pas la démarche : ses constats
+relancent l'identification, donc un nouveau tour de cycle.</figcaption>
+</figure>
+
+<table class="compact">
+  <caption>Les 6 phases et leurs livrables</caption>
+  <tr><th style="width:20%">Phase</th><th style="width:36%">Question posée</th><th>Livrable</th></tr>
+  <tr><td><b>1 · Identification</b></td><td>Quels processus existent et lesquels prioriser ?</td><td><b>Liste organisée et priorisée</b> des processus (carte <i>high-level</i>)</td></tr>
+  <tr><td><b>2 · Découverte</b></td><td>Comment le processus fonctionne-t-il <i>aujourd'hui</i> ?</td><td>Modèles des processus actuels — « <b>as-is</b> »</td></tr>
+  <tr><td><b>3 · Analyse</b></td><td>Où sont les problèmes et quel est leur impact ?</td><td><b>Insights</b> sur les problèmes et leur impact</td></tr>
+  <tr><td><b>4 · Re-design</b></td><td>Comment le processus <i>devrait</i>-il fonctionner ?</td><td>Modèles des processus améliorés — « <b>to-be</b> »</td></tr>
+  <tr><td><b>5 · Implémentation</b></td><td>Comment passer du to-be à la réalité ?</td><td>Modèles des processus <b>exécutables</b></td></tr>
+  <tr><td><b>6 · Suivi</b></td><td>Le processus performe-t-il comme prévu ?</td><td>Insights sur la <b>conformité et la performance</b> → relance le cycle</td></tr>
+</table>
+
+<div class="box trap">
+  <span class="box-t">Deux pièges</span>
+  <p>① <b>as-is</b> (processus tel qu'il existe) est le produit de la <b>découverte</b> ; <b>to-be</b>
+  (processus amélioré) est le produit du <b>re-design</b>. ② À l'étape d'<b>identification</b>, on ne modélise
+  <b>pas</b> en détail : on établit un listing, une carte de haut niveau. La modélisation détaillée, c'est la
+  <b>découverte</b>.</p>
+</div>
+
+<h3 id="p3-3" class="keep"><span class="h3-num">3.3</span>Identifier les processus et choisir sa perspective</h3>
+
+<p>L'identification donne une <b>vision globale</b> du fonctionnement de l'organisation : comprendre quels
+processus existent, les <b>nommer et catégoriser</b>, identifier les <b>prioritaires</b> pour la transformation,
+et éviter de s'attaquer à des sous-processus sans cohérence d'ensemble. Le cours retient trois types de
+processus : <b>stratégiques</b> (pilotent et orientent : priorités de transformation, budgets, gestion du
+changement), <b>opérationnels</b> (cœur de métier, délivrent la valeur : traitement des demandes de subventions,
+décisions sur les aides sociales) et <b>support</b> (RH, IT, comptabilité).</p>
+
+<table class="compact">
+  <caption>Les trois perspectives de modélisation — du moins au plus détaillé</caption>
+  <tr><th style="width:16%">Perspective</th><th style="width:42%">Avantages</th><th>Inconvénients</th></tr>
+  <tr><td><b>Interne</b><br><span class="small">départements, rôles, responsabilités</span></td><td>Reflète la structure réelle de l'organisation · facile à comprendre pour les managers · permet d'optimiser localement · utile pour identifier compétences, ressources et charge de travail</td><td>Vision <b>fragmentée</b> · masque les problèmes aux <b>interfaces</b> · <b>renforce les silos</b> · ignore le parcours du citoyen qui traverse plusieurs services · conduit à des <b>sous-optimisations locales</b></td></tr>
+  <tr><td><b>Externe</b><br><span class="small">le processus vu par le client / citoyen</span></td><td>Vision <b>complète et transversale</b> · identifie bottlenecks, transferts inutiles et doublons · orientation <b>valeur pour le citoyen</b> · facilite digitalisation et simplification</td><td>Les managers perdent leurs repères fonctionnels · exige plus de coordination inter-services · nécessite un <b>sponsor fort</b> · frontières entre processus difficiles à définir</td></tr>
+  <tr><td><b>Systèmes d'information</b><br><span class="small">le processus vu par les SI utilisés</span></td><td colspan="2">La plus détaillée des trois — utile pour préparer l'automatisation et les exigences fonctionnelles</td></tr>
+</table>
+
+<div class="box exam">
+  <span class="box-t">Laquelle choisir ? Les deux</span>
+  <p>L'<b>interne</b> pour <i>comprendre l'organisation et la gérer</i> (responsabilités, optimiser un service) ;
+  l'<b>externe</b> pour <i>transformer et digitaliser</i> (chaîne de valeur complète et transversale).
+  Face à un projet de digitalisation transversal, recommandez l'externe — en gardant l'interne pour la gestion.</p>
+</div>
+
+<h3 id="p3-4" class="keep"><span class="h3-num">3.4</span>Analyser : Fishbone, Lean et VA / BVA / NVA</h3>
+
+<p>Le <b>diagramme de Fishbone</b> (ou d'Ishikawa) est la technique de <i>root-cause analysis</i> du cours :
+partir d'un problème — la tête du poisson — et remonter systématiquement à ses causes profondes, classées en
+six familles, <b>les 6M</b>.</p>
+
+<figure>
+<svg viewBox="0 0 660 244" role="img" aria-label="Diagramme de Fishbone et les 6M">
+  <defs><marker id="fb-a" markerWidth="9" markerHeight="8" refX="8" refY="4" orient="auto">
+    <path d="M0 0 L8 4 L0 8 Z" fill="#152a31"/></marker></defs>
+  <line x1="40" y1="122" x2="500" y2="122" stroke="#152a31" stroke-width="2.4" marker-end="url(#fb-a)"/>
+  <polygon points="512,122 542,96 645,96 645,148 542,148" fill="#fbeae8" stroke="#b8403a" stroke-width="1.6"/>
+  <text x="594" y="116" font-size="10.5" font-weight="700" fill="#b8403a" text-anchor="middle">Problème :</text>
+  <text x="594" y="132" font-size="10.5" font-weight="700" fill="#b8403a" text-anchor="middle">délais trop longs</text>
+
+  <g stroke="#0e7c86" stroke-width="1.6">
+    <line x1="170" y1="122" x2="122" y2="52"/><line x1="300" y1="122" x2="252" y2="52"/><line x1="430" y1="122" x2="382" y2="52"/>
+    <line x1="170" y1="122" x2="122" y2="192"/><line x1="300" y1="122" x2="252" y2="192"/><line x1="430" y1="122" x2="382" y2="192"/>
+  </g>
+  <g font-size="10.5" font-weight="700" fill="#0a5a63" text-anchor="middle">
+    <text x="118" y="42">Main-d'œuvre</text><text x="248" y="42">Méthodes</text><text x="378" y="42">Machines / SI</text>
+    <text x="118" y="212">Matériaux</text><text x="248" y="212">Mesure</text><text x="378" y="212">Milieu</text>
+  </g>
+  <g font-size="8.8" font-style="italic" fill="#78868f">
+    <text x="150" y="82">manque de formation</text><text x="280" y="82">double encodage</text><text x="410" y="82">systèmes non intégrés</text>
+    <text x="150" y="170">dossiers incomplets</text><text x="280" y="170">pas de KPI suivi</text><text x="410" y="170">silos entre services</text>
+  </g>
+</svg>
+<figcaption data-n="Figure 3.2">Le diagramme de Fishbone et les <b>6M</b>. Chaque arête porte une famille de
+causes ; on y accroche les causes concrètes observées.</figcaption>
+</figure>
+
+<h4>L'approche Lean</h4>
+<div class="box def keep">
+  <span class="box-t">Taiichi Ohno (Toyota) — slide 78</span>
+  <p class="quote">« Tout ce que nous faisons, c'est examiner le délai entre le moment où le client passe sa
+  commande et celui où nous encaissons l'argent. Et nous réduisons ce délai en <b>éliminant les gaspillages qui
+  n'apportent aucune valeur ajoutée</b>. »</p>
+</div>
+<p><b>Les 5 étapes Lean :</b> ① analyser <b>quel processus génère de la valeur pour le client</b> ;
+② examiner <b>comment</b> cette valeur est créée — quelles étapes en ajoutent, lesquelles non ;
+③ <b>éliminer le gaspillage</b> (principe de flux) ; ④ <b>réorganiser le flux</b> pour ne garder que les
+étapes à valeur ; ⑤ <b>remettre en question en continu</b>.</p>
+
+<h4>La value-added analysis : VA, BVA, NVA</h4>
+<p>On décompose le processus en étapes — avant la tâche, la tâche, après la tâche — puis on classe chacune.</p>
+
+<figure>
+<svg viewBox="0 0 660 224" role="img" aria-label="Arbre de décision VA, BVA, NVA">
+  <defs><marker id="va-a" markerWidth="9" markerHeight="8" refX="8" refY="4" orient="auto">
+    <path d="M0 0 L8 4 L0 8 Z" fill="#455760"/></marker></defs>
+
+  <rect x="120" y="14" width="230" height="44" rx="4" fill="#fdfefe" stroke="#0e7c86" stroke-width="1.4"/>
+  <text x="235" y="34" font-size="10.5" font-weight="700" fill="#0a5a63" text-anchor="middle">Le client paierait-il</text>
+  <text x="235" y="49" font-size="10.5" font-weight="700" fill="#0a5a63" text-anchor="middle">pour cette étape ?</text>
+
+  <rect x="430" y="14" width="215" height="44" rx="4" fill="#e6f3ea" stroke="#2e7d46" stroke-width="1.6"/>
+  <text x="537" y="32" font-size="11" font-weight="700" fill="#2e7d46" text-anchor="middle">VA — Value Adding</text>
+  <text x="537" y="48" font-size="9" fill="#455760" text-anchor="middle">à maximiser et fluidifier</text>
+  <line x1="354" y1="36" x2="424" y2="36" stroke="#455760" stroke-width="1.6" marker-end="url(#va-a)"/>
+  <text x="389" y="28" font-size="9" font-weight="700" fill="#2e7d46" text-anchor="middle">OUI</text>
+
+  <rect x="120" y="98" width="230" height="52" rx="4" fill="#fdfefe" stroke="#0e7c86" stroke-width="1.4"/>
+  <text x="235" y="118" font-size="10.5" font-weight="700" fill="#0a5a63" text-anchor="middle">L'entreprise en a-t-elle besoin ?</text>
+  <text x="235" y="134" font-size="9.2" fill="#455760" text-anchor="middle">conformité réglementaire, réduction</text>
+  <text x="235" y="145" font-size="9.2" fill="#455760" text-anchor="middle">de risque, revenus</text>
+  <line x1="235" y1="62" x2="235" y2="92" stroke="#455760" stroke-width="1.6" marker-end="url(#va-a)"/>
+  <text x="252" y="80" font-size="9" font-weight="700" fill="#b8403a">NON</text>
+
+  <rect x="430" y="102" width="215" height="44" rx="4" fill="#fbf3de" stroke="#c9971f" stroke-width="1.6"/>
+  <text x="537" y="120" font-size="11" font-weight="700" fill="#8a6111" text-anchor="middle">BVA — Business Value Adding</text>
+  <text x="537" y="136" font-size="9" fill="#455760" text-anchor="middle">à réduire au strict nécessaire</text>
+  <line x1="354" y1="124" x2="424" y2="124" stroke="#455760" stroke-width="1.6" marker-end="url(#va-a)"/>
+  <text x="389" y="116" font-size="9" font-weight="700" fill="#2e7d46" text-anchor="middle">OUI</text>
+
+  <rect x="120" y="176" width="230" height="40" rx="4" fill="#fbeae8" stroke="#b8403a" stroke-width="1.6"/>
+  <text x="235" y="194" font-size="11" font-weight="700" fill="#b8403a" text-anchor="middle">NVA — Non Value Adding</text>
+  <text x="235" y="209" font-size="9" fill="#455760" text-anchor="middle">à éliminer</text>
+  <line x1="235" y1="154" x2="235" y2="170" stroke="#455760" stroke-width="1.6" marker-end="url(#va-a)"/>
+  <text x="252" y="168" font-size="9" font-weight="700" fill="#b8403a">NON</text>
+  <text x="537" y="192" font-size="9.2" fill="#78868f" text-anchor="middle">transferts, changements de contexte,</text>
+  <text x="537" y="205" font-size="9.2" fill="#78868f" text-anchor="middle">attentes, retards, retouches (rework)</text>
+</svg>
+<figcaption data-n="Figure 3.3">L'arbre de décision VA / BVA / NVA. <b>Les attentes et les transferts sont
+presque toujours NVA.</b></figcaption>
+</figure>
+
+<table class="compact">
+  <caption>Les trois catégories, avec les exemples du cours</caption>
+  <tr><th style="width:14%">Catégorie</th><th style="width:38%">Test</th><th>Exemples</th></tr>
+  <tr><td><b>VA</b></td><td>Le client <b>paierait-il</b> pour cette étape ? La <b>reconnaîtrait-il</b> comme nécessaire ? Percevrait-il <b>moins de valeur</b> sans elle ?</td><td>Usinage des matériaux d'une voiture · traitement d'une demande de permis de construire par l'agent d'urbanisme</td></tr>
+  <tr><td><b>BVA</b></td><td>Nécessaire ou utile au <b>fonctionnement de l'entreprise</b> : revenus, réduction de risques, <b>conformité réglementaire</b></td><td>Admission à l'université : vérifier la complétude du dossier, la validité des diplômes et des tests linguistiques</td></tr>
+  <tr><td><b>NVA</b></td><td>Tout le reste : transferts, changements de contexte, temps d'attente, retards, <b>retouches</b></td><td>Matériaux qui attendent en entrepôt · demande de permis dans une pile sur un bureau · patient qui attend deux semaines un rendez-vous</td></tr>
+</table>
+
+<div class="box trap">
+  <span class="box-t">Le piège du contrôle</span>
+  <p>Un contrôle n'est <b>pas automatiquement NVA</b> : un contrôle de conformité ou de réduction de risque est
+  <b>BVA</b> — on le réduit au strict nécessaire, on ne le supprime pas. En revanche, un contrôle qui
+  <b>duplique</b> un contrôle existant est bien du NVA déguisé.</p>
+</div>
+
+<h3 id="p3-5" class="keep"><span class="h3-num">3.5</span>Les 5 dimensions de performance</h3>
+
+<p>Le cours reprend le <b>« Devil's Quadrangle »</b> classique — coût, temps, qualité, flexibilité — et lui
+ajoute la <b>durabilité</b> (Seidel, Recker &amp; vom Brocke, 2012) : c'est donc un <b>pentagone</b>. Le principe
+est que ces dimensions sont <b>en tension</b> : améliorer l'une dégrade souvent les autres.</p>
+
+<figure>
+<svg viewBox="0 0 660 292" role="img" aria-label="Le pentagone des dimensions de performance">
+  <polygon points="330,42 435,118 395,241 265,241 225,118" fill="none" stroke="#0e7c86" stroke-width="2"/>
+  <polygon points="330,102 419,132 363,208 275,199 248,132" fill="#fbf3de" stroke="#c9971f"
+           stroke-width="1.6" stroke-dasharray="5 4" opacity="0.85"/>
+  <g fill="#0e7c86"><circle cx="330" cy="42" r="5"/><circle cx="435" cy="118" r="5"/>
+    <circle cx="395" cy="241" r="5"/><circle cx="265" cy="241" r="5"/><circle cx="225" cy="118" r="5"/></g>
+  <g font-size="11.5" font-weight="700" fill="#0a5a63" text-anchor="middle">
+    <text x="330" y="30">TEMPS</text><text x="486" y="114">COÛT</text>
+    <text x="420" y="262">QUALITÉ</text><text x="240" y="262">FLEXIBILITÉ</text><text x="172" y="114">DURABILITÉ</text>
+  </g>
+  <g font-size="8.8" fill="#78868f" text-anchor="middle">
+    <text x="330" y="278">tirer sur une dimension déforme les autres : réduire le temps peut augmenter le coût ou dégrader la qualité</text>
+  </g>
+</svg>
+<figcaption data-n="Figure 3.4">Le « pentagone du diable ». Le pentagone intérieur, déformé, illustre la
+tension : <b>aucune amélioration n'est gratuite</b>.</figcaption>
+</figure>
+
+<table class="compact">
+  <tr><th style="width:16%">Dimension</th><th style="width:52%">Définition</th><th>Objectif</th></tr>
+  <tr><td><b>Coût</b></td><td>Ressources consommées : main-d'œuvre, outils, énergie, achats</td><td>Faire mieux à budget maîtrisé</td></tr>
+  <tr><td><b>Temps</b></td><td>Durée d'exécution et délais : <i>cycle time</i>, temps d'attente, <i>time-to-deliver</i></td><td>Réduire les délais</td></tr>
+  <tr><td><b>Qualité</b></td><td>Conformité et fiabilité des résultats : erreurs, défauts, satisfaction client, respect des règles</td><td>Zéro défaut, meilleure valeur perçue</td></tr>
+  <tr><td><b>Flexibilité</b></td><td>Capacité à gérer la variété et le changement : exceptions, personnalisation, pics de demande, évolutions réglementaires</td><td>S'adapter sans exploser le reste</td></tr>
+  <tr><td><b>Durabilité</b></td><td>Impact environnemental, social et de gouvernance (<b>ESG</b>) : empreinte carbone, déchets, conditions de travail</td><td>Réduire les impacts négatifs</td></tr>
+</table>
+
+<div class="box exam">
+  <span class="box-t">La mise en situation type</span>
+  <p>« Une organisation ajoute un contrôle qualité supplémentaire : analysez l'impact sur les cinq dimensions. »
+  Réponse attendue : <b>qualité ↑</b>, mais <b>temps ↑</b> et <b>coût ↑</b>, <b>flexibilité ↓</b> (une étape
+  obligatoire rigidifie le flux) et <b>durabilité</b> marginalement ↓ (impressions, déplacements).
+  Bonus : ce contrôle est <b>BVA</b> — à maintenir mais à réduire au strict nécessaire, voire du <b>NVA
+  déguisé</b> s'il duplique un contrôle existant. À l'inverse, un redesign qui <b>élimine du gaspillage</b>
+  peut gagner sur le temps <i>et</i> le coût sans perte de qualité : il « bat » le pentagone.</p>
+</div>
+
+<h3 id="p3-6" class="keep"><span class="h3-num">3.6</span>Redesign : incrémental ou radical</h3>
+
+<div class="grid2">
+  <div class="card">
+    <span class="c-kick">Voie 1</span><h4>Amélioration incrémentale</h4>
+    <p>Optimiser le processus <b>tel qu'il existe</b> · ajustements <b>progressifs</b> · <b>faibles risques</b>,
+    changements ciblés.</p>
+  </div>
+  <div class="card">
+    <span class="c-kick">Voie 2</span><h4>Process redesign</h4>
+    <p>Repenser les processus <b>en profondeur, parfois en repartant de zéro</b> · changements majeurs : nouveaux
+    rôles, nouvelles technologies · <b>plus risqué, mais gains potentiels supérieurs</b>.</p>
+  </div>
+</div>
+<p class="small">Nuance attendue à l'examen : <b>ni l'un ni l'autre n'est préférable dans l'absolu</b>.
+Présentez le <b>compromis risque / gain</b> — le choix dépend de l'ampleur des dysfonctionnements, de l'appétit
+au risque et des moyens disponibles.</p>
+
+<h4>Les 6 heuristiques d'amélioration incrémentale</h4>
+<dl class="kv">
+  <dt>Parallélisme</dt><dd>Exécuter des activités en parallèle plutôt qu'en séquence</dd>
+  <dt>Composition</dt><dd>Éviter la décomposition extrême des activités — réduire le <i>context switching</i></dd>
+  <dt>Élimination</dt><dd>Supprimer les activités inutiles</dd>
+  <dt>Empower</dt><dd>Donner du pouvoir de décision aux travailleurs</dd>
+  <dt>Assignation flexible</dt><dd>Si plusieurs ressources sont disponibles, choisir la plus <b>spécialisée</b> — pour garder les ressources génériques libres</dd>
+  <dt>Automatisation</dt><dd>Automatiser les activités opérationnelles</dd>
+</dl>
+
+<h3 id="p3-7" class="keep"><span class="h3-num">3.7</span>Les 7 principes de Hammer</h3>
+
+<p>Le cours consacre 24 slides à ces principes, chacun illustré par un cas du secteur public belge — signal
+fort d'importance pour l'examen. Pour chacun, mémorisez <b>l'idée, l'exemple et ce qui se passe si on ne
+l'applique pas</b>.</p>
+
+<table class="compact">
+  <tr><th style="width:4%">#</th><th style="width:30%">Principe</th><th>Idée clé et exemple du cours</th></tr>
+  <tr><td><b>1</b></td><td><b>Organiser autour des résultats, pas des tâches</b></td><td>Concevoir autour du résultat final plutôt que d'une succession de tâches fragmentées. Solution générique : un <b>gestionnaire de cas unique</b> qui coordonne de bout en bout. <i>Changement de statut professionnel : le citoyen doit lui-même coordonner caisse d'assurances, organisme de paiement, employeur, ONEM et FOREM.</i></td></tr>
+  <tr><td><b>2</b></td><td><b>Faire exécuter le processus par ceux qui en utilisent les résultats</b></td><td>La collecte d'information doit être faite par celui qui <b>utilise</b> le résultat, pas par un intermédiaire. <i>Le C4 est produit par l'employeur et utilisé par l'ONEM — mais c'est le citoyen qui court après. C'est à l'ONEM de le collecter.</i></td></tr>
+  <tr><td><b>3</b></td><td><b>Intégrer le traitement de l'information au travail qui la produit</b></td><td>L'information doit être encodée, vérifiée et traitée <b>au moment où elle est produite</b>. <i>Changement de domicile : la demande arrive directement à la police qui, si elle est valide, met à jour le registre et la carte d'identité — au lieu des allers-retours commune ↔ police.</i></td></tr>
+  <tr><td><b>4</b></td><td><b>Traiter les ressources géographiquement distribuées comme si elles étaient centralisées</b></td><td>Mutualiser des ressources dispersées grâce à la technologie. <i>Appels d'urgence 112 : un centre par province créait des files séparées ; réponse = numéro unique, centres interconnectés via ASTRID, charge mutualisée.</i></td></tr>
+  <tr><td><b>5</b></td><td><b>Lier les activités parallèles au lieu d'intégrer leurs résultats</b></td><td>Faire travailler ensemble les acteurs parallèles <b>pendant</b> l'analyse, plutôt que d'intégrer des avis contradictoires à la fin. <i>Permis d'environnement : plateforme commune où les analyses sont visibles en temps réel, incohérences résolues avant la décision.</i></td></tr>
+  <tr><td><b>6</b></td><td><b>Placer la décision là où le travail est effectué et intégrer le contrôle au processus</b></td><td>Décisions courantes prises là où l'information est produite ; contrôles intégrés au flux plutôt qu'a posteriori. <i>Aide sociale au CPAS : le travailleur social octroie directement, contrôles automatisés dans l'outil, le Comité spécial ne traite que les cas exceptionnels.</i></td></tr>
+  <tr><td><b>7</b></td><td><b>Capturer l'information une seule fois, à la source</b></td><td>Chaque information est collectée <b>une seule fois</b>, au moment de sa première apparition, dans le <b>système source légitime</b>. <i>Précompte immobilier : toutes les données demandées au citoyen sont déjà connues de l'administration (cadastre, registre national, registre de population).</i></td></tr>
+</table>
+
+<div class="box exam">
+  <span class="box-t">Les indices de reconnaissance — à connaître pour le diagnostic</span>
+  <p>« le citoyen doit coordonner » → <b>P1</b> · « X court après un document produit par Y » → <b>P2</b> ·
+  « l'information est encodée puis re-traitée ailleurs » → <b>P3</b> · « ressources locales séparées, files
+  distinctes » → <b>P4</b> · « avis contradictoires intégrés à la fin » → <b>P5</b> · « validation hiérarchique
+  systématique, contrôle a posteriori » → <b>P6</b> · « le citoyen fournit des informations déjà connues » →
+  <b>P7</b>. L'exercice type demande d'identifier <b>au moins trois principes violés</b> dans une situation,
+  puis de proposer le redesign correspondant.</p>
+</div>
+
+<h4>Prioriser les idées d'amélioration : la matrice PICK</h4>
+<figure>
+<svg viewBox="0 0 660 246" role="img" aria-label="La matrice PICK">
+  <text x="352" y="16" font-size="10" font-weight="700" fill="#78868f" text-anchor="middle">DIFFICULTÉ DE MISE EN ŒUVRE</text>
+  <text x="228" y="30" font-size="9.5" fill="#78868f" text-anchor="middle">facile</text>
+  <text x="512" y="30" font-size="9.5" fill="#78868f" text-anchor="middle">difficile</text>
+  <text x="-120" y="20" transform="rotate(-90)" font-size="10" font-weight="700" fill="#78868f" text-anchor="middle">BÉNÉFICE</text>
+  <text x="-72" y="34" transform="rotate(-90)" font-size="9.5" fill="#78868f" text-anchor="middle">élevé</text>
+  <text x="-178" y="34" transform="rotate(-90)" font-size="9.5" fill="#78868f" text-anchor="middle">faible</text>
+
+  <rect x="90" y="38" width="276" height="88" rx="4" fill="#e6f3ea" stroke="#2e7d46" stroke-width="1.6"/>
+  <text x="228" y="72" font-size="15" font-weight="700" fill="#2e7d46" text-anchor="middle">IMPLEMENT</text>
+  <text x="228" y="92" font-size="9.5" fill="#455760" text-anchor="middle">gain élevé, facile</text>
+  <text x="228" y="108" font-size="9.5" font-style="italic" fill="#2e7d46" text-anchor="middle">à faire tout de suite</text>
+
+  <rect x="374" y="38" width="276" height="88" rx="4" fill="#fbf3de" stroke="#c9971f" stroke-width="1.6"/>
+  <text x="512" y="72" font-size="15" font-weight="700" fill="#8a6111" text-anchor="middle">CHALLENGE</text>
+  <text x="512" y="92" font-size="9.5" fill="#455760" text-anchor="middle">gain élevé, difficile</text>
+  <text x="512" y="108" font-size="9.5" font-style="italic" fill="#8a6111" text-anchor="middle">à challenger, en mode projet</text>
+
+  <rect x="90" y="134" width="276" height="88" rx="4" fill="#e4f1f2" stroke="#0e7c86" stroke-width="1.6"/>
+  <text x="228" y="168" font-size="15" font-weight="700" fill="#0a5a63" text-anchor="middle">POSSIBLE</text>
+  <text x="228" y="188" font-size="9.5" fill="#455760" text-anchor="middle">gain faible, facile</text>
+  <text x="228" y="204" font-size="9.5" font-style="italic" fill="#0a5a63" text-anchor="middle">si le temps le permet</text>
+
+  <rect x="374" y="134" width="276" height="88" rx="4" fill="#fbeae8" stroke="#b8403a" stroke-width="1.6"/>
+  <text x="512" y="168" font-size="15" font-weight="700" fill="#b8403a" text-anchor="middle">KILL</text>
+  <text x="512" y="188" font-size="9.5" fill="#455760" text-anchor="middle">gain faible, difficile</text>
+  <text x="512" y="204" font-size="9.5" font-style="italic" fill="#b8403a" text-anchor="middle">à abandonner</text>
+  <text x="370" y="240" font-size="9" font-style="italic" fill="#78868f" text-anchor="middle">Implement est le meilleur coin, Kill le pire — c'est l'erreur de placement la plus fréquente</text>
+</svg>
+<figcaption data-n="Figure 3.5">La matrice <b>PICK</b> priorise des <i>idées d'amélioration</i> (et non des
+processus) en croisant le bénéfice attendu et la difficulté de mise en œuvre.</figcaption>
+</figure>
+
+<h3 id="p3-8" class="keep"><span class="h3-num">3.8</span>Surveiller : dashboards et process mining</h3>
+
+<div class="box def keep">
+  <span class="box-t">Surveillance des processus — Dumas et al. (2013), slide 126</span>
+  <p class="quote">« La surveillance des processus métier consiste à utiliser les <b>données générées par
+  l'exécution</b> d'un processus métier afin d'extraire des informations sur les <b>performances réelles</b> du
+  processus et de vérifier sa <b>conformité</b> aux normes, politiques ou réglementations. »</p>
+  <p class="small" style="margin-top:2mm">Deux idées : <b>performance</b> et <b>conformité</b>. Matière
+  première : les <b>données d'exécution</b> — les traces réelles des SI, pas des impressions ni des interviews.</p>
+</div>
+
+<table class="compact">
+  <caption>Hors ligne ou en ligne : le critère est « cas terminés » contre « cas en cours »</caption>
+  <tr><th style="width:50%">Hors ligne (offline) — cas <b>terminés</b></th><th>En ligne (online) — cas <b>en cours</b></th></tr>
+  <tr><td>Image des performances du processus · <b>raisons</b> des mauvaises performances · <b>variations indésirables</b> · conformité aux règles attendues</td><td>Image <b>en temps réel</b> des cas en cours · génération d'<b>alarmes</b> ou déclenchement de <b>contre-mesures</b> quand les objectifs ne sont pas respectés — par exemple une demande client restée trop longtemps sans réponse</td></tr>
+</table>
+<p class="small">Analogie utile : le hors ligne, c'est <b>l'autopsie</b> ; l'en ligne, c'est le <b>monitoring
+cardiaque</b>.</p>
+
+<figure>
+<svg viewBox="0 0 660 196" role="img" aria-label="Le pipeline de surveillance des processus">
+  <defs><marker id="mo-a" markerWidth="9" markerHeight="8" refX="8" refY="4" orient="auto">
+    <path d="M0 0 L8 4 L0 8 Z" fill="#0a5a63"/></marker></defs>
+  <g text-anchor="middle">
+    <rect x="15" y="72" width="118" height="52" rx="4" fill="#fdfefe" stroke="#78868f" stroke-width="1.2"/>
+    <text x="74" y="94" font-size="10" font-weight="700" fill="#152a31">Système</text>
+    <text x="74" y="107" font-size="10" font-weight="700" fill="#152a31">d'information</text>
+
+    <rect x="163" y="72" width="112" height="52" rx="4" fill="#fdfefe" stroke="#78868f" stroke-width="1.2"/>
+    <text x="219" y="102" font-size="10" font-weight="700" fill="#152a31">Base de données</text>
+
+    <rect x="305" y="72" width="112" height="52" rx="4" fill="#e4f1f2" stroke="#0e7c86" stroke-width="1.6"/>
+    <text x="361" y="94" font-size="10.5" font-weight="700" fill="#0a5a63">Event log</text>
+    <text x="361" y="108" font-size="8.6" fill="#455760">traces d'exécution</text>
+
+    <rect x="470" y="24" width="175" height="52" rx="4" fill="#e6f3ea" stroke="#2e7d46" stroke-width="1.5"/>
+    <text x="557" y="45" font-size="10.5" font-weight="700" fill="#2e7d46">Dashboards</text>
+    <text x="557" y="60" font-size="8.6" fill="#455760">KPI : délais, volumes, taux d'erreur</text>
+
+    <rect x="470" y="120" width="175" height="52" rx="4" fill="#efecf8" stroke="#5f4b96" stroke-width="1.5"/>
+    <text x="557" y="141" font-size="10.5" font-weight="700" fill="#5f4b96">Process mining</text>
+    <text x="557" y="156" font-size="8.6" fill="#455760">le processus tel qu'il s'exécute</text>
+  </g>
+  <g stroke="#0a5a63" stroke-width="1.6" marker-end="url(#mo-a)" fill="none">
+    <line x1="137" y1="98" x2="158" y2="98"/>
+    <line x1="279" y1="98" x2="300" y2="98"/>
+    <path d="M 421 92 L 445 92 L 445 50 L 466 50"/>
+    <path d="M 421 104 L 445 104 L 445 146 L 466 146"/>
+  </g>
+  <text x="74" y="140" font-size="8.6" font-style="italic" fill="#78868f" text-anchor="middle">exécute le processus</text>
+  <text x="330" y="186" font-size="9.2" font-style="italic" fill="#78868f" text-anchor="middle">la matière première du process mining, c'est l'event log — pas les modèles, pas les interviews</text>
+</svg>
+<figcaption data-n="Figure 3.6">Le pipeline de surveillance. Le <b>process mining</b> reconstruit
+automatiquement le processus <b>tel qu'il s'exécute réellement</b>, à partir des traces, et le compare au
+modèle théorique.</figcaption>
+</figure>
+
+<p><b>Les 4 défis de la modélisation auxquels répond le process mining :</b> ① les modèles décrivent une
+<b>version idéalisée de la réalité</b> ; ② ils sont souvent <b>trop détaillés</b> ; ③ ils sont <b>incapables de
+saisir correctement le comportement humain</b> ; ④ leur <b>niveau d'abstraction est inapproprié</b>. En réalité,
+les processus sont bien plus complexes que leurs modèles : le process mining révèle le « spaghetti » réel —
+chemins alternatifs, boucles, contournements — que personne n'avait dessiné.</p>
+
+<div class="box link">
+  <span class="box-t">Le fil rouge avec le chapitre 1</span>
+  <p>L'<i>event log</i> est constitué de <b>données</b> brutes ; le processus reconstitué devient une
+  <b>information</b> ; les écarts et leurs causes deviennent de la <b>connaissance</b> ; les décisions
+  d'amélioration relèvent de la <b>sagesse</b> — et relancent le cycle BPM. C'est la pyramide DIKW appliquée
+  aux processus.</p>
+</div>
+
+<p class="small"><b>Les 3 messages de conclusion du chapitre :</b> ① pour comprendre et améliorer les processus,
+il faut une <b>compréhension commune</b> (as-is <i>et</i> to-be) par <b>toutes les parties affectées</b> ;
+② une <b>notation standard</b> est un atout essentiel, malgré un coût d'apprentissage initial ; ③ des
+<b>modèles simplifiés</b> pour les travailleurs peuvent être nécessaires, mais une compréhension détaillée et
+non ambiguë doit exister <b>d'abord</b>.</p>

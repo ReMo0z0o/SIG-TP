@@ -1,0 +1,282 @@
+<!-- ===================== PARTIE 4 ===================== -->
+<div data-break="1" data-part="Partie 4 · L'architecture d'entreprise et TOGAF" id="p4">
+  <div class="part-open">
+    <span class="po-num">4</span>
+    <div class="po-txt">
+      <p class="po-kicker">Chapitre 4 du cours · la méthode, hors notation ArchiMate</p>
+      <h2>L'architecture d'entreprise et TOGAF</h2>
+    </div>
+  </div>
+  <div class="part-exam"><b>Ce que l'examen attend de cette partie :</b> définir ce qu'est l'architecture
+  d'entreprise, puis rappeler et appliquer les différentes phases de modélisation TOGAF. Sachez restituer
+  l'ordre du cycle ADM, la position centrale de la gestion des exigences et le triptyque as-is → gap → to-be.</div>
+</div>
+
+<h3 id="p4-1" class="keep"><span class="h3-num">4.1</span>Le problème : silos verticaux, processus transversaux</h3>
+
+<p>Les processus métier ont besoin des <b>services des systèmes d'information</b> pour s'exécuter : enregistrer
+une commande, récupérer un dossier client, calculer un prix. Mais il existe un <b>décalage structurel</b> :
+les SI sont organisés <b>par domaine fonctionnel</b> — une application pour les ventes, une pour la
+comptabilité, une pour les RH : ce sont des <b>silos</b> — alors que les processus métier sont
+<b>transversaux</b> : traiter une commande traverse les ventes, la logistique et la facturation.</p>
+
+<figure>
+<svg viewBox="0 0 660 202" role="img" aria-label="Le décalage entre silos verticaux et processus transversal">
+  <defs><marker id="ea-a" markerWidth="9" markerHeight="8" refX="8" refY="4" orient="auto">
+    <path d="M0 0 L8 4 L0 8 Z" fill="#8a6111"/></marker></defs>
+  <g text-anchor="middle">
+    <rect x="80" y="20" width="130" height="120" rx="4" fill="#f7f9f8" stroke="#78868f" stroke-width="1.3"/>
+    <text x="145" y="42" font-size="10.5" font-weight="700" fill="#152a31">App Ventes</text>
+    <text x="145" y="56" font-size="8.4" fill="#78868f">domaine fonctionnel</text>
+    <rect x="230" y="20" width="130" height="120" rx="4" fill="#f7f9f8" stroke="#78868f" stroke-width="1.3"/>
+    <text x="295" y="42" font-size="10.5" font-weight="700" fill="#152a31">App Logistique</text>
+    <text x="295" y="56" font-size="8.4" fill="#78868f">domaine fonctionnel</text>
+    <rect x="380" y="20" width="130" height="120" rx="4" fill="#f7f9f8" stroke="#78868f" stroke-width="1.3"/>
+    <text x="445" y="42" font-size="10.5" font-weight="700" fill="#152a31">App Facturation</text>
+    <text x="445" y="56" font-size="8.4" fill="#78868f">domaine fonctionnel</text>
+  </g>
+  <rect x="40" y="82" width="580" height="42" rx="4" fill="#fbf3de" stroke="#c9971f" stroke-width="1.8" opacity="0.92"/>
+  <text x="60" y="101" font-size="10.5" font-weight="700" fill="#8a6111">Processus « Traiter une commande »</text>
+  <text x="60" y="115" font-size="8.6" fill="#8a6111">transversal — il traverse les trois silos</text>
+  <line x1="470" y1="103" x2="608" y2="103" stroke="#8a6111" stroke-width="2" marker-end="url(#ea-a)"/>
+  <text x="330" y="168" font-size="10.5" font-weight="700" fill="#b8403a" text-anchor="middle">Résultat : intégrations complexes, transferts de données, incohérences</text>
+  <text x="330" y="188" font-size="9.2" font-style="italic" fill="#78868f" text-anchor="middle">l'alignement stratégique dit QUOI viser ; il ne dit pas COMMENT y arriver</text>
+</svg>
+<figcaption data-n="Figure 4.1">Le décalage fondamental : des applications <b>verticales</b> traversées par des
+processus <b>horizontaux</b>. C'est le problème que l'architecture d'entreprise vient résoudre.</figcaption>
+</figure>
+
+<div class="box link">
+  <span class="box-t">Le lien avec la partie 1</span>
+  <p>Le modèle d'alignement de <b>Henderson &amp; Venkatraman</b> donne la vision — fit stratégique et
+  intégration fonctionnelle — mais en pratique l'alignement se réalise via une <b>multitude de projets</b>,
+  chacun avec son propre cycle de développement. Sans vision d'ensemble, ces projets partent dans tous les sens.
+  Il faut un <b>instrument de coordination global</b> : c'est l'architecture d'entreprise.
+  <b>L'EA n'annule pas le modèle d'alignement — elle l'opérationnalise.</b></p>
+</div>
+
+<h3 id="p4-2" class="keep"><span class="h3-num">4.2</span>Définition de l'architecture d'entreprise</h3>
+
+<div class="box def keep">
+  <span class="box-t">Définition à connaître — slide 11</span>
+  <p class="quote">L'architecture d'entreprise est un <b>ensemble cohérent de descriptions</b> qui fournit des
+  <b>indicateurs et des contrôles</b> permettant une <b>gouvernance éclairée</b> de l'évolution et du succès de
+  l'entreprise.</p>
+  <p class="quote" style="margin-top:2mm">L'EA est un <b>instrument</b> qui permet d'<b>articuler l'orientation
+  future</b> d'une entreprise, tout en servant de <b>mécanisme de coordination et de pilotage</b> vers la
+  transformation effective de l'entreprise.</p>
+</div>
+
+<p>En clair : l'EA consiste à <b>modéliser l'entreprise entière</b> — métier, applications, technologie — pour
+piloter sa transformation de façon cohérente, plutôt que projet par projet et silo par silo. Retenez ses
+<b>deux rôles</b> : ① <b>articuler</b> l'orientation future (dire où l'on va) et ② <b>coordonner et piloter</b>
+la transformation (y aller de façon cohérente).</p>
+
+<div class="box exam">
+  <span class="box-t">Pour retenir</span>
+  <p>L'EA joue pour <i>toute l'entreprise</i> le rôle que le BPM joue pour <i>un processus</i> : décrire
+  l'existant (as-is), concevoir la cible (to-be), piloter la transition. Et les <b>5 qualités d'un modèle</b>
+  vues en partie 2 s'appliquent aussi aux modèles d'architecture — en particulier la qualité <b>prédictive</b> :
+  un bon modèle rend les problèmes (silos, fragmentation) <b>visibles avant qu'on investisse</b>.</p>
+</div>
+
+<h3 id="p4-3" class="keep"><span class="h3-num">4.3</span>TOGAF et le cycle ADM</h3>
+
+<p><b>TOGAF</b> — <i>The Open Group Architecture Framework</i> — est la <b>méthode</b> la plus utilisée pour
+pratiquer l'architecture d'entreprise ; elle est maintenue par l'<b>Open Group</b>. Les <b>7 raisons</b> de la
+choisir : elle est basée sur les <b>meilleures pratiques</b>, <b>neutre</b> vis-à-vis des fournisseurs, c'est
+une <b>norme ouverte</b> documentée, elle évite de <b>réinventer la roue</b>, elle est <b>adaptable</b> aux
+normes industrielles, <b>largement adoptée</b> et <b>complémentaire</b> d'autres cadres. En un mot : un
+<b>standard ouvert, neutre et éprouvé</b>.</p>
+
+<p>Son cœur est le <b>cycle ADM</b> (<i>Architecture Development Method</i>) : une phase préliminaire, puis
+huit phases A à H qui s'enchaînent <b>en boucle</b>, avec la <b>gestion des exigences au centre</b>.</p>
+
+<figure>
+<svg viewBox="0 0 660 404" role="img" aria-label="Le cycle ADM de TOGAF">
+  <defs><marker id="adm-a" markerWidth="9" markerHeight="8" refX="8" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#0e7c86"/></marker></defs>
+  <path d="M 368.7 10.1 A 186 186 0 0 1 431.3 36.0" fill="none" stroke="#0e7c86" stroke-width="1.6" opacity="0.55" marker-end="url(#adm-a)"/>
+  <path d="M 486.0 90.7 A 186 186 0 0 1 511.9 153.3" fill="none" stroke="#0e7c86" stroke-width="1.6" opacity="0.55" marker-end="url(#adm-a)"/>
+  <path d="M 511.9 230.7 A 186 186 0 0 1 486.0 293.3" fill="none" stroke="#0e7c86" stroke-width="1.6" opacity="0.55" marker-end="url(#adm-a)"/>
+  <path d="M 431.3 348.0 A 186 186 0 0 1 368.7 373.9" fill="none" stroke="#0e7c86" stroke-width="1.6" opacity="0.55" marker-end="url(#adm-a)"/>
+  <path d="M 291.3 373.9 A 186 186 0 0 1 228.7 348.0" fill="none" stroke="#0e7c86" stroke-width="1.6" opacity="0.55" marker-end="url(#adm-a)"/>
+  <path d="M 174.0 293.3 A 186 186 0 0 1 148.1 230.7" fill="none" stroke="#0e7c86" stroke-width="1.6" opacity="0.55" marker-end="url(#adm-a)"/>
+  <path d="M 148.1 153.3 A 186 186 0 0 1 174.0 90.7" fill="none" stroke="#0e7c86" stroke-width="1.6" opacity="0.55" marker-end="url(#adm-a)"/>
+  <path d="M 228.7 36.0 A 186 186 0 0 1 291.3 10.1" fill="none" stroke="#0e7c86" stroke-width="1.6" opacity="0.55" marker-end="url(#adm-a)"/>
+  <rect x="282.0" y="28.0" width="96" height="44" rx="4" fill="#fdfefe" stroke="#78868f" stroke-width="1.5"/>
+  <text x="330.0" y="44.0" font-size="11" font-weight="700" fill="#0a5a63" text-anchor="middle">A</text>
+  <text x="330.0" y="53.0" font-size="7.8" fill="#455760" text-anchor="middle">Vision de</text>
+  <text x="330.0" y="62.5" font-size="7.8" fill="#455760" text-anchor="middle">l'architecture</text>
+  <rect x="382.4" y="69.6" width="96" height="44" rx="4" fill="#fbf3de" stroke="#c9971f" stroke-width="1.5"/>
+  <text x="430.4" y="85.6" font-size="11" font-weight="700" fill="#0a5a63" text-anchor="middle">B</text>
+  <text x="430.4" y="97.6" font-size="7.8" fill="#455760" text-anchor="middle">Architecture métier</text>
+  <rect x="424.0" y="170.0" width="96" height="44" rx="4" fill="#e4f1f2" stroke="#0e7c86" stroke-width="1.5"/>
+  <text x="472.0" y="186.0" font-size="11" font-weight="700" fill="#0a5a63" text-anchor="middle">C</text>
+  <text x="472.0" y="198.0" font-size="7.8" fill="#455760" text-anchor="middle">Architecture des SI</text>
+  <rect x="382.4" y="270.4" width="96" height="44" rx="4" fill="#e6f3ea" stroke="#2e7d46" stroke-width="1.5"/>
+  <text x="430.4" y="286.4" font-size="11" font-weight="700" fill="#0a5a63" text-anchor="middle">D</text>
+  <text x="430.4" y="295.4" font-size="7.8" fill="#455760" text-anchor="middle">Architecture</text>
+  <text x="430.4" y="304.9" font-size="7.8" fill="#455760" text-anchor="middle">technologique</text>
+  <rect x="282.0" y="312.0" width="96" height="44" rx="4" fill="#fdfefe" stroke="#78868f" stroke-width="1.5"/>
+  <text x="330.0" y="328.0" font-size="11" font-weight="700" fill="#0a5a63" text-anchor="middle">E</text>
+  <text x="330.0" y="337.0" font-size="7.8" fill="#455760" text-anchor="middle">Opportunités et</text>
+  <text x="330.0" y="346.5" font-size="7.8" fill="#455760" text-anchor="middle">solutions</text>
+  <rect x="181.6" y="270.4" width="96" height="44" rx="4" fill="#fdfefe" stroke="#78868f" stroke-width="1.5"/>
+  <text x="229.6" y="286.4" font-size="11" font-weight="700" fill="#0a5a63" text-anchor="middle">F</text>
+  <text x="229.6" y="295.4" font-size="7.8" fill="#455760" text-anchor="middle">Planning de</text>
+  <text x="229.6" y="304.9" font-size="7.8" fill="#455760" text-anchor="middle">migration</text>
+  <rect x="140.0" y="170.0" width="96" height="44" rx="4" fill="#fdfefe" stroke="#78868f" stroke-width="1.5"/>
+  <text x="188.0" y="186.0" font-size="11" font-weight="700" fill="#0a5a63" text-anchor="middle">G</text>
+  <text x="188.0" y="195.0" font-size="7.8" fill="#455760" text-anchor="middle">Gouvernance de mise</text>
+  <text x="188.0" y="204.5" font-size="7.8" fill="#455760" text-anchor="middle">en œuvre</text>
+  <rect x="181.6" y="69.6" width="96" height="44" rx="4" fill="#fdfefe" stroke="#78868f" stroke-width="1.5"/>
+  <text x="229.6" y="85.6" font-size="11" font-weight="700" fill="#0a5a63" text-anchor="middle">H</text>
+  <text x="229.6" y="94.6" font-size="7.8" fill="#455760" text-anchor="middle">Gestion du</text>
+  <text x="229.6" y="104.1" font-size="7.8" fill="#455760" text-anchor="middle">changement</text>
+  <circle cx="330" cy="192" r="62" fill="#fbf3de" stroke="#c9971f" stroke-width="2.2"/>
+  <text x="330" y="184" font-size="11" font-weight="700" fill="#8a6111" text-anchor="middle">Gestion des</text>
+  <text x="330" y="198" font-size="11" font-weight="700" fill="#8a6111" text-anchor="middle">exigences</text>
+  <text x="330" y="212" font-size="7.8" fill="#455760" text-anchor="middle">alimente toutes les phases</text>
+  <line x1="330.0" y1="128.0" x2="330.0" y2="74.0" stroke="#c9971f" stroke-width="0.9" stroke-dasharray="2 3" opacity="0.75"/>
+  <line x1="375.3" y1="146.7" x2="413.4" y2="108.6" stroke="#c9971f" stroke-width="0.9" stroke-dasharray="2 3" opacity="0.75"/>
+  <line x1="394.0" y1="192.0" x2="448.0" y2="192.0" stroke="#c9971f" stroke-width="0.9" stroke-dasharray="2 3" opacity="0.75"/>
+  <line x1="375.3" y1="237.3" x2="413.4" y2="275.4" stroke="#c9971f" stroke-width="0.9" stroke-dasharray="2 3" opacity="0.75"/>
+  <line x1="330.0" y1="256.0" x2="330.0" y2="310.0" stroke="#c9971f" stroke-width="0.9" stroke-dasharray="2 3" opacity="0.75"/>
+  <line x1="284.7" y1="237.3" x2="246.6" y2="275.4" stroke="#c9971f" stroke-width="0.9" stroke-dasharray="2 3" opacity="0.75"/>
+  <line x1="266.0" y1="192.0" x2="212.0" y2="192.0" stroke="#c9971f" stroke-width="0.9" stroke-dasharray="2 3" opacity="0.75"/>
+  <line x1="284.7" y1="146.7" x2="246.6" y2="108.6" stroke="#c9971f" stroke-width="0.9" stroke-dasharray="2 3" opacity="0.75"/>
+  <rect x="8" y="26" width="118" height="46" rx="4" fill="#f7f9f8" stroke="#78868f" stroke-width="1.4"/>
+  <text x="67" y="46" font-size="10.5" font-weight="700" fill="#152a31" text-anchor="middle">Préliminaire</text>
+  <text x="67" y="60" font-size="7.8" fill="#455760" text-anchor="middle">contexte, gouvernance, outils</text>
+  <path d="M 126 44 C 200 30 250 30 278 54" fill="none" stroke="#78868f" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#adm-a)"/>
+  <rect x="516" y="330" width="10" height="10" fill="#fbf3de" stroke="#c9971f"/>
+  <text x="532" y="339" font-size="8.6" fill="#455760">B · couche métier</text>
+  <rect x="516" y="348" width="10" height="10" fill="#e4f1f2" stroke="#0e7c86"/>
+  <text x="532" y="357" font-size="8.6" fill="#455760">C · couche application</text>
+  <rect x="516" y="366" width="10" height="10" fill="#e6f3ea" stroke="#2e7d46"/>
+  <text x="532" y="375" font-size="8.6" fill="#455760">D · couche technologique</text>
+</svg>
+<figcaption data-n="Figure 4.2">Le cycle ADM. Notez la <b>position centrale</b> de la gestion des exigences :
+elle alimente <i>toutes</i> les phases en continu — les exigences ne sont jamais collectées « une bonne fois
+pour toutes ». Les couleurs des phases B, C et D correspondent aux trois couches d'architecture.</figcaption>
+</figure>
+
+<table class="compact">
+  <caption>Les phases du cycle ADM</caption>
+  <tr><th style="width:26%">Phase</th><th>Ce que l'on y fait</th></tr>
+  <tr><td><b>Préliminaire</b></td><td>Examiner le contexte organisationnel, identifier les unités concernées, définir le cadre et les méthodologies, établir le modèle organisationnel, <b>mettre en place la gouvernance</b> et sélectionner les outils</td></tr>
+  <tr><td><b>A · Vision de l'architecture</b></td><td>Développer une <b>vision globale</b> des capacités et de la valeur commerciale, définir les <b>principes de conception</b>, obtenir l'<b>approbation</b></td></tr>
+  <tr><td><b>B · Architecture métier</b></td><td>Décrire l'architecture métier <b>as-is</b>, développer l'architecture métier <b>cible</b>, identifier les composants de la feuille de route selon les lacunes</td></tr>
+  <tr><td><b>C · Architecture des SI</b></td><td>Le même triptyque appliqué aux <b>systèmes d'information</b> — applications et données</td></tr>
+  <tr><td><b>D · Architecture technologique</b></td><td>Le même triptyque appliqué à l'<b>infrastructure technologique</b></td></tr>
+  <tr><td><b>E · Opportunités et solutions</b></td><td>Créer une <b>feuille de route architecturale complète</b>, définir les <b>architectures de transition</b> si nécessaire, définir les éléments constitutifs de la solution globale</td></tr>
+  <tr><td><b>F · Planning de migration</b></td><td>Finaliser la feuille de route et le <b>plan de migration</b>, s'assurer qu'il est coordonné et que la <b>valeur et le coût</b> des lots de travaux sont compris par les parties prenantes</td></tr>
+  <tr><td><b>G · Gouvernance de mise en œuvre</b></td><td>Formuler des recommandations pour les projets, assurer la <b>gouvernance</b> pendant la mise en œuvre, <b>garantir la conformité avec l'architecture</b></td></tr>
+  <tr><td><b>H · Gestion du changement</b></td><td>Veiller à ce que l'architecture <b>reste adaptée à l'usage prévu</b> et mettre en place un processus de gestion des changements architecturaux</td></tr>
+  <tr><td><b>Gestion des exigences</b><br><span class="small">au centre</span></td><td><b>Identifier et gérer les exigences</b>, les stocker dans un <b>référentiel</b>, les <b>intégrer dans toutes les autres phases</b> — en continu</td></tr>
+</table>
+
+<div class="box trap">
+  <span class="box-t">Deux questions pièges fréquentes</span>
+  <p>① « Les exigences ne sont collectées qu'une seule fois, en phase préliminaire » → <b>FAUX</b> : la gestion
+  des exigences est <b>continue et centrale</b>, elle interagit avec toutes les phases. ② Ne confondez pas la
+  <b>phase E</b> (feuille de route complète et architectures de transition) avec la <b>phase F</b> (plan de
+  migration finalisé), ni avec la <b>phase H</b> (processus de gestion des changements architecturaux).</p>
+</div>
+
+<p class="small">La logique <b>B → C → D</b> n'est pas arbitraire : c'est la <b>logique descendante des
+couches</b> — le métier d'abord, puis les SI qui le supportent, puis la technologie qui supporte les SI.</p>
+
+<h3 id="p4-4" class="keep"><span class="h3-num">4.4</span>Le triptyque as-is → gap → to-be</h3>
+
+<p>Les trois phases d'architecture — métier (B), systèmes d'information (C) et technologique (D) — suivent
+<b>exactement la même logique en trois temps</b>. C'est un grand classique d'examen.</p>
+
+<figure>
+<svg viewBox="0 0 660 176" role="img" aria-label="Le triptyque as-is, analyse de gap, to-be">
+  <defs><marker id="gap-a" markerWidth="9" markerHeight="8" refX="8" refY="4" orient="auto">
+    <path d="M0 0 L8 4 L0 8 Z" fill="#0a5a63"/></marker></defs>
+  <g text-anchor="middle">
+    <rect x="20" y="24" width="170" height="60" rx="4" fill="#f7f9f8" stroke="#78868f" stroke-width="1.4"/>
+    <text x="105" y="48" font-size="11.5" font-weight="700" fill="#152a31">Architecture as-is</text>
+    <text x="105" y="65" font-size="9" fill="#78868f">« de référence » — l'existant</text>
+
+    <rect x="245" y="24" width="170" height="60" rx="4" fill="#fbf3de" stroke="#c9971f" stroke-width="1.8"/>
+    <text x="330" y="48" font-size="11.5" font-weight="700" fill="#8a6111">Analyse de gap</text>
+    <text x="330" y="65" font-size="9" fill="#455760">quelles lacunes ?</text>
+
+    <rect x="470" y="24" width="170" height="60" rx="4" fill="#e6f3ea" stroke="#2e7d46" stroke-width="1.4"/>
+    <text x="555" y="48" font-size="11.5" font-weight="700" fill="#2e7d46">Architecture cible</text>
+    <text x="555" y="65" font-size="9" fill="#455760">« to-be » — la visée</text>
+  </g>
+  <g stroke="#0a5a63" stroke-width="1.8" marker-end="url(#gap-a)">
+    <line x1="194" y1="54" x2="239" y2="54"/><line x1="419" y1="54" x2="464" y2="54"/>
+  </g>
+  <path d="M 330 88 L 330 108" stroke="#0a5a63" stroke-width="1.8" marker-end="url(#gap-a)" fill="none"/>
+  <rect x="150" y="112" width="360" height="32" rx="4" fill="#e4f1f2" stroke="#0e7c86" stroke-width="1.4"/>
+  <text x="330" y="132" font-size="10.5" font-weight="700" fill="#0a5a63" text-anchor="middle">Feuille de route / plan d'action pour combler les gaps</text>
+  <text x="330" y="164" font-size="9.5" fill="#455760" text-anchor="middle">Les 4 types de gaps : processus · personnes (compétences) · financiers · matériels</text>
+</svg>
+<figcaption data-n="Figure 4.3">Le triptyque commun aux phases B, C et D. La migration se fait ensuite par
+étapes : <b>baseline → architectures de transition → target</b>.</figcaption>
+</figure>
+
+<div class="box link">
+  <span class="box-t">La même logique, partout dans le cours</span>
+  <p>Vous l'avez déjà rencontrée deux fois : dans les <b>4 phases de l'analyse métier</b> (partie 2 : problème →
+  état actuel → état désiré → gap) et dans le <b>cycle de vie BPM</b> (partie 3 : découverte as-is → analyse →
+  redesign to-be). C'est le squelette de toute démarche de transformation.</p>
+</div>
+
+<h3 id="p4-5" class="keep"><span class="h3-num">4.5</span>Les trois couches et la logique de service</h3>
+
+<p>TOGAF dit <b>comment procéder</b> ; un langage de modélisation dit <b>comment dessiner</b>. Sans langage
+commun, chaque couche utiliserait sa propre notation, et il deviendrait impossible de voir les liens
+<i>entre</i> les couches — or c'est précisément l'alignement métier-IT que l'on cherche à rendre visible.</p>
+
+<figure>
+<svg viewBox="0 0 660 236" role="img" aria-label="Les trois couches d'architecture et la logique de service">
+  <defs><marker id="lay-a" markerWidth="9" markerHeight="8" refX="8" refY="4" orient="auto">
+    <path d="M0 0 L8 4 L0 8 Z" fill="#5f4b96"/></marker></defs>
+
+  <rect x="60" y="20" width="470" height="56" rx="4" fill="#fbf3de" stroke="#c9971f" stroke-width="1.8"/>
+  <text x="80" y="44" font-size="12" font-weight="700" fill="#8a6111">Couche MÉTIER</text>
+  <text x="80" y="62" font-size="9" fill="#455760">produits et services à des clients externes, mis en œuvre par des processus métier exécutés par des acteurs</text>
+
+  <rect x="60" y="96" width="470" height="56" rx="4" fill="#e4f1f2" stroke="#0e7c86" stroke-width="1.8"/>
+  <text x="80" y="120" font-size="12" font-weight="700" fill="#0a5a63">Couche des SYSTÈMES D'INFORMATION</text>
+  <text x="80" y="138" font-size="9" fill="#455760">soutient la couche métier avec des services d'application mis en œuvre par des applications logicielles</text>
+
+  <rect x="60" y="172" width="470" height="56" rx="4" fill="#e6f3ea" stroke="#2e7d46" stroke-width="1.8"/>
+  <text x="80" y="196" font-size="12" font-weight="700" fill="#2e7d46">Couche TECHNOLOGIQUE</text>
+  <text x="80" y="214" font-size="9" fill="#455760">services d'infrastructure — traitement, stockage, communication — matériel et logiciels système</text>
+
+  <line x1="562" y1="168" x2="562" y2="100" stroke="#5f4b96" stroke-width="2" marker-end="url(#lay-a)"/>
+  <line x1="562" y1="92" x2="562" y2="24" stroke="#5f4b96" stroke-width="2" marker-end="url(#lay-a)"/>
+  <text x="600" y="126" font-size="10" font-weight="700" fill="#5f4b96" text-anchor="middle" transform="rotate(-90 600 126)">SERT (serving)</text>
+  <text x="40" y="124" font-size="9" fill="#78868f" text-anchor="middle" transform="rotate(-90 40 124)">le concret réalise l'abstrait</text>
+</svg>
+<figcaption data-n="Figure 4.4">Les trois couches et la <b>logique verticale</b> : chaque couche <b>sert</b>
+celle du dessus au moyen de <b>services</b>. Le mot-clé qui circule entre les couches, c'est « service ».</figcaption>
+</figure>
+
+<div class="box exam">
+  <span class="box-t">Le mémo à retenir</span>
+  <p><b>technologie → sert → applications → servent → métier → sert → clients.</b> La relation de service part
+  toujours du <b>fournisseur</b> et <b>monte</b> ; jamais l'inverse. Pour distinguer deux notions voisines : le
+  <b>service</b> est le comportement <i>exposé</i> à l'environnement, le <b>processus</b> est le comportement
+  <i>interne</i> qui réalise ce service.</p>
+</div>
+
+<div class="box ex">
+  <span class="box-t">L'exemple fil rouge du cours : le permis de stationnement</span>
+  <p>Une municipalité délivre un permis de stationnement. Le modèle se lit sur quatre niveaux : le
+  <b>parcours citoyen</b> (consulter les informations → fournir les informations → payer → recevoir le permis) ;
+  les <b>services métier</b> qui forment l'interface avec l'administration ; le <b>processus interne</b> et ses
+  activités — dont « évaluer la demande », <b>invisible pour le citoyen</b> ; et les <b>applications</b>,
+  front-office (portail, formulaire, paiement) et back-office (gestion des dossiers, registres).</p>
+  <p style="margin-top:2mm"><b>Les deux problèmes que le modèle révèle</b> — à connaître : ① une
+  <b>architecture en silos</b> — le processus repose sur plusieurs SI distincts, d'où des intégrations
+  complexes, des transferts multiples et des risques d'erreurs ; ② une <b>mauvaise expérience utilisateur</b> —
+  le citoyen est redirigé d'une interface à l'autre, d'où un parcours fragmenté et confus.</p>
+</div>
