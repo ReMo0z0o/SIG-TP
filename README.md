@@ -25,6 +25,7 @@ Compatible GitHub Pages : il suffit d'activer Pages sur la branche pour publier 
 
 | Module | Contenu |
 |---|---|
+| **TRA/TAM/UTAUT/UTAUT2 (PDF)** | `Theories-acceptation-ECGEB210.pdf` — 22 pages consacrées au chapitre 5 : les quatre modèles redessinés à l'identique des slides (flèches des modérateurs comprises), leurs différences détaillées, une réponse type rédigée à la question d'examen, les pièges et 20 questions d'auto-test |
 | **Synthèse théorique (PDF)** | `Synthese-theorique-ECGEB210.pdf` — 47 pages reprenant toute la matière théorique (hors notations BPMN/ArchiMate), avec les modèles redessinés : DIKW, alignement stratégique, SDLC, SCRUM, cycle BPM, pentagone des performances, roue ADM, TRA/TAM/UTAUT/UTAUT2. Sources et script de génération dans `pdf/` |
 | **Théorie du cours** | Les 6 chapitres du cours magistral : Introduction aux SIG, SDLC, BPM, TOGAF & ArchiMate, Théories des SI (apps de révision autonomes dans `theorie/`) + Conclusion orientée examen, avec suivi de progression par chapitre |
 | **Théorie BPMN** | Événements, tâches, flux, pools/lanes, gateways (avec **simulateur de jetons**), sous-processus, boucles/multi-instances, événements frontière (scénario animé) + quiz |
@@ -56,14 +57,16 @@ js/lib/archi.js       Moteur de rendu SVG ArchiMate 3.x
 js/lib/quiz.js        Moteur d'exercices (QCM, tableaux, hotspots, étapes, questions ouvertes)
 js/views/*.js         Les pages de contenu (accueil, théorie, TP, examens)
 theorie/*.html        Les 6 chapitres du cours (apps autonomes + sommaire latéral partagé)
-pdf/src/*.html        Sources de la synthèse théorique PDF (fragments + CSS d'impression)
+pdf/src/*.html        Sources de la synthèse théorique (fragments + CSS d'impression partagés)
+pdf/src-theories/     Sources du document TRA/TAM/UTAUT/UTAUT2
 pdf/build.js          Génération du PDF (Chromium/Playwright, pagination A4 maison)
 ```
 
 Régénérer le PDF :
 
 ```bash
-NODE_PATH=/opt/node22/lib/node_modules node pdf/build.js --preview
+NODE_PATH=/opt/node22/lib/node_modules node pdf/build.js synthese --preview
+NODE_PATH=/opt/node22/lib/node_modules node pdf/build.js theories --preview
 ```
 
 > Ce site est un outil d'entraînement : en cas de divergence, les supports officiels du cours font foi.

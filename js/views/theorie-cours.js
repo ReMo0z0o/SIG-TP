@@ -152,6 +152,16 @@
           <a class="btn btn-primary" href="Synthese-theorique-ECGEB210.pdf" download>Télécharger le PDF ↓</a>
         </section>
 
+        <section class="card" style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">
+          <div style="flex:1;min-width:240px">
+            <h3 style="margin:0 0 4px">TRA · TAM · UTAUT · UTAUT2 — 22 pages, en PDF</h3>
+            <p style="margin:0;font-size:.94rem;color:var(--ink-2)">Le chapitre 5 en profondeur : les quatre
+            modèles redessinés <b>à l'identique des slides</b>, leurs différences expliquées une à une, une
+            <b>réponse type rédigée</b> à la question d'examen, les pièges et <b>20 questions d'auto-test</b>.</p>
+          </div>
+          <a class="btn btn-primary" href="Theories-acceptation-ECGEB210.pdf" download>Télécharger le PDF ↓</a>
+        </section>
+
         <div class="toc-legend">
           <b>Légende :</b>
           <span><span class="toc-dot" style="display:inline-grid"></span> pas encore vue</span>

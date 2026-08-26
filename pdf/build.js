@@ -1,32 +1,46 @@
 /* ==========================================================================
-   Génère « Synthese-theorique-ECGEB210.pdf » à partir des fragments src/.
-   Usage :  NODE_PATH=/opt/node22/lib/node_modules node pdf/build.js [--preview]
-   --preview : exporte aussi un PNG de chaque page dans pdf/build/preview/
+   Génère les PDF du cours à partir des fragments HTML de pdf/src*.
+   Usage :  NODE_PATH=/opt/node22/lib/node_modules node pdf/build.js [doc] [--preview]
+     doc        « synthese » (défaut) ou « theories »
+     --preview  exporte aussi un PNG de chaque page dans pdf/build/<doc>/
+   Les fragments sont pris dans l'ordre alphabétique du dossier source.
    ========================================================================== */
 const fs = require('fs');
 const path = require('path');
 const { chromium } = require('playwright');
 
 const ROOT = __dirname;
-const SRC = path.join(ROOT, 'src');
 const BUILD = path.join(ROOT, 'build');
-const PDF_OUT = path.join(ROOT, '..', 'Synthese-theorique-ECGEB210.pdf');
 
-const FRAGMENTS = [
-  '01-front.html',
-  '10-part1.html',
-  '20-part2.html',
-  '30-part3.html',
-  '40-part4.html',
-  '50-part5.html',
-  '60-part6.html'
-];
+const DOCS = {
+  synthese: {
+    dir: 'src',
+    out: 'Synthese-theorique-ECGEB210.pdf',
+    title: "Synthèse théorique — Systèmes d'information de gestion (ECGEB210)"
+  },
+  theories: {
+    dir: 'src-theories',
+    out: 'Theories-acceptation-ECGEB210.pdf',
+    title: "Les théories de l'acceptation des technologies — TRA, TAM, UTAUT, UTAUT2 (ECGEB210)"
+  }
+};
+
+const DOC_NAME = process.argv.slice(2).find(a => !a.startsWith('--')) || 'synthese';
+const DOC = DOCS[DOC_NAME];
+if (!DOC) {
+  console.error('Document inconnu : ' + DOC_NAME + ' (attendu : ' + Object.keys(DOCS).join(', ') + ')');
+  process.exit(1);
+}
+const SRC = path.join(ROOT, DOC.dir);
+const SHARED = path.join(ROOT, 'src');            // style.css et paginate.js sont partagés
+const PDF_OUT = path.join(ROOT, '..', DOC.out);
+const FRAGMENTS = fs.readdirSync(SRC).filter(f => f.endsWith('.html')).sort();
 
 (async () => {
   fs.mkdirSync(BUILD, { recursive: true });
 
-  const css = fs.readFileSync(path.join(SRC, 'style.css'), 'utf8');
-  const js = fs.readFileSync(path.join(SRC, 'paginate.js'), 'utf8');
+  const css = fs.readFileSync(path.join(SHARED, 'style.css'), 'utf8');
+  const js = fs.readFileSync(path.join(SHARED, 'paginate.js'), 'utf8');
   const body = FRAGMENTS
     .filter(f => fs.existsSync(path.join(SRC, f)))
     .map(f => '<!-- ' + f + ' -->\n' + fs.readFileSync(path.join(SRC, f), 'utf8'))
@@ -36,7 +50,7 @@ const FRAGMENTS = [
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<title>Synthèse théorique — Systèmes d'information de gestion (ECGEB210)</title>
+<title>${DOC.title}</title>
 <style>
 ${css}
 </style>
@@ -52,7 +66,7 @@ ${js}
 </body>
 </html>`;
 
-  const htmlPath = path.join(BUILD, 'synthese.html');
+  const htmlPath = path.join(BUILD, DOC_NAME + '.html');
   fs.writeFileSync(htmlPath, html);
 
   const browser = await chromium.launch();
@@ -72,7 +86,7 @@ ${js}
   });
 
   if (process.argv.includes('--preview')) {
-    const dir = path.join(BUILD, 'preview');
+    const dir = path.join(BUILD, DOC_NAME);
     fs.rmSync(dir, { recursive: true, force: true });
     fs.mkdirSync(dir, { recursive: true });
     const pages = await page.locator('.page').all();
